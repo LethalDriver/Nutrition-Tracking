@@ -5,17 +5,22 @@ import jakarta.persistence.Id;
 import java.util.List;
 
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 @Data
 @Entity
 @RequiredArgsConstructor
+@AllArgsConstructor
+@Table(name="food")
 public class Food {
     @Id
-    private Long fdc_id;
+    private Long fdcId;
     private String description;
-    @OneToMany
-    private List<Nutrient> nutrients;
+    private Integer foodCategoryId;
+    @OneToMany(mappedBy = "food")
+    private List<FoodToNutrient> foodToNutrients;
 
 }

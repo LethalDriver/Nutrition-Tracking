@@ -1,16 +1,20 @@
 package org.mwdziak.service;
 
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.mwdziak.domain.Day;
 import org.mwdziak.dto.DayDTO;
+import org.mwdziak.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class DayService {
-    MealService mealService;
+    private final MealService mealService;
+    private final UserRepository userRepository;
     public DayDTO DayToDayDto(Day day) {
         return DayDTO.builder()
                 .date(day.getDate())
@@ -20,6 +24,14 @@ public class DayService {
                                 .collect(Collectors.toList())
                 )
                 .build();
+    }
+
+    public List<DayDTO> getUserDays(String email){
+        var user = userRepository.findByEmail(email).orElseThrow();
+        var days = user.getDays();
+        return days.stream()
+                .map(this::DayToDayDto)
+                .collect(Collectors.toList());
     }
 
 }

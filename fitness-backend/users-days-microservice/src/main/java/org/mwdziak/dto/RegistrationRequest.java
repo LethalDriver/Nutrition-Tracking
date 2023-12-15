@@ -6,10 +6,11 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateUserDTO {
+public class RegistrationRequest {
     private String email;
     private String password;
-    private String name;
+    private String firstName;
+    private String lastName;
     private Double hydrationGoal;
     private Double caloriesGoal;
     private Double proteinGoal;

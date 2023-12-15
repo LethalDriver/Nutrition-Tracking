@@ -23,6 +23,7 @@ public class FoodService {
 
     private FoodDTO foodToFoodDTO(Food food){
         return FoodDTO.builder()
+                .fdcId(food.getFdcId())
                 .description(food.getDescription())
                 .nutrients(food.getFoodToNutrients().stream().map(this::nutrientToFoodNutrientDTO)
                         .collect(Collectors.toList()))
@@ -32,6 +33,7 @@ public class FoodService {
 
     private FoodNutrientDTO nutrientToFoodNutrientDTO(FoodToNutrient foodToNutrient){
         return FoodNutrientDTO.builder()
+                .id(foodToNutrient.getId())
                 .name(foodToNutrient.getNutrient().getName())
                 .quantity(foodToNutrient.getAmount())
                 .unitName(foodToNutrient.getNutrient().getUnitName())

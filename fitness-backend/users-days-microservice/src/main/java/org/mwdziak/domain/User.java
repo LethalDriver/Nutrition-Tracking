@@ -1,10 +1,10 @@
-package domain;
+package org.mwdziak.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
@@ -14,13 +14,14 @@ import java.util.List;
 @Table(name="_users")
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class User {
     @Id
     @GeneratedValue
     private Long id;
     private String email;
+    private String password;
     private String name;
-    private boolean areGoalsSet;
     private Double hydrationGoal;
     private Double caloriesGoal;
     private Double proteinGoal;

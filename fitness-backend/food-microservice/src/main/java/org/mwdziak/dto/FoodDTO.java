@@ -12,6 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class FoodDTO {
+    private Long fdcId;
     private String description;
     private List<FoodNutrientDTO> nutrients;
 }

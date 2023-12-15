@@ -1,4 +1,4 @@
-package domain;
+package org.mwdziak.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -23,5 +23,4 @@ public class Day {
     private User user;
     @OneToMany(mappedBy="day", cascade=CascadeType.ALL)
     private List<Meal> meals;
-
 }

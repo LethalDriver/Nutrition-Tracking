@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.mwdziak.dto.DayDTO;
 import org.mwdziak.service.DayService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 

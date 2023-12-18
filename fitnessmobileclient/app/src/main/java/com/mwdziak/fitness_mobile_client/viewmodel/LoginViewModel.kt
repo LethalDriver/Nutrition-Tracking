@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.mwdziak.fitness_mobile_client.auth.AuthenticationRequest
 import com.mwdziak.fitness_mobile_client.auth.AuthenticationResponse
+import com.mwdziak.fitness_mobile_client.auth.TokenManager
 import io.ktor.client.HttpClient
 import io.ktor.client.call.receive
 import io.ktor.client.features.json.JsonFeature
@@ -13,7 +14,7 @@ import io.ktor.client.statement.HttpResponse
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 
-class LoginViewModel: ViewModel() {
+class LoginViewModel(private val client: HttpClient, private val tokenManager: TokenManager) : ViewModel() {
     private val email = MutableLiveData<String>("")
     private val password = MutableLiveData<String>("")
 
@@ -25,13 +26,8 @@ class LoginViewModel: ViewModel() {
         password.value = newPassword
     }
 
-    suspend fun makeLoginPostRequest():
-            AuthenticationResponse {
-        val client = HttpClient {
-            install(JsonFeature) {
-                serializer = KotlinxSerializer()
-            }
-        }
+    suspend fun authenticate(){
+
         val authenticationRequest = AuthenticationRequest(email.value ?: "", password.value ?: "")
 
         val url = "https://example.com/api/endpoint"
@@ -42,9 +38,8 @@ class LoginViewModel: ViewModel() {
         }
 
         val authenticationResponse: AuthenticationResponse = response.receive()
-
         client.close()
 
-        return authenticationResponse
+        tokenManager.saveTokens(authenticationResponse.token, authenticationResponse.refreshToken)
     }
 }

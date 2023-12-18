@@ -3,4 +3,11 @@
     <!-- to toggle the open close button of the navigation drawer -->
     <string name="nav_open">Open</string>
     <string name="nav_close">Close</string>
+    <string name="password">password</string>
+    <string name="email">email</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="confirm_password">confirm password</string>
+    <string name="already_have_an_account_login_here">Already have an account? Login here!</string>
+
 </resources>

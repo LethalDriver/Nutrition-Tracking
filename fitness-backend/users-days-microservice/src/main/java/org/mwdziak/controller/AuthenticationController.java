@@ -16,12 +16,12 @@ public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
 
-    @PostMapping("/register")
+    @PostMapping("/auth/register")
     public AuthenticationResponse registerUser(@RequestBody RegistrationRequest user) {
         return authenticationService.register(user);
     }
 
-    @PostMapping("/login")
+    @PostMapping("/auth/login")
     public AuthenticationResponse loginUser(@RequestBody AuthenticationRequest user) {
         return authenticationService.authenticate(user);
     }

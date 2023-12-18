@@ -6,6 +6,9 @@ plugins {
 android {
     namespace = "com.mwdziak.fitness_mobile_client"
     compileSdk = 34
+    buildFeatures {
+        viewBinding = true
+    }
 
     defaultConfig {
         applicationId = "com.mwdziak.fitness_mobile_client"
@@ -46,7 +49,12 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     implementation("io.ktor:ktor-client-core:1.6.4")
+
     implementation("io.ktor:ktor-client-android:1.6.4")
     implementation("io.ktor:ktor-client-json:1.6.4")
     implementation("io.ktor:ktor-client-serialization:1.6.4")
+    implementation("io.ktor:ktor-client-auth:1.6.4")
+
+    implementation("io.insert-koin:koin-android:3.1.2")
+
 }

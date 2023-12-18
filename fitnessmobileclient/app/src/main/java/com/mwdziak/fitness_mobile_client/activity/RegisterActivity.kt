@@ -1,9 +1,10 @@
-package com.mwdziak.fitness_mobile_client
+package com.mwdziak.fitness_mobile_client.activity
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
+import com.mwdziak.fitness_mobile_client.R
 
 class RegisterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

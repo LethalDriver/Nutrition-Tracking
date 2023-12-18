@@ -1,4 +1,4 @@
-package com.mwdziak.fitness_mobile_client
+package com.mwdziak.fitness_mobile_client.activity
 
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -8,6 +8,7 @@ import androidx.annotation.RequiresApi
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.navigation.NavigationView
+import com.mwdziak.fitness_mobile_client.R
 
 class MainActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)

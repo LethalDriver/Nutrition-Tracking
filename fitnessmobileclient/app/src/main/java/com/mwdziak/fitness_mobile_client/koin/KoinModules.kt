@@ -2,6 +2,7 @@ package com.mwdziak.fitness_mobile_client.koin
 
 import com.mwdziak.fitness_mobile_client.auth.TokenManager
 import com.mwdziak.fitness_mobile_client.viewmodel.LoginViewModel
+import com.mwdziak.fitness_mobile_client.viewmodel.RegisterViewModel
 import io.ktor.client.HttpClient
 import io.ktor.client.features.auth.Auth
 import io.ktor.client.features.auth.providers.bearer
@@ -46,6 +47,7 @@ val httpClientModule = module {
 
 val viewModelModule = module {
     viewModel { LoginViewModel(get(named("noAuthHttpClient")), get()) }
+    viewModel { RegisterViewModel(get(named("noAuthHttpClient")), get()) }
 }
 val tokenManagerModule = module {
     single { TokenManager(androidContext()) }

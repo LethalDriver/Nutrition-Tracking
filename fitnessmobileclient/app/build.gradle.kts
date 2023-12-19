@@ -1,7 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    kotlin("plugin.serialization") version "1.5.31"
+    kotlin("plugin.serialization") version "1.9.21"
 }
 
 android {
@@ -57,5 +57,7 @@ dependencies {
     implementation("io.ktor:ktor-client-auth:1.6.4")
 
     implementation("io.insert-koin:koin-android:3.1.2")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 
 }

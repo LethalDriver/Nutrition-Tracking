@@ -30,7 +30,7 @@ class LoginViewModel(private val client: HttpClient, private val tokenManager: T
 
         val authenticationRequest = AuthenticationRequest(email.value ?: "", password.value ?: "")
 
-        val url = "https://example.com/api/endpoint"
+        val url = "http://10.0.2.2:8080/auth/login"
 
         val response: HttpResponse = client.post(url) {
             contentType(ContentType.Application.Json)

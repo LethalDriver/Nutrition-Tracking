@@ -11,8 +11,4 @@ public class RegistrationRequest {
     private String password;
     private String firstName;
     private String lastName;
-    private Double hydrationGoal;
-    private Double caloriesGoal;
-    private Double proteinGoal;
-    private Double fatGoal;
 }

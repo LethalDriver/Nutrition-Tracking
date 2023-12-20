@@ -29,10 +29,6 @@ public class AuthenticationService {
             .lastName(request.getLastName())
             .email(request.getEmail())
             .password(encoder.encode(request.getPassword()))
-            .hydrationGoal(request.getHydrationGoal())
-            .caloriesGoal(request.getCaloriesGoal())
-            .proteinGoal(request.getProteinGoal())
-            .fatGoal(request.getFatGoal())
             .build();
 
         repository.save(user);

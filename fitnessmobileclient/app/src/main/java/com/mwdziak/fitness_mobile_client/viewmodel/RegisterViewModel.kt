@@ -35,29 +35,6 @@ class RegisterViewModel(private val client: HttpClient, private val tokenManager
         lastName.value = newLastName
     }
 
-    fun isValidFirstName(firstName: String): Boolean {
-        // Add your validation logic here
-        return firstName.isNotEmpty()
-    }
-
-    fun isValidLastName(lastName: String): Boolean {
-        // Add your validation logic here
-        return lastName.isNotEmpty()
-    }
-
-    fun isValidEmail(email: String): Boolean {
-        return Patterns.EMAIL_ADDRESS.matcher(email).matches()
-    }
-
-    fun isValidPassword(password: String): Boolean {
-        // Password should be at least 8 characters long
-        return password.length >= 8
-    }
-
-    fun isValidConfirmPassword(password: String, confirmPassword: String): Boolean {
-        // Confirm password should match the password
-        return password == confirmPassword
-    }
 
     suspend fun register(){
 

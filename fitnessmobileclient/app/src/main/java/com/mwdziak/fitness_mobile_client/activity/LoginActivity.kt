@@ -23,10 +23,11 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
-        val registerLink = findViewById<TextView>(R.id.registerLink)
-        registerLink.setOnClickListener {
+
+        binding.registerLink.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
+            finish()
         }
 
         binding.editTextEmail.addTextChangedListener { text ->
@@ -39,9 +40,10 @@ class LoginActivity : AppCompatActivity() {
 
         binding.loginButton.setOnClickListener {
             lifecycleScope.launch {
-                val authenticationResponse = viewModel.authenticate()
+                viewModel.authenticate()
                 val intent = Intent(this@LoginActivity, MainActivity::class.java)
                 startActivity(intent)
+                finish()
             }
         }
     }

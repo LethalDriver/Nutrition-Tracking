@@ -48,7 +48,7 @@ val httpClientModule = module {
 
 val viewModelModule = module {
     viewModel { LoginViewModel(get(named("noAuthHttpClient")), get()) }
-    viewModel { RegisterViewModel(get(named("noAuthHttpClient")), get()) }
+    viewModel { RegisterViewModel(get(named("noAuthHttpClient")), get(), get()) }
 }
 val tokenManagerModule = module {
     single { TokenManager(androidContext()) }

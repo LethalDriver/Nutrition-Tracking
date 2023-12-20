@@ -41,10 +41,10 @@ class LoginActivity : AppCompatActivity() {
         binding.loginButton.setOnClickListener {
             lifecycleScope.launch {
                 viewModel.authenticate()
-                val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                startActivity(intent)
-                finish()
             }
+            val intent = Intent(this@LoginActivity, MainActivity::class.java)
+            startActivity(intent)
+            finish()
         }
     }
 

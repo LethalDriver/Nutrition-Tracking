@@ -70,10 +70,10 @@ class RegisterActivity : AppCompatActivity() {
         binding.registerButton.setOnClickListener {
             lifecycleScope.launch {
                 viewModel.register()
-                val intent = Intent(this@RegisterActivity, MainActivity::class.java)
-                startActivity(intent)
-                finish()
             }
+            val intent = Intent(this@RegisterActivity, MainActivity::class.java)
+            startActivity(intent)
+            finish()
         }
     }
 }

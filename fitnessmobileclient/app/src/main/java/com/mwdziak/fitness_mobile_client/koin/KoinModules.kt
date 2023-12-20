@@ -21,7 +21,7 @@ import org.koin.core.qualifier.named
 
 val httpClientModule = module {
     single(named("defaultHttpClient")) {
-        val client = HttpClient {
+        HttpClient {
             install(JsonFeature) {
                 serializer = KotlinxSerializer()
             }

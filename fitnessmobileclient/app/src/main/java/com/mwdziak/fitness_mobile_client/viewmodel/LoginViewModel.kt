@@ -3,12 +3,10 @@ package com.mwdziak.fitness_mobile_client.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.mwdziak.fitness_mobile_client.auth.AuthenticationRequest
-import com.mwdziak.fitness_mobile_client.auth.AuthenticationResponse
+import com.mwdziak.fitness_mobile_client.auth.TokensDTO
 import com.mwdziak.fitness_mobile_client.auth.TokenManager
 import io.ktor.client.HttpClient
 import io.ktor.client.call.receive
-import io.ktor.client.features.json.JsonFeature
-import io.ktor.client.features.json.serializer.KotlinxSerializer
 import io.ktor.client.request.post
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.ContentType
@@ -37,9 +35,9 @@ class LoginViewModel(private val client: HttpClient, private val tokenManager: T
             body = authenticationRequest
         }
 
-        val authenticationResponse: AuthenticationResponse = response.receive()
+        val tokensDTO: TokensDTO = response.receive()
         client.close()
 
-        tokenManager.saveTokens(authenticationResponse.token, authenticationResponse.refreshToken)
+        tokenManager.saveTokens(tokensDTO.token, tokensDTO.refreshToken)
     }
 }

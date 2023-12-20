@@ -1,10 +1,12 @@
 package com.mwdziak.fitness_mobile_client.koin
 
+import com.mwdziak.fitness_mobile_client.auth.TokensDTO
 import com.mwdziak.fitness_mobile_client.auth.TokenManager
 import com.mwdziak.fitness_mobile_client.auth.Validator
 import com.mwdziak.fitness_mobile_client.viewmodel.LoginViewModel
 import com.mwdziak.fitness_mobile_client.viewmodel.RegisterViewModel
 import io.ktor.client.HttpClient
+import io.ktor.client.call.receive
 import io.ktor.client.features.auth.Auth
 import io.ktor.client.features.auth.providers.bearer
 import io.ktor.client.features.json.JsonFeature
@@ -14,12 +16,12 @@ import org.koin.dsl.module
 import io.ktor.client.features.auth.providers.BearerTokens
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.qualifier.named
-import org.koin.core.scope.get
+
 
 
 val httpClientModule = module {
     single(named("defaultHttpClient")) {
-        HttpClient {
+        val client = HttpClient {
             install(JsonFeature) {
                 serializer = KotlinxSerializer()
             }
@@ -32,6 +34,14 @@ val httpClientModule = module {
                             refreshToken = tokenManager.getRefreshToken()!!
                         )
                     }
+                    refreshTokens {
+                        tokenManager.refreshTokens()
+                        BearerTokens(
+                            accessToken = tokenManager.getJwtToken()!!,
+                            refreshToken = tokenManager.getRefreshToken()!!
+                        )
+                    }
+
                 }
             }
         }
@@ -46,12 +56,13 @@ val httpClientModule = module {
     }
 }
 
+
 val viewModelModule = module {
     viewModel { LoginViewModel(get(named("noAuthHttpClient")), get()) }
     viewModel { RegisterViewModel(get(named("noAuthHttpClient")), get(), get()) }
 }
 val tokenManagerModule = module {
-    single { TokenManager(androidContext()) }
+    single { TokenManager(androidContext(), get(named("noAuthHttpClient"))) }
 }
 val validatorModule = module {
     single { Validator() }

@@ -1,9 +1,8 @@
 package com.mwdziak.fitness_mobile_client.viewmodel
 
-import android.util.Patterns
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.mwdziak.fitness_mobile_client.auth.AuthenticationResponse
+import com.mwdziak.fitness_mobile_client.auth.TokensDTO
 import com.mwdziak.fitness_mobile_client.auth.RegistrationRequest
 import com.mwdziak.fitness_mobile_client.auth.TokenManager
 import com.mwdziak.fitness_mobile_client.auth.Validator
@@ -89,9 +88,9 @@ class RegisterViewModel(private val client: HttpClient, private val tokenManager
             body = registrationRequest
         }
 
-        val authenticationResponse: AuthenticationResponse = response.receive()
+        val tokensDTO: TokensDTO = response.receive()
         client.close()
 
-        tokenManager.saveTokens(authenticationResponse.token, authenticationResponse.refreshToken)
+        tokenManager.saveTokens(tokensDTO.token, tokensDTO.refreshToken)
     }
 }

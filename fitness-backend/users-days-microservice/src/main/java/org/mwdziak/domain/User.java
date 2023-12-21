@@ -26,10 +26,9 @@ public class User implements UserDetails {
     private String password;
     private String firstName;
     private String lastName;
-    private Double hydrationGoal;
-    private Double caloriesGoal;
-    private Double proteinGoal;
-    private Double fatGoal;
+    @OneToOne
+    @JoinColumn(name = "nutritional_goals_id")
+    private NutritionalGoals nutritionalGoals;
     @OneToMany(mappedBy="user", cascade=CascadeType.ALL)
     private List<Day> days;
 

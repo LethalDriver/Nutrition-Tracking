@@ -26,7 +26,7 @@ public class User implements UserDetails {
     private String password;
     private String firstName;
     private String lastName;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "nutritional_goals_id")
     private NutritionalGoals nutritionalGoals;
     @OneToMany(mappedBy="user", cascade=CascadeType.ALL)

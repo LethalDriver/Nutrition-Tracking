@@ -1,30 +1,38 @@
-package com.mwdziak.fitness_mobile_client.activity
+package com.mwdziak.fitness_mobile_client.fragment
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Patterns
-import android.widget.TextView
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.mwdziak.fitness_mobile_client.R
-import com.mwdziak.fitness_mobile_client.databinding.ActivityRegisterBinding
+import com.mwdziak.fitness_mobile_client.databinding.FragmentRegisterBinding
 import com.mwdziak.fitness_mobile_client.viewmodel.RegisterViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class RegisterActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityRegisterBinding
+class RegisterFragment : Fragment() {
+    private var _binding: FragmentRegisterBinding? = null
+    private val binding get() = _binding!!
     private val viewModel: RegisterViewModel by viewModel()
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityRegisterBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentRegisterBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         binding.loginLink.setOnClickListener {
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
-            finish()
+            findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
         }
 
         binding.editTextFirstName.addTextChangedListener { text ->
@@ -63,7 +71,7 @@ class RegisterActivity : AppCompatActivity() {
             }
         }
 
-        viewModel.isAllFieldsValid.observe(this) { isValid ->
+        viewModel.isAllFieldsValid.observe(viewLifecycleOwner) { isValid ->
             binding.registerButton.isEnabled = isValid
         }
 
@@ -71,9 +79,12 @@ class RegisterActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 viewModel.register()
             }
-            val intent = Intent(this@RegisterActivity, MainActivity::class.java)
-            startActivity(intent)
-            finish()
+            findNavController().navigate(R.id.action_registerFragment_to_updateGoalsFragment)
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

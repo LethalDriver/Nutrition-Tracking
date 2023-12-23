@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
     private final UserService userService;
 
-    @PutMapping("/user/nutrients/update")
+    @PutMapping("/user/goals/update")
     public HttpStatus updateUserNutrients(@RequestBody NutritionalGoalsDTO nutritionalGoalsDTO) {
         userService.updateUserNutrients(nutritionalGoalsDTO);
         return HttpStatus.OK;
     }
 
-    @GetMapping("/user/nutrients/get")
+    @GetMapping("/user/goals/get")
     public NutritionalGoalsDTO getUserNutrients() {
         return userService.getUserNutrients();
     }

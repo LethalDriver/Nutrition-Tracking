@@ -1,5 +1,6 @@
 package com.mwdziak.fitness_mobile_client.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.mwdziak.fitness_mobile_client.R
+import com.mwdziak.fitness_mobile_client.activity.MainActivity
 import com.mwdziak.fitness_mobile_client.databinding.FragmentLoginBinding
 import com.mwdziak.fitness_mobile_client.viewmodel.LoginViewModel
 import kotlinx.coroutines.launch
@@ -45,9 +47,15 @@ class LoginFragment : Fragment() {
         binding.loginButton.setOnClickListener {
             lifecycleScope.launch {
                 viewModel.authenticate()
-
             }
-            findNavController().navigate(R.id.action_loginFragment_to_updateGoalsFragment)
+            lifecycleScope.launch {
+                if(viewModel.areGoalsSet()) {
+                    val intent = Intent(requireContext(), MainActivity::class.java)
+                    startActivity(intent)
+                } else {
+                    findNavController().navigate(R.id.action_loginFragment_to_updateGoalsFragment)
+                }
+            }
         }
     }
 

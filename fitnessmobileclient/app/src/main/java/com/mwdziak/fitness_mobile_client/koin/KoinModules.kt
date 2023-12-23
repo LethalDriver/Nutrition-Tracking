@@ -1,7 +1,8 @@
 package com.mwdziak.fitness_mobile_client.koin
 
-import com.mwdziak.fitness_mobile_client.auth.TokenManager
-import com.mwdziak.fitness_mobile_client.auth.Validator
+import com.mwdziak.fitness_mobile_client.service.HttpService
+import com.mwdziak.fitness_mobile_client.service.TokenManager
+import com.mwdziak.fitness_mobile_client.service.Validator
 import com.mwdziak.fitness_mobile_client.viewmodel.LoginViewModel
 import com.mwdziak.fitness_mobile_client.viewmodel.RegisterViewModel
 import com.mwdziak.fitness_mobile_client.viewmodel.UpdateGoalsViewModel
@@ -55,15 +56,14 @@ val httpClientModule = module {
     }
 }
 
+val serviceModule = module {
+    single { TokenManager(androidContext(), get(named("noAuthHttpClient"))) }
+    single { Validator() }
+    single { HttpService(get(named("noAuthHttpClient")), get(named("defaultHttpClient"))) }
+}
 
 val viewModelModule = module {
-    viewModel { LoginViewModel(get(named("noAuthHttpClient")), get()) }
-    viewModel { RegisterViewModel(get(named("noAuthHttpClient")), get(), get()) }
+    viewModel { LoginViewModel(get(), get()) }
+    viewModel { RegisterViewModel(get(), get(), get()) }
     viewModel { UpdateGoalsViewModel(get(named("defaultHttpClient")), get()) }
-}
-val tokenManagerModule = module {
-    single { TokenManager(androidContext(), get(named("noAuthHttpClient"))) }
-}
-val validatorModule = module {
-    single { Validator() }
 }

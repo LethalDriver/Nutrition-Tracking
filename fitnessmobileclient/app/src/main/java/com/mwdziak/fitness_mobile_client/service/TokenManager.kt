@@ -1,7 +1,8 @@
-package com.mwdziak.fitness_mobile_client.auth
+package com.mwdziak.fitness_mobile_client.service
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.mwdziak.fitness_mobile_client.auth.TokensDTO
 import io.ktor.client.HttpClient
 import io.ktor.client.call.receive
 import io.ktor.client.request.post

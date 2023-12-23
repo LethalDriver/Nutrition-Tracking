@@ -1,4 +1,4 @@
-package com.mwdziak.fitness_mobile_client.auth
+package com.mwdziak.fitness_mobile_client.service
 
 import android.util.Patterns
 

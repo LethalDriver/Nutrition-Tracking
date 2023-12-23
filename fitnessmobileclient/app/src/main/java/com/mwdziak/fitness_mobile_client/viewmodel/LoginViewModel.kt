@@ -4,15 +4,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.mwdziak.fitness_mobile_client.auth.AuthenticationRequest
 import com.mwdziak.fitness_mobile_client.auth.TokensDTO
-import com.mwdziak.fitness_mobile_client.auth.TokenManager
-import io.ktor.client.HttpClient
+import com.mwdziak.fitness_mobile_client.service.HttpService
+import com.mwdziak.fitness_mobile_client.service.TokenManager
 import io.ktor.client.call.receive
 import io.ktor.client.request.post
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 
-class LoginViewModel(private val client: HttpClient, private val tokenManager: TokenManager) : ViewModel() {
+class LoginViewModel(private val tokenManager: TokenManager, private val httpService: HttpService) : ViewModel() {
     private val email = MutableLiveData<String>("")
     private val password = MutableLiveData<String>("")
 
@@ -28,16 +28,12 @@ class LoginViewModel(private val client: HttpClient, private val tokenManager: T
 
         val authenticationRequest = AuthenticationRequest(email.value ?: "", password.value ?: "")
 
-        val url = "http://10.0.2.2:8080/auth/login"
-
-        val response: HttpResponse = client.post(url) {
-            contentType(ContentType.Application.Json)
-            body = authenticationRequest
-        }
-
-        val tokensDTO: TokensDTO = response.receive()
-        client.close()
+        val tokensDTO = httpService.authenticate(authenticationRequest)
 
         tokenManager.saveTokens(tokensDTO.token, tokensDTO.refreshToken)
+    }
+
+    suspend fun areGoalsSet(): Boolean {
+        return httpService.checkIfGoalsAlreadySet()
     }
 }

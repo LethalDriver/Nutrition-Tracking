@@ -10,10 +10,11 @@ import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.mwdziak.fitness_mobile_client.R
-import com.mwdziak.fitness_mobile_client.databinding.FragmentRegisterBinding
+import com.mwdziak.fitness_mobile_client.activity.MainActivity
 import com.mwdziak.fitness_mobile_client.viewmodel.RegisterViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import com.mwdziak.fitness_mobile_client.databinding.FragmentRegisterBinding;
 
 class RegisterFragment : Fragment() {
     private var _binding: FragmentRegisterBinding? = null
@@ -79,7 +80,14 @@ class RegisterFragment : Fragment() {
             lifecycleScope.launch {
                 viewModel.register()
             }
-            findNavController().navigate(R.id.action_registerFragment_to_updateGoalsFragment)
+            lifecycleScope.launch {
+                if(viewModel.areGoalsSet()) {
+                    val intent = Intent(requireContext(), MainActivity::class.java)
+                    startActivity(intent)
+                } else {
+                    findNavController().navigate(R.id.action_loginFragment_to_updateGoalsFragment)
+                }
+            }
         }
     }
 

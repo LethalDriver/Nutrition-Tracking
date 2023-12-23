@@ -4,17 +4,19 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.mwdziak.fitness_mobile_client.auth.TokensDTO
 import com.mwdziak.fitness_mobile_client.auth.RegistrationRequest
-import com.mwdziak.fitness_mobile_client.auth.TokenManager
-import com.mwdziak.fitness_mobile_client.auth.Validator
-import io.ktor.client.HttpClient
+import com.mwdziak.fitness_mobile_client.service.HttpService
+import com.mwdziak.fitness_mobile_client.service.TokenManager
+import com.mwdziak.fitness_mobile_client.service.Validator
 import io.ktor.client.call.receive
 import io.ktor.client.request.post
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 
-class RegisterViewModel(private val client: HttpClient, private val tokenManager: TokenManager,
-    private val validator: Validator): ViewModel() {
+class RegisterViewModel(private val tokenManager: TokenManager,
+                        private val validator: Validator,
+                        private val httpService: HttpService
+): ViewModel() {
 
     private val email = MutableLiveData<String>("")
     private val password = MutableLiveData<String>("")
@@ -77,20 +79,16 @@ class RegisterViewModel(private val client: HttpClient, private val tokenManager
     }
 
     suspend fun register(){
-
         val registrationRequest = RegistrationRequest(email.value ?: "", password.value ?: "",
             firstName.value ?: "", lastName.value ?: "")
 
-        val url = "http://10.0.2.2:8080/auth/register"
-
-        val response: HttpResponse = client.post(url) {
-            contentType(ContentType.Application.Json)
-            body = registrationRequest
-        }
-
-        val tokensDTO: TokensDTO = response.receive()
-        client.close()
+        val tokensDTO = httpService.register(registrationRequest)
 
         tokenManager.saveTokens(tokensDTO.token, tokensDTO.refreshToken)
     }
+
+    suspend fun areGoalsSet(): Boolean {
+        return httpService.checkIfGoalsAlreadySet()
+    }
+
 }

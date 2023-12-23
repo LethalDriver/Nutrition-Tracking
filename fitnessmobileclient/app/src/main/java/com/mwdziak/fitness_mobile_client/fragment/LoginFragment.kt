@@ -45,10 +45,11 @@ class LoginFragment : Fragment() {
         }
 
         binding.loginButton.setOnClickListener {
-            lifecycleScope.launch {
+            val auth = lifecycleScope.launch {
                 viewModel.authenticate()
             }
             lifecycleScope.launch {
+                auth.join()
                 if(viewModel.areGoalsSet()) {
                     val intent = Intent(requireContext(), MainActivity::class.java)
                     startActivity(intent)

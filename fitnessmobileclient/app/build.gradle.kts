@@ -51,6 +51,7 @@ dependencies {
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.1")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
+    implementation("org.slf4j:slf4j-simple:2.0.7")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -60,6 +61,7 @@ dependencies {
     implementation("io.ktor:ktor-client-json:1.6.4")
     implementation("io.ktor:ktor-client-serialization:1.6.4")
     implementation("io.ktor:ktor-client-auth:1.6.4")
+    implementation("io.ktor:ktor-client-logging:1.6.4")
 
     implementation("io.insert-koin:koin-android:3.1.2")
 

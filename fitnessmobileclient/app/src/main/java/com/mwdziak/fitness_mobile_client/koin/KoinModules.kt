@@ -7,6 +7,7 @@ import com.mwdziak.fitness_mobile_client.viewmodel.LoginViewModel
 import com.mwdziak.fitness_mobile_client.viewmodel.RegisterViewModel
 import com.mwdziak.fitness_mobile_client.viewmodel.UpdateGoalsViewModel
 import io.ktor.client.HttpClient
+import io.ktor.client.engine.android.Android
 import io.ktor.client.features.auth.Auth
 import io.ktor.client.features.auth.providers.bearer
 import io.ktor.client.features.json.JsonFeature
@@ -14,14 +15,17 @@ import io.ktor.client.features.json.serializer.KotlinxSerializer
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import io.ktor.client.features.auth.providers.BearerTokens
+import io.ktor.client.features.logging.DEFAULT
+import io.ktor.client.features.logging.LogLevel
+import io.ktor.client.features.logging.Logger
+import io.ktor.client.features.logging.Logging
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.qualifier.named
 
 
-
 val httpClientModule = module {
     single(named("defaultHttpClient")) {
-        HttpClient {
+        HttpClient(Android) {
             install(JsonFeature) {
                 serializer = KotlinxSerializer()
             }
@@ -44,13 +48,21 @@ val httpClientModule = module {
 
                 }
             }
+            install(Logging) {
+                logger = Logger.DEFAULT
+                level = LogLevel.ALL
+            }
         }
     }
 
     single(named("noAuthHttpClient")) {
-        HttpClient {
+        HttpClient(Android) {
             install(JsonFeature) {
                 serializer = KotlinxSerializer()
+            }
+            install(Logging) {
+                logger = Logger.DEFAULT
+                level = LogLevel.ALL
             }
         }
     }

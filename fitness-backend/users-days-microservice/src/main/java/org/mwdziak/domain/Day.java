@@ -25,4 +25,7 @@ public class Day {
     private User user;
     @OneToMany(mappedBy="day", cascade=CascadeType.ALL)
     private List<Meal> meals;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "nutritional_progress_id")
+    private NutritionalProgress nutritionalProgress;
 }

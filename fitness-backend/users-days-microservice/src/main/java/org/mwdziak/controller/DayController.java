@@ -18,4 +18,6 @@ public class DayController {
     public List<DayDTO> getUserDays(@RequestParam String email) {
         return dayService.getUserDays(email);
     }
+
+
 }

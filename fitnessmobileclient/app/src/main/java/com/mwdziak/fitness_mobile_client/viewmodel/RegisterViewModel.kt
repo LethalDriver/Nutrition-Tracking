@@ -87,8 +87,4 @@ class RegisterViewModel(private val tokenManager: TokenManager,
         tokenManager.saveTokens(tokensDTO.token, tokensDTO.refreshToken)
     }
 
-    suspend fun areGoalsSet(): Boolean {
-        return httpService.checkIfGoalsAlreadySet()
-    }
-
 }

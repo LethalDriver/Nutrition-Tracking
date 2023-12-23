@@ -44,20 +44,4 @@ class HttpService(private val noAuthHttpClient: HttpClient, private val defaultH
 
         return tokensDTO
     }
-
-    suspend fun checkIfGoalsAlreadySet(): Boolean {
-        val url = "http://10.0.2.2:8080/user/nutrients/get"
-
-        val response: HttpResponse = defaultHttpClient.get(url)
-        val nutritionalGoals: NutritionalGoals = response.receive()
-        defaultHttpClient.close()
-        return !areAllFieldsNull(nutritionalGoals)
-    }
-
-    private fun areAllFieldsNull(nutritionalGoals: NutritionalGoals): Boolean {
-        return nutritionalGoals.calories == null &&
-                nutritionalGoals.carbohydrates == null &&
-                nutritionalGoals.fat == null &&
-                nutritionalGoals.protein == null
-    }
 }

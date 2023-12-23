@@ -48,15 +48,8 @@ class LoginFragment : Fragment() {
             val auth = lifecycleScope.launch {
                 viewModel.authenticate()
             }
-            lifecycleScope.launch {
-                auth.join()
-                if(viewModel.areGoalsSet()) {
-                    val intent = Intent(requireContext(), MainActivity::class.java)
-                    startActivity(intent)
-                } else {
-                    findNavController().navigate(R.id.action_loginFragment_to_updateGoalsFragment)
-                }
-            }
+            val intent = Intent(requireContext(), MainActivity::class.java)
+            startActivity(intent)
         }
     }
 

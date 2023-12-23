@@ -33,7 +33,4 @@ class LoginViewModel(private val tokenManager: TokenManager, private val httpSer
         tokenManager.saveTokens(tokensDTO.token, tokensDTO.refreshToken)
     }
 
-    suspend fun areGoalsSet(): Boolean {
-        return httpService.checkIfGoalsAlreadySet()
-    }
 }

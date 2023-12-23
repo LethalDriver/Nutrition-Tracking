@@ -3,6 +3,7 @@ package org.mwdziak.service;
 
 import lombok.RequiredArgsConstructor;
 import org.mwdziak.domain.BlacklistedToken;
+import org.mwdziak.domain.NutritionalGoals;
 import org.mwdziak.domain.User;
 import org.mwdziak.dto.AuthenticationResponse;
 import org.mwdziak.dto.TokensDTO;
@@ -29,6 +30,7 @@ public class AuthenticationService {
             .lastName(request.getLastName())
             .email(request.getEmail())
             .password(encoder.encode(request.getPassword()))
+                .nutritionalGoals(new NutritionalGoals())
             .build();
 
         repository.save(user);

@@ -1,4 +1,5 @@
 package org.mwdziak;
+import org.mwdziak.domain.NutritionalGoals;
 import org.mwdziak.domain.User;
 import org.mwdziak.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -19,6 +20,7 @@ public class UsersDaysApplication {
             User user = new User();
             user.setEmail("test@test.com");
             user.setPassword(passwordEncoder.encode("test"));
+                    user.setNutritionalGoals(new NutritionalGoals());
             repository.save(user);
         };
     }

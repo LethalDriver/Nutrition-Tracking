@@ -11,26 +11,98 @@
         android:layout_height="match_parent">
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textField"
-            android:layout_width="120dp"
+            android:id="@+id/textInputCalories"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="24dp"
-            android:hint="calories"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="64dp"
+            android:layout_marginEnd="32dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:suffixText="kJ"
-            >
+            app:suffixText="kJ">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextCalories"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
-                />
-
-
+                android:hint="calories"
+                android:inputType="numberDecimal"/>
 
         </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputProtein"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="32dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textInputCalories"
+            app:suffixText="g">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextProtein"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="protein"
+                android:inputType="numberDecimal"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputCarbohydrates"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="32dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textInputProtein"
+            app:suffixText="g">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextCarbohydrates"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="carbohydrates"
+                android:inputType="numberDecimal" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputFat"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="32dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputCarbohydrates"
+            app:suffixText="g">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextFat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="fat"
+                android:inputType="numberDecimal"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/saveButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="save"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputFat" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

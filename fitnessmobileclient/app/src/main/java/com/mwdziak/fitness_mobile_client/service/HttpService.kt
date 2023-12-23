@@ -8,6 +8,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.receive
 import io.ktor.client.request.get
 import io.ktor.client.request.post
+import io.ktor.client.request.put
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
@@ -15,23 +16,19 @@ import io.ktor.http.contentType
 
 class HttpService(private val noAuthHttpClient: HttpClient, private val defaultHttpClient: HttpClient) {
     suspend fun authenticate(authenticationRequest: AuthenticationRequest): TokensDTO {
-
-
         val url = "http://10.0.2.2:8080/auth/login"
 
         val response: HttpResponse = noAuthHttpClient.post(url) {
             contentType(ContentType.Application.Json)
             body = authenticationRequest
         }
-
         val tokensDTO: TokensDTO = response.receive()
-        noAuthHttpClient.close()
 
+        noAuthHttpClient.close()
         return tokensDTO
     }
 
     suspend fun register(registrationRequest: RegistrationRequest): TokensDTO{
-
         val url = "http://10.0.2.2:8080/auth/register"
 
         val response: HttpResponse = noAuthHttpClient.post(url) {
@@ -44,4 +41,15 @@ class HttpService(private val noAuthHttpClient: HttpClient, private val defaultH
 
         return tokensDTO
     }
+
+    suspend fun updateGoals(nutritionalGoals: NutritionalGoals) {
+        val url = "http://10.0.2.2:8080/user/goals/update"
+        val response: HttpResponse = defaultHttpClient.put(url) {
+            contentType(ContentType.Application.Json)
+            body = nutritionalGoals
+        }
+        defaultHttpClient.close()
+    }
+
+
 }

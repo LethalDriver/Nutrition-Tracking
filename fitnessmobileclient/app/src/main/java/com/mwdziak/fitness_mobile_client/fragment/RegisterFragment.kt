@@ -80,7 +80,7 @@ class RegisterFragment : Fragment() {
             lifecycleScope.launch {
                 viewModel.register()
             }
-            findNavController().navigate(R.id.action_loginFragment_to_updateGoalsFragment)
+            findNavController().navigate(R.id.action_registerFragment_to_updateGoalsFragment)
         }
     }
 

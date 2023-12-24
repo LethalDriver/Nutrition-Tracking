@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.mwdziak.domain.Day;
 import org.mwdziak.dto.DayDTO;
+import org.mwdziak.dto.NutritionalGoalsDTO;
+import org.mwdziak.dto.NutritionalProgressDTO;
+import org.mwdziak.repository.DayRepository;
 import org.mwdziak.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +19,7 @@ import java.util.stream.Collectors;
 public class DayService {
     private final MealService mealService;
     private final UserRepository userRepository;
+    private final DayRepository dayRepository;
     public DayDTO DayToDayDto(Day day) {
         return DayDTO.builder()
                 .date(day.getDate())
@@ -62,5 +66,39 @@ public class DayService {
         return day;
     }
 
+    public NutritionalGoalsDTO getNutritionalProgress(String email) {
+        var user = userRepository.findByEmail(email).orElseThrow();
+        var day = user.getDays().stream()
+                .filter(d -> d.getDate().equals(new Date()))
+                .findFirst()
+                .orElseThrow();
+        return NutritionalGoalsDTO.builder()
+                .calories(day.getNutritionalProgress().getCalories())
+                .protein(day.getNutritionalProgress().getProtein())
+                .carbohydrates(day.getNutritionalProgress().getCarbohydrates())
+                .fat(day.getNutritionalProgress().getFat())
+                .build();
+    }
 
+    public Date parseDate(String date) {
+        return new Date(Long.parseLong(date));
+    }
+
+
+    public Date getCurrentDate() {
+        return new Date();
+    }
+
+    public void updateNutritionalProgress(String currentUserEmail, NutritionalProgressDTO nutritionalProgressDTO) {
+        var user = userRepository.findByEmail(currentUserEmail).orElseThrow();
+        var day = user.getDays().stream()
+                .filter(d -> d.getDate().equals(new Date()))
+                .findFirst()
+                .orElseThrow();
+        day.getNutritionalProgress().setCalories(nutritionalProgressDTO.getCalories());
+        day.getNutritionalProgress().setProtein(nutritionalProgressDTO.getProtein());
+        day.getNutritionalProgress().setCarbohydrates(nutritionalProgressDTO.getCarbohydrates());
+        day.getNutritionalProgress().setFat(nutritionalProgressDTO.getFat());
+        dayRepository.save(day);
+    }
 }

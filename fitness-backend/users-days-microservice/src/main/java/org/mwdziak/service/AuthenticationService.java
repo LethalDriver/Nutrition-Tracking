@@ -10,7 +10,9 @@ import org.mwdziak.dto.TokensDTO;
 import org.mwdziak.repository.BlacklistedTokenRepository;
 import org.mwdziak.repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.mwdziak.dto.AuthenticationRequest;
@@ -45,20 +47,29 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(
-                request.getEmail(),
-                request.getPassword()
-            )
-        );
+        var userOptional = repository.findByEmail(request.getEmail());
+        if (userOptional.isEmpty()) {
+            throw new UsernameNotFoundException("User not found");
+        }
 
-        var user = repository.findByEmail(request.getEmail()).orElseThrow();
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getEmail(),
+                            request.getPassword()
+                    )
+            );
+        } catch (BadCredentialsException e) {
+            throw new BadCredentialsException("Incorrect password");
+        }
+
+        var user = userOptional.get();
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
         return AuthenticationResponse.builder()
-            .token(jwtToken)
-            .refreshToken(refreshToken)
-            .build();
+                .token(jwtToken)
+                .refreshToken(refreshToken)
+                .build();
     }
 
     public AuthenticationResponse refresh(TokensDTO request) {

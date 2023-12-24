@@ -1,6 +1,5 @@
 package org.mwdziak.service;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.mwdziak.domain.Day;
 import org.mwdziak.dto.DayDTO;
@@ -10,7 +9,8 @@ import org.mwdziak.repository.DayRepository;
 import org.mwdziak.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,14 +39,14 @@ public class DayService {
                 .collect(Collectors.toList());
     }
 
-    public boolean isDayExists(String email, Date date) {
+    public boolean isDayExists(String email, LocalDate date) {
         var user = userRepository.findByEmail(email).orElseThrow();
         var days = user.getDays();
         return days.stream()
                 .anyMatch(day -> day.getDate().equals(date));
     }
 
-    public Day getDay(String email, Date date) {
+    public Day getDay(String email, LocalDate date) {
         var user = userRepository.findByEmail(email).orElseThrow();
         var days = user.getDays();
         return days.stream()
@@ -55,7 +55,7 @@ public class DayService {
                 .orElseThrow();
     }
 
-    public Day createDay(String email, Date date) {
+    public void createDay(String email, LocalDate date) {
         var user = userRepository.findByEmail(email).orElseThrow();
         var day = Day.builder()
                 .date(date)
@@ -63,15 +63,11 @@ public class DayService {
                 .build();
         user.getDays().add(day);
         userRepository.save(user);
-        return day;
     }
 
     public NutritionalGoalsDTO getNutritionalProgress(String email) {
         var user = userRepository.findByEmail(email).orElseThrow();
-        var day = user.getDays().stream()
-                .filter(d -> d.getDate().equals(new Date()))
-                .findFirst()
-                .orElseThrow();
+        var day = getDay(email, getCurrentDate());
         return NutritionalGoalsDTO.builder()
                 .calories(day.getNutritionalProgress().getCalories())
                 .protein(day.getNutritionalProgress().getProtein())
@@ -80,21 +76,19 @@ public class DayService {
                 .build();
     }
 
-    public Date parseDate(String date) {
-        return new Date(Long.parseLong(date));
+    public LocalDate parseDate(String date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        return LocalDate.parse(date, formatter);
     }
 
 
-    public Date getCurrentDate() {
-        return new Date();
+    public LocalDate getCurrentDate() {
+        return LocalDate.now();
     }
 
     public void updateNutritionalProgress(String currentUserEmail, NutritionalProgressDTO nutritionalProgressDTO) {
         var user = userRepository.findByEmail(currentUserEmail).orElseThrow();
-        var day = user.getDays().stream()
-                .filter(d -> d.getDate().equals(new Date()))
-                .findFirst()
-                .orElseThrow();
+        var day = getDay(currentUserEmail, getCurrentDate());
         day.getNutritionalProgress().setCalories(nutritionalProgressDTO.getCalories());
         day.getNutritionalProgress().setProtein(nutritionalProgressDTO.getProtein());
         day.getNutritionalProgress().setCarbohydrates(nutritionalProgressDTO.getCarbohydrates());

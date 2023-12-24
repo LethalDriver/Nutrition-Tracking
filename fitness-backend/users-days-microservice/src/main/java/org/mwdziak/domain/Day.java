@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class Day {
     @Id
     @GeneratedValue
     private Long id;
-    private Date date;
+    private LocalDate date;
     @ManyToOne
     @JoinColumn(name="user_id")
     private User user;

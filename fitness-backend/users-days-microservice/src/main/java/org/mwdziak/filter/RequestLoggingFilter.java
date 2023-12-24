@@ -37,7 +37,7 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
 
         // Continue with the filter chain
         filterChain.doFilter(request, response);
-
         logger.info("Outgoing response: status={}", response.getStatus());
+        return;
     }
 }

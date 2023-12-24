@@ -17,9 +17,9 @@ public class DayController {
     private final DayService dayService;
     private final UserService userService;
     @GetMapping("/user/day/exists")
-    public boolean isDayCreated(@RequestParam String date) {
+    public boolean isDayCreated() {
         return dayService.isDayExists(userService.getCurrentUserEmail(),
-                dayService.parseDate(date));
+                dayService.getCurrentDate());
     }
 
     @GetMapping("/user/day/progress")
@@ -27,13 +27,13 @@ public class DayController {
         return dayService.getNutritionalProgress(userService.getCurrentUserEmail());
     }
 
-    @PostMapping
-    public Day createNewDay() {
-        return dayService.createDay(userService.getCurrentUserEmail(),
+    @PostMapping("/user/day/create")
+    public void createNewDay() {
+        dayService.createDay(userService.getCurrentUserEmail(),
                 dayService.getCurrentDate());
     }
 
-    @PutMapping
+    @PutMapping("/user/day/progress")
     public void updateNutrients(@RequestBody NutritionalProgressDTO nutritionalProgressDTO) {
         dayService.updateNutritionalProgress(userService.getCurrentUserEmail(),
                 nutritionalProgressDTO);

@@ -7,7 +7,7 @@ import com.mwdziak.fitness_mobile_client.service.HttpService
 import com.mwdziak.fitness_mobile_client.service.Validator
 import io.ktor.client.HttpClient
 
-class UpdateGoalsViewModel(val httpClient: HttpClient, val httpService: HttpService) : ViewModel() {
+class UpdateGoalsViewModel(private val httpService: HttpService) : ViewModel() {
     private val calories = MutableLiveData<String>("")
     private val protein = MutableLiveData<String>("")
     private val carbohydrates = MutableLiveData<String>("")

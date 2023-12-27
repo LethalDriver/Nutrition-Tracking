@@ -4,6 +4,7 @@ import com.mwdziak.fitness_mobile_client.service.HttpService
 import com.mwdziak.fitness_mobile_client.service.TokenManager
 import com.mwdziak.fitness_mobile_client.service.Validator
 import com.mwdziak.fitness_mobile_client.viewmodel.LoginViewModel
+import com.mwdziak.fitness_mobile_client.viewmodel.MainDashboardViewModel
 import com.mwdziak.fitness_mobile_client.viewmodel.RegisterViewModel
 import com.mwdziak.fitness_mobile_client.viewmodel.UpdateGoalsViewModel
 import io.ktor.client.HttpClient
@@ -21,6 +22,7 @@ import io.ktor.client.features.logging.Logger
 import io.ktor.client.features.logging.Logging
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.qualifier.named
+import org.koin.core.scope.get
 
 
 val httpClientModule = module {
@@ -77,5 +79,7 @@ val serviceModule = module {
 val viewModelModule = module {
     viewModel { LoginViewModel(get(), get()) }
     viewModel { RegisterViewModel(get(), get(), get()) }
-    viewModel { UpdateGoalsViewModel(get(named("defaultHttpClient")), get()) }
+    viewModel { UpdateGoalsViewModel(get()) }
+    viewModel { MainDashboardViewModel(get()) }
+
 }

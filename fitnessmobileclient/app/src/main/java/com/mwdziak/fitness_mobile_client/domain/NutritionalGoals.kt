@@ -1,5 +1,4 @@
 package com.mwdziak.fitness_mobile_client.domain
-
 import kotlinx.serialization.Serializable
 
 @Serializable

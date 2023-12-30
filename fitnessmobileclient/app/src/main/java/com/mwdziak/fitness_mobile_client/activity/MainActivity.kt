@@ -19,14 +19,7 @@ class MainActivity : AppCompatActivity() {
         val topAppBar = findViewById<MaterialToolbar>(R.id.topAppBar)
         val drawerLayout = findViewById<DrawerLayout>(R.id.drawerLayout)
         val navigationView = findViewById<NavigationView>(R.id.navigationView)
-        val hydrationBar = findViewById<ProgressBar>(R.id.hydrationBar)
-        val caloriesBar = findViewById<ProgressBar>(R.id.caloriesBar)
-        val proteinBar = findViewById<ProgressBar>(R.id.proteinBar)
-        val carbsBar = findViewById<ProgressBar>(R.id.carbohydratesBar)
 
-        hydrationBar.min = 0
-        hydrationBar.max = 100
-        hydrationBar.progress = 50
 
         topAppBar.setNavigationOnClickListener {
             drawerLayout.open()

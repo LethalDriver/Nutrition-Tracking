@@ -20,10 +20,10 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
-    <string-array name="items">
-        <item>Item 1</item>
-        <item>Item 2</item>
-        <item>Item 3</item>
+    <string-array name="food_categories">
+        <item>Egg</item>
+        <item>Beef</item>
+        <item>Broccoli</item>
     </string-array>
 
     <string name="lorem_ipsum">

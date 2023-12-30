@@ -9,8 +9,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mwdziak.fitness_mobile_client.AddMealViewModel
 import com.mwdziak.fitness_mobile_client.R
-import com.mwdziak.fitness_mobile_client.adapter.AddMealRecycleViewAdapter
+import com.mwdziak.fitness_mobile_client.recycleview.AddMealRecycleViewAdapter
 import com.mwdziak.fitness_mobile_client.databinding.FragmentAddMealBinding
+import com.mwdziak.fitness_mobile_client.domain.Ingredient
 
 class AddMealFragment : Fragment() {
 
@@ -34,8 +35,10 @@ class AddMealFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val recyclerView = view.findViewById<RecyclerView>(R.id.mealRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        val myDataset = arrayOf("Item 1", "Item 2", "Item 3")
-        recyclerView.adapter = AddMealRecycleViewAdapter(myDataset)
+        val myDataset = MutableList<Ingredient>(1) {
+            Ingredient()
+        }
+        recyclerView.adapter = AddMealRecycleViewAdapter(myDataset, resources.getStringArray(R.array.food_categories))
     }
 
     override fun onDestroyView() {

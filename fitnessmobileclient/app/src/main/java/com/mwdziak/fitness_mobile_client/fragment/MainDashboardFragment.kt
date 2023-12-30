@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import com.mwdziak.fitness_mobile_client.R
 import com.mwdziak.fitness_mobile_client.databinding.FragmentLoginBinding
 import com.mwdziak.fitness_mobile_client.databinding.FragmentMainDashboardBinding
@@ -34,6 +35,13 @@ class MainDashboardFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.addMealButton.setOnClickListener {
+            findNavController().navigate(R.id.action_mainDashboardFragment_to_addMealFragment)
+        }
     }
 
 }

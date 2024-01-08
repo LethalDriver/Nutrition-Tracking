@@ -9,8 +9,6 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class FoodNutrientDTO {
-    private Long id;
     private String name;
-    private String unitName;
     private Double quantity;
 }

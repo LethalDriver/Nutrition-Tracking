@@ -20,7 +20,7 @@ public class FoodController {
 
 
     @GetMapping("/foods")
-    public List<FoodDTO> fetchFoods(@RequestParam(name="name") String name){
-        return foodService.getFoodToSend(name);
+    public List<FoodDTO> fetchFoods(@RequestParam("foodKind") String foodKind){
+        return foodService.getFoodToSend(foodKind);
     }
 }

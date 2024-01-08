@@ -14,5 +14,6 @@ import java.util.List;
 public class FoodDTO {
     private Long fdcId;
     private String description;
+    private String foodKind;
     private List<FoodNutrientDTO> nutrients;
 }

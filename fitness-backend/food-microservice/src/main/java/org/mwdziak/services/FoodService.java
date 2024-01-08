@@ -16,8 +16,8 @@ import java.util.stream.Collectors;
 public class FoodService {
     private FoodRepository foodRepository;
 
-    public List<FoodDTO> getFoodToSend(String foodName){
-        List<Food> foods = foodRepository.findByDescriptionStartsWith(foodName);
+    public List<FoodDTO> getFoodToSend(String foodKind){
+        List<Food> foods = foodRepository.findByFoodKind(foodKind);
         return foods.stream().map(this::foodToFoodDTO).collect(Collectors.toList());
     }
 
@@ -25,6 +25,7 @@ public class FoodService {
         return FoodDTO.builder()
                 .fdcId(food.getFdcId())
                 .description(food.getDescription())
+                .foodKind(food.getFoodKind())
                 .nutrients(food.getFoodToNutrients().stream().map(this::nutrientToFoodNutrientDTO)
                         .collect(Collectors.toList()))
                 .build();
@@ -33,10 +34,8 @@ public class FoodService {
 
     private FoodNutrientDTO nutrientToFoodNutrientDTO(FoodToNutrient foodToNutrient){
         return FoodNutrientDTO.builder()
-                .id(foodToNutrient.getId())
                 .name(foodToNutrient.getNutrient().getName())
                 .quantity(foodToNutrient.getAmount())
-                .unitName(foodToNutrient.getNutrient().getUnitName())
                 .build();
     }
 }

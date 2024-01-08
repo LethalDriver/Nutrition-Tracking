@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 public class Food {
     @Id
     private Long fdcId;
+    private String foodKind;
     private String description;
     private Integer foodCategoryId;
     @OneToMany(mappedBy = "food")

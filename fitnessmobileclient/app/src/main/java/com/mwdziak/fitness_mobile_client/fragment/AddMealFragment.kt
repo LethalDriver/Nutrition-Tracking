@@ -30,6 +30,9 @@ class AddMealFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.addButton.setOnClickListener {
+            addForm()
+        }
         addForm()
     }
 
@@ -57,10 +60,13 @@ class AddMealFragment : Fragment() {
         val foodCategories = resources.getStringArray(R.array.food_categories)
         val foodCategoriesAdapter = ArrayAdapter(view.context, R.layout.meal_autocomplete_item, foodCategories)
         val unitsAdapter = ArrayAdapter(view.context, R.layout.meal_autocomplete_item, arrayOf("g", "lb"))
+
         val foodKindTextView = view.findViewById<AutoCompleteTextView>(R.id.foodKindTextView)
         val foodDescriptionTextView = view.findViewById<AutoCompleteTextView>(R.id.foodDescriptionTextView)
         val weightTextView = view.findViewById<TextInputEditText>(R.id.weightEditText)
         val unitTextView = view.findViewById<AutoCompleteTextView>(R.id.unitAutoCompleteTextView)
+        val deleteButton = view.findViewById<View>(R.id.deleteButton)
+
         foodKindTextView.setAdapter(foodCategoriesAdapter)
         unitTextView.setAdapter(unitsAdapter)
 
@@ -78,6 +84,34 @@ class AddMealFragment : Fragment() {
                 }
             }
         }
+
+        foodDescriptionTextView.setOnItemClickListener { _, _, dropdownPosition, _ ->
+            viewModel.ingredients[position].description = foodDescriptionTextView.text.toString()
+            foodDescriptionTextView.clearFocus()
+            Log.w("AddMealFragment", viewModel.ingredients.toString())
+        }
+
+        unitTextView.setOnItemClickListener { _, _, dropdownPosition, _ ->
+            viewModel.ingredients[position].unit = unitsAdapter.getItem(dropdownPosition).toString()
+            unitTextView.clearFocus()
+            Log.w("AddMealFragment", viewModel.ingredients.toString())
+        }
+
+        weightTextView.setOnFocusChangeListener { v, hasFocus ->
+            if (!hasFocus) {
+                val enteredText = (v as TextInputEditText).text.toString()
+                if (enteredText.isEmpty()) {
+                    v.setText("0")
+                }
+                viewModel.ingredients[position].weight = weightTextView.text.toString().toDouble()
+                Log.w("AddMealFragment", viewModel.ingredients.toString())
+            }
+        }
+
+
+
+
+
 
     }
 }

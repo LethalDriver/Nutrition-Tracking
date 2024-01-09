@@ -13,4 +13,8 @@ class AddMealViewModel(private val httpService: HttpService) : ViewModel() {
         val foods = httpService.getFoods(foodKind)
         return foods
     }
+
+    fun getFoodsDescriptions(foods: List<FoodDTO>): List<String> {
+        return foods.map { it.description }
+    }
 }

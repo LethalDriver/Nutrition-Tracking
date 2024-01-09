@@ -4,6 +4,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class FoodDTO(
+    val fdcId: Int,
+    val description: String,
     val calories: Double,
     val protein: Double,
     val carbohydrates: Double,

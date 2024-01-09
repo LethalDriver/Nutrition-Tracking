@@ -2,7 +2,7 @@ package com.mwdziak.fitness_mobile_client.domain
 
 data class Ingredient(
     val id: Int = 0,
-    var name: String = "",
+    var foodKind: String = "",
     var description: String = "",
     var weight: Double = 0.0,
     var unit: String = "",

@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class FoodNutrientDTO {
-    private String name;
-    private Double quantity;
+    private double calories;
+    private double protein;
+    private double fat;
+    private double carbohydrates;
 }

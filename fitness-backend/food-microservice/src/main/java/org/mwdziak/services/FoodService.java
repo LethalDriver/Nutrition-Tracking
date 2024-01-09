@@ -22,20 +22,31 @@ public class FoodService {
     }
 
     private FoodDTO foodToFoodDTO(Food food){
-        return FoodDTO.builder()
+        var foodDto = FoodDTO.builder()
                 .fdcId(food.getFdcId())
                 .description(food.getDescription())
                 .foodKind(food.getFoodKind())
-                .nutrients(food.getFoodToNutrients().stream().map(this::nutrientToFoodNutrientDTO)
-                        .collect(Collectors.toList()))
                 .build();
 
-    }
+        for (FoodToNutrient foodToNutrient : food.getFoodToNutrients()){
+            var name = foodToNutrient.getNutrient().getName();
+            if (name.equals("Protein")){
+                foodDto.getNutrients().setProtein(foodToNutrient.getAmount());
 
-    private FoodNutrientDTO nutrientToFoodNutrientDTO(FoodToNutrient foodToNutrient){
-        return FoodNutrientDTO.builder()
-                .name(foodToNutrient.getNutrient().getName())
-                .quantity(foodToNutrient.getAmount())
-                .build();
+            } else if (name.equals("Total lipid (fat)")) {
+                foodDto.getNutrients().setFat(foodToNutrient.getAmount());
+
+            } else if (name.equals("Carbohydrate, by difference")) {
+                foodDto.getNutrients().setCarbohydrates(foodToNutrient.getAmount());
+
+            } else if (name.equals("Energy")) {
+                foodDto.getNutrients().setCalories(foodToNutrient.getAmount());
+
+            }
+        }
+
+        return foodDto;
+
+
     }
 }

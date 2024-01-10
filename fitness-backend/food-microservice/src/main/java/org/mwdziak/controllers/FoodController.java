@@ -19,7 +19,7 @@ public class FoodController {
     private FoodService foodService;
 
 
-    @GetMapping("/foods")
+    @GetMapping("/food/kinds")
     public List<FoodDTO> fetchFoods(@RequestParam("foodKind") String foodKind){
         return foodService.getFoodToSend(foodKind);
     }

@@ -8,13 +8,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import com.google.android.material.textfield.TextInputEditText
 import com.mwdziak.fitness_mobile_client.viewmodel.AddMealViewModel
 import com.mwdziak.fitness_mobile_client.R
 import com.mwdziak.fitness_mobile_client.databinding.FragmentAddMealBinding
 import com.mwdziak.fitness_mobile_client.domain.Ingredient
-import kotlinx.coroutines.CoroutineScope
+import com.mwdziak.fitness_mobile_client.viewmodel.IngredientFormViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -60,13 +62,17 @@ class AddMealFragment : Fragment() {
     }
 
     private fun initForm(view: View, position: Int){
-        val foodCategories = resources.getStringArray(R.array.food_categories)
-        val foodCategoriesAdapter = ArrayAdapter(view.context, R.layout.meal_autocomplete_item, foodCategories)
+        val formViewModel: IngredientFormViewModel by viewModel()
+
+        val descriptions = mutableListOf<String>()
+
+        val foodCategories = formViewModel.foodCategories
+        val foodKindsAdapter = ArrayAdapter(view.context, R.layout.meal_autocomplete_item, foodCategories)
 
         val foodKindTextView = view.findViewById<AutoCompleteTextView>(R.id.foodKindTextView)
 
         val foodDescriptionTextView = view.findViewById<AutoCompleteTextView>(R.id.foodDescriptionTextView)
-        val foodDescriptionAdapter = ArrayAdapter(view.context, R.layout.meal_autocomplete_item, arrayOf<String>())
+        val foodDescriptionAdapter = ArrayAdapter(view.context, R.layout.meal_autocomplete_item, descriptions)
 
         val weightTextView = view.findViewById<TextInputEditText>(R.id.weightEditText)
 
@@ -76,17 +82,19 @@ class AddMealFragment : Fragment() {
 
         val deleteButton = view.findViewById<View>(R.id.deleteButton)
 
-        foodKindTextView.setAdapter(foodCategoriesAdapter)
+        foodKindTextView.setAdapter(foodKindsAdapter)
+        foodDescriptionTextView.setAdapter(foodDescriptionAdapter)
         unitTextView.setAdapter(unitsAdapter)
 
         foodKindTextView.setOnItemClickListener { _, _, dropdownPosition, _ ->
             viewModel.ingredients[position].foodKind = foodCategories[dropdownPosition]
-            CoroutineScope(viewModel.viewModelScope.coroutineContext).launch {
-                val foods = viewModel.getFoods(viewModel.ingredients[position].foodKind)
-                foodDescriptionAdapter.clear()
-                foodDescriptionAdapter.addAll(viewModel.getFoodsDescriptions(foods))
-                foodDescriptionAdapter.notifyDataSetChanged()
+            formViewModel.viewModelScope.launch {
+                val foods = formViewModel.getFoods(viewModel.ingredients[position].foodKind)
+                val fetchedDescriptions = formViewModel.getFoodsDescriptions(foods)
+                descriptions.addAll(fetchedDescriptions)
+                Log.w("AddMealFragment", descriptions.toString())
             }
+            foodDescriptionAdapter.notifyDataSetChanged()
             foodKindTextView.clearFocus()
             Log.w("AddMealFragment", viewModel.ingredients.toString())
         }
@@ -97,21 +105,10 @@ class AddMealFragment : Fragment() {
                 if (!foodCategories.contains(enteredText)) {
                     v.setText("")
                 }
-                else {
-                    viewModel.ingredients[position].foodKind = enteredText
-
-                    CoroutineScope(viewModel.viewModelScope.coroutineContext).launch {
-                        val foods = viewModel.getFoods(viewModel.ingredients[position].foodKind)
-                        foodDescriptionAdapter.clear()
-                        foodDescriptionAdapter.addAll(viewModel.getFoodsDescriptions(foods))
-                        foodDescriptionAdapter.notifyDataSetChanged()
-                    }
-                    Log.w("AddMealFragment", viewModel.ingredients.toString())
-                }
             }
         }
 
-        foodDescriptionTextView.setOnItemClickListener { _, _, dropdownPosition, _ ->
+        foodDescriptionTextView.setOnItemClickListener { _, _, _, _ ->
             viewModel.ingredients[position].description = foodDescriptionTextView.text.toString()
             foodDescriptionTextView.clearFocus()
             Log.w("AddMealFragment", viewModel.ingredients.toString())

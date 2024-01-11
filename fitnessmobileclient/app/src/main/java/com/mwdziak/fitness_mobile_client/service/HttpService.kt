@@ -9,6 +9,7 @@ import com.mwdziak.fitness_mobile_client.dto.FoodDTO
 import io.ktor.client.HttpClient
 import io.ktor.client.call.receive
 import io.ktor.client.request.get
+import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.client.request.put
 import io.ktor.client.statement.HttpResponse
@@ -18,7 +19,7 @@ import io.ktor.http.contentType
 
 class HttpService(private val noAuthHttpClient: HttpClient, private val defaultHttpClient: HttpClient) {
     private val mainUrl = "http://10.0.2.2:8080"
-    private val foodServiceUrl = "http://10.0.2.2:8000"
+    private val foodServiceUrl = "http://10.0.2.2:8081"
     suspend fun authenticate(authenticationRequest: AuthenticationRequest): TokensDTO {
         val url = "$mainUrl/auth/login"
 
@@ -28,7 +29,6 @@ class HttpService(private val noAuthHttpClient: HttpClient, private val defaultH
         }
         val tokensDTO: TokensDTO = response.receive()
 
-        noAuthHttpClient.close()
         return tokensDTO
     }
 
@@ -39,9 +39,7 @@ class HttpService(private val noAuthHttpClient: HttpClient, private val defaultH
             contentType(ContentType.Application.Json)
             body = registrationRequest
         }
-
         val tokensDTO: TokensDTO = response.receive()
-        noAuthHttpClient.close()
 
         return tokensDTO
     }
@@ -50,7 +48,6 @@ class HttpService(private val noAuthHttpClient: HttpClient, private val defaultH
         val url = "$mainUrl/user/goals/get"
         val response: HttpResponse = defaultHttpClient.get(url)
         val nutritionalGoals: NutritionalGoals = response.receive()
-        defaultHttpClient.close()
         return nutritionalGoals
     }
 
@@ -60,41 +57,37 @@ class HttpService(private val noAuthHttpClient: HttpClient, private val defaultH
             contentType(ContentType.Application.Json)
             body = nutritionalGoals
         }
-        defaultHttpClient.close()
     }
 
     suspend fun isDayCreated(): Boolean {
         val url = "$mainUrl/user/day/exists"
         val response: HttpResponse = defaultHttpClient.get(url)
         val isDayCreated: Boolean = response.receive()
-        defaultHttpClient.close()
         return isDayCreated
     }
 
     suspend fun createDay() {
         val url = "$mainUrl/user/day/create"
         val response: HttpResponse = defaultHttpClient.post(url)
-        defaultHttpClient.close()
     }
     suspend fun getProgress(): NutritionalProgress {
         val url = "$mainUrl/user/day/get"
         val response: HttpResponse = defaultHttpClient.get(url)
         val nutritionalProgress: NutritionalProgress = response.receive()
-        defaultHttpClient.close()
         return nutritionalProgress
     }
 
     suspend fun updateProgress() {
         val url = "$mainUrl/user/day/update"
         val response: HttpResponse = defaultHttpClient.put(url)
-        defaultHttpClient.close()
     }
 
     suspend fun getFoods(foodKind: String): List<FoodDTO> {
-        val url = "$foodServiceUrl/food/kinds/$foodKind"
-        val response: HttpResponse = defaultHttpClient.get(url)
+        val url = "$foodServiceUrl/food/kinds"
+        val response: HttpResponse = defaultHttpClient.get(url) {
+            parameter("foodKind", foodKind)
+        }
         val foodDTOs: List<FoodDTO> = response.receive()
-        defaultHttpClient.close()
         return foodDTOs
     }
 

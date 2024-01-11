@@ -4,6 +4,7 @@ import com.mwdziak.fitness_mobile_client.service.HttpService
 import com.mwdziak.fitness_mobile_client.service.TokenManager
 import com.mwdziak.fitness_mobile_client.service.Validator
 import com.mwdziak.fitness_mobile_client.viewmodel.AddMealViewModel
+import com.mwdziak.fitness_mobile_client.viewmodel.IngredientFormViewModel
 import com.mwdziak.fitness_mobile_client.viewmodel.LoginViewModel
 import com.mwdziak.fitness_mobile_client.viewmodel.MainDashboardViewModel
 import com.mwdziak.fitness_mobile_client.viewmodel.RegisterViewModel
@@ -83,5 +84,5 @@ val viewModelModule = module {
     viewModel { UpdateGoalsViewModel(get()) }
     viewModel { MainDashboardViewModel(get()) }
     viewModel { AddMealViewModel(get()) }
-
+    viewModel { IngredientFormViewModel(get()) }
 }

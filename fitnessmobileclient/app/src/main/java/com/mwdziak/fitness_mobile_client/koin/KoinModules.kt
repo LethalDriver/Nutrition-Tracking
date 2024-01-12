@@ -38,15 +38,15 @@ val httpClientModule = module {
                     val tokenManager: TokenManager = get()
                     loadTokens {
                         BearerTokens(
-                            accessToken = tokenManager.getJwtToken()!!,
-                            refreshToken = tokenManager.getRefreshToken()!!
+                            accessToken = tokenManager.getJwtToken() ?: "",
+                            refreshToken = tokenManager.getRefreshToken() ?: ""
                         )
                     }
                     refreshTokens {
                         tokenManager.refreshTokens()
                         BearerTokens(
-                            accessToken = tokenManager.getJwtToken()!!,
-                            refreshToken = tokenManager.getRefreshToken()!!
+                            accessToken = tokenManager.getJwtToken() ?: "",
+                            refreshToken = tokenManager.getRefreshToken() ?: ""
                         )
                     }
 

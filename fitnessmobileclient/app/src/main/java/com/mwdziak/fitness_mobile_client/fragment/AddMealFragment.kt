@@ -8,14 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
-import androidx.lifecycle.ViewModelProvider
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import com.google.android.material.textfield.TextInputEditText
 import com.mwdziak.fitness_mobile_client.viewmodel.AddMealViewModel
 import com.mwdziak.fitness_mobile_client.R
 import com.mwdziak.fitness_mobile_client.databinding.FragmentAddMealBinding
-import com.mwdziak.fitness_mobile_client.domain.Ingredient
 import com.mwdziak.fitness_mobile_client.viewmodel.IngredientFormViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -38,6 +37,9 @@ class AddMealFragment : Fragment() {
         binding.addButton.setOnClickListener {
             addForm()
         }
+        lifecycleScope.launch {
+            viewModel.fetchFoodKinds()
+        }
         addForm()
     }
 
@@ -49,8 +51,7 @@ class AddMealFragment : Fragment() {
     private fun addForm() {
         val newForm = LayoutInflater.from(requireContext()).inflate(R.layout.ingredient_item, binding.formContainer, false)
         binding.formContainer.addView(newForm)
-        viewModel.ingredients.add(Ingredient())
-        initForm(newForm, viewModel.ingredients.size - 1)
+        initForm(newForm)
     }
 
     private fun removeForm(form: View) {
@@ -61,23 +62,22 @@ class AddMealFragment : Fragment() {
         fun newInstance() = AddMealFragment()
     }
 
-    private fun initForm(view: View, position: Int){
+    private fun initForm(view: View){
         val formViewModel: IngredientFormViewModel by viewModel()
 
-        val descriptions = mutableListOf<String>()
+        viewModel.addIngredient(formViewModel)
 
-        val foodCategories = formViewModel.foodCategories
-        val foodKindsAdapter = ArrayAdapter(view.context, R.layout.meal_autocomplete_item, foodCategories)
+        val foodKindsAdapter = ArrayAdapter(view.context, R.layout.meal_autocomplete_item, viewModel.getFoodCategories())
 
         val foodKindTextView = view.findViewById<AutoCompleteTextView>(R.id.foodKindTextView)
 
         val foodDescriptionTextView = view.findViewById<AutoCompleteTextView>(R.id.foodDescriptionTextView)
-        val foodDescriptionAdapter = ArrayAdapter(view.context, R.layout.meal_autocomplete_item, descriptions)
+        val foodDescriptionAdapter = ArrayAdapter(view.context, R.layout.meal_autocomplete_item, formViewModel.getFoodDescriptions())
 
         val weightTextView = view.findViewById<TextInputEditText>(R.id.weightEditText)
 
         val unitTextView = view.findViewById<AutoCompleteTextView>(R.id.unitAutoCompleteTextView)
-        val unitsAdapter = ArrayAdapter(view.context, R.layout.meal_autocomplete_item, arrayOf("g", "lb"))
+        val unitsAdapter = ArrayAdapter(view.context, R.layout.meal_autocomplete_item, formViewModel.getWeightUnits())
 
 
         val deleteButton = view.findViewById<View>(R.id.deleteButton)
@@ -87,57 +87,43 @@ class AddMealFragment : Fragment() {
         unitTextView.setAdapter(unitsAdapter)
 
         foodKindTextView.setOnItemClickListener { _, _, dropdownPosition, _ ->
-            viewModel.ingredients[position].foodKind = foodCategories[dropdownPosition]
             formViewModel.viewModelScope.launch {
-                val foods = formViewModel.getFoods(viewModel.ingredients[position].foodKind)
-                val fetchedDescriptions = formViewModel.getFoodsDescriptions(foods)
-                descriptions.addAll(fetchedDescriptions)
-                Log.w("AddMealFragment", descriptions.toString())
+                formViewModel.updatePickedFoodKind(viewModel.getFoodCategories()[dropdownPosition])
+                formViewModel.fetchFoodDescriptions()
             }
             foodDescriptionAdapter.notifyDataSetChanged()
             foodKindTextView.clearFocus()
-            Log.w("AddMealFragment", viewModel.ingredients.toString())
+            Log.w("AddMealFragment", formViewModel.toString())
         }
 
         foodKindTextView.setOnFocusChangeListener { v, hasFocus ->
             if (!hasFocus) {
                 val enteredText = (v as AutoCompleteTextView).text.toString()
-                if (!foodCategories.contains(enteredText)) {
+                if (!viewModel.getFoodCategories().contains(enteredText)) {
                     v.setText("")
                 }
             }
         }
 
-        foodDescriptionTextView.setOnItemClickListener { _, _, _, _ ->
-            viewModel.ingredients[position].description = foodDescriptionTextView.text.toString()
+        foodDescriptionTextView.setOnItemClickListener { _, _, dropdownPosition, _ ->
+            formViewModel.updatePickedFoodDescription(dropdownPosition)
             foodDescriptionTextView.clearFocus()
-            Log.w("AddMealFragment", viewModel.ingredients.toString())
+            Log.w("AddMealFragment", formViewModel.toString())
         }
 
         unitTextView.setOnItemClickListener { _, _, dropdownPosition, _ ->
-            viewModel.ingredients[position].unit = unitsAdapter.getItem(dropdownPosition).toString()
+            formViewModel.updatePickedWeightUnit(dropdownPosition)
             unitTextView.clearFocus()
-            Log.w("AddMealFragment", viewModel.ingredients.toString())
+            Log.w("AddMealFragment", formViewModel.toString())
         }
 
-        weightTextView.setOnFocusChangeListener { v, hasFocus ->
-            if (!hasFocus) {
-                val enteredText = (v as TextInputEditText).text.toString()
-                if (enteredText.isEmpty()) {
-                    v.setText("0")
-                }
-                viewModel.ingredients[position].weight = weightTextView.text.toString().toDouble()
-                Log.w("AddMealFragment", viewModel.ingredients.toString())
-            }
+        weightTextView.addTextChangedListener { text ->
+            formViewModel.updatePickedFoodWeight(text.toString().toDouble())
         }
 
         deleteButton.setOnClickListener {
             removeForm(view)
-            viewModel.ingredients.removeAt(position)
-            for (i in position until viewModel.ingredients.size) {
-                initForm(binding.formContainer.getChildAt(i), i)
-            }
-            Log.w("AddMealFragment", viewModel.ingredients.toString())
+            viewModel.removeIngredient(formViewModel)
         }
     }
 }

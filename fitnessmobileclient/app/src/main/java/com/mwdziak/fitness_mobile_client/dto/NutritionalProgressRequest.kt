@@ -1,8 +1,9 @@
-package com.mwdziak.fitness_mobile_client.domain
+package com.mwdziak.fitness_mobile_client.dto
+
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class NutritionalGoals(
+data class NutritionalProgressRequest(
     val calories: Double? = null,
     val protein: Double? = null,
     val carbohydrates: Double? = null,

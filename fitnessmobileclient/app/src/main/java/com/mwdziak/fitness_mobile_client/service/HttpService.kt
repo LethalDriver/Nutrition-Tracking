@@ -3,9 +3,9 @@ package com.mwdziak.fitness_mobile_client.service
 import com.mwdziak.fitness_mobile_client.auth.AuthenticationRequest
 import com.mwdziak.fitness_mobile_client.auth.RegistrationRequest
 import com.mwdziak.fitness_mobile_client.auth.TokensDTO
-import com.mwdziak.fitness_mobile_client.domain.NutritionalGoals
-import com.mwdziak.fitness_mobile_client.domain.NutritionalProgress
-import com.mwdziak.fitness_mobile_client.dto.FoodDTO
+import com.mwdziak.fitness_mobile_client.dto.NutritionalGoalsRequest
+import com.mwdziak.fitness_mobile_client.dto.NutritionalProgressRequest
+import com.mwdziak.fitness_mobile_client.dto.FoodGetRequest
 import io.ktor.client.HttpClient
 import io.ktor.client.call.receive
 import io.ktor.client.request.get
@@ -42,13 +42,13 @@ class HttpService(private val noAuthHttpClient: HttpClient, private val defaultH
         return response.receive()
     }
 
-    suspend fun getGoals(): NutritionalGoals {
+    suspend fun getGoals(): NutritionalGoalsRequest {
         val url = "$mainUrl/user/goals/get"
         val response: HttpResponse = defaultHttpClient.get(url)
         return response.receive()
     }
 
-    suspend fun updateGoals(nutritionalGoals: NutritionalGoals) {
+    suspend fun updateGoals(nutritionalGoals: NutritionalGoalsRequest) {
         val url = "$mainUrl/user/goals/update"
         val response: HttpResponse = defaultHttpClient.put(url) {
             contentType(ContentType.Application.Json)
@@ -66,7 +66,7 @@ class HttpService(private val noAuthHttpClient: HttpClient, private val defaultH
         val url = "$mainUrl/user/day/create"
         val response: HttpResponse = defaultHttpClient.post(url)
     }
-    suspend fun getProgress(): NutritionalProgress {
+    suspend fun getProgress(): NutritionalProgressRequest {
         val url = "$mainUrl/user/day/get"
         val response: HttpResponse = defaultHttpClient.get(url)
         return response.receive()
@@ -77,7 +77,7 @@ class HttpService(private val noAuthHttpClient: HttpClient, private val defaultH
         val response: HttpResponse = defaultHttpClient.put(url)
     }
 
-    suspend fun getFoodsByKind(foodKind: String): List<FoodDTO> {
+    suspend fun getFoodsByKind(foodKind: String): List<FoodGetRequest> {
         val url = "$foodServiceUrl/food/kinds"
         val response: HttpResponse = noAuthHttpClient.get(url) {
             parameter("foodKind", foodKind)
@@ -85,7 +85,7 @@ class HttpService(private val noAuthHttpClient: HttpClient, private val defaultH
         return response.receive()
     }
 
-    suspend fun getFoodKinds(): List<FoodDTO> {
+    suspend fun getFoodKinds(): List<FoodGetRequest> {
         val url = "$foodServiceUrl/food/kinds"
         val response: HttpResponse = noAuthHttpClient.get(url)
         return response.receive()

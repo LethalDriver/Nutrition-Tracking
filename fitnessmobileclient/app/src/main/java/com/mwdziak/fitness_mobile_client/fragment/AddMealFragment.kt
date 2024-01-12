@@ -41,6 +41,9 @@ class AddMealFragment : Fragment() {
             viewModel.fetchFoodKinds()
         }
         addForm()
+        binding.discardButton.setOnClickListener {
+            requireActivity().supportFragmentManager.popBackStack()
+        }
     }
 
     override fun onDestroyView() {
@@ -64,6 +67,7 @@ class AddMealFragment : Fragment() {
 
     private fun initForm(view: View){
         val formViewModel: IngredientFormViewModel by viewModel()
+        formViewModel.setFoodKinds(viewModel.getFoodCategories())
 
         viewModel.addIngredient(formViewModel)
 
@@ -89,7 +93,7 @@ class AddMealFragment : Fragment() {
         foodKindTextView.setOnItemClickListener { _, _, dropdownPosition, _ ->
             formViewModel.viewModelScope.launch {
                 formViewModel.updatePickedFoodKind(viewModel.getFoodCategories()[dropdownPosition])
-                formViewModel.fetchFoodDescriptions()
+                formViewModel.fetchFoodsByKind()
             }
             foodDescriptionAdapter.notifyDataSetChanged()
             foodKindTextView.clearFocus()
@@ -106,7 +110,7 @@ class AddMealFragment : Fragment() {
         }
 
         foodDescriptionTextView.setOnItemClickListener { _, _, dropdownPosition, _ ->
-            formViewModel.updatePickedFoodDescription(dropdownPosition)
+            formViewModel.updatePickedFood(dropdownPosition)
             foodDescriptionTextView.clearFocus()
             Log.w("AddMealFragment", formViewModel.toString())
         }

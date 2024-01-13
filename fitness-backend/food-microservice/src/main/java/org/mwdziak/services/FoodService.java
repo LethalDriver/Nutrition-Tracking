@@ -60,4 +60,8 @@ public class FoodService {
         }
         return 0.0;
     }
+
+    public List<String> getAllFoodKinds() {
+        return foodRepository.findDistinctFoodKinds();
+    }
 }

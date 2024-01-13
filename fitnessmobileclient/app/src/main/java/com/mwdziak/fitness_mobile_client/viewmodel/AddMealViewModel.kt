@@ -1,6 +1,8 @@
 package com.mwdziak.fitness_mobile_client.viewmodel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 import com.mwdziak.fitness_mobile_client.dto.FoodGetRequest
 import com.mwdziak.fitness_mobile_client.dto.FoodPostRequest
 import com.mwdziak.fitness_mobile_client.service.HttpService
@@ -8,7 +10,7 @@ import com.mwdziak.fitness_mobile_client.service.HttpService
 class AddMealViewModel(private val httpService: HttpService) : ViewModel() {
     private val forms = mutableListOf<IngredientFormViewModel>()
     private val foodKinds = mutableListOf("Fruit", "Egg", "Meat", "Dairy", "Grain", "Other")
-    private val areAllFieldsValid = false
+    val areAllFormsValid = false
 
     fun addIngredient(formViewModel: IngredientFormViewModel) {
         forms.add(formViewModel)
@@ -18,8 +20,7 @@ class AddMealViewModel(private val httpService: HttpService) : ViewModel() {
     }
 
     suspend fun fetchFoodKinds() {
-        val foods = httpService.getFoodKinds()
-        val kinds = mapFoodDtoToKinds(foods)
+        val kinds = httpService.getFoodKinds()
         foodKinds.clear()
         foodKinds.addAll(kinds)
     }

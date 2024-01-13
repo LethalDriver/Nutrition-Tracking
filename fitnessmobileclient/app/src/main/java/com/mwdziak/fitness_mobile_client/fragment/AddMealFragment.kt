@@ -97,7 +97,7 @@ class AddMealFragment : Fragment() {
             }
             foodDescriptionAdapter.notifyDataSetChanged()
             foodKindTextView.clearFocus()
-            Log.w("AddMealFragment", formViewModel.toString())
+            Log.w("AddMealFragment", formViewModel.getFoodDescriptions().toString())
         }
 
         foodKindTextView.setOnFocusChangeListener { v, hasFocus ->
@@ -110,7 +110,7 @@ class AddMealFragment : Fragment() {
         }
 
         foodDescriptionTextView.setOnItemClickListener { _, _, dropdownPosition, _ ->
-            formViewModel.updatePickedFood(dropdownPosition)
+            formViewModel.updatePickedFoodDescription(dropdownPosition)
             foodDescriptionTextView.clearFocus()
             Log.w("AddMealFragment", formViewModel.toString())
         }

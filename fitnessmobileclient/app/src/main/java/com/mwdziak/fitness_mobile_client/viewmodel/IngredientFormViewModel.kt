@@ -9,7 +9,7 @@ import com.mwdziak.fitness_mobile_client.service.HttpService
 
 class IngredientFormViewModel(private val httpService: HttpService) : ViewModel(){
     private val foodsMatchingKind = mutableListOf<FoodGetRequest>()
-    private val foodDescriptions = mutableListOf<String>("Raw", "Cooked", "Dry", "Other")
+    private val foodDescriptions = mutableListOf<String>()
     private val foodKinds = mutableListOf<String>()
     private var foodFromDatabase = FoodGetRequest()
     private val pickedFoodKind = MutableLiveData<String>("")
@@ -49,7 +49,7 @@ class IngredientFormViewModel(private val httpService: HttpService) : ViewModel(
         checkFormValidity()
     }
 
-    fun updatePickedFood(dropdownPosition: Int) {
+    fun updatePickedFoodDescription(dropdownPosition: Int) {
         pickedFoodDescription.value = foodDescriptions[dropdownPosition]
         foodFromDatabase = foodsMatchingKind[dropdownPosition]
         checkFormValidity()
@@ -68,7 +68,7 @@ class IngredientFormViewModel(private val httpService: HttpService) : ViewModel(
         this.foodKinds.addAll(foodKinds)
     }
 
-    fun calculateNutritionalValues(){
+    private fun calculateNutritionalValues(){
         val weight = pickedFoodWeight.value ?: 0.0
         val multiplier = when(pickedWeightUnit.value) {
             "g" -> 1.0
@@ -125,6 +125,11 @@ class IngredientFormViewModel(private val httpService: HttpService) : ViewModel(
             nutrients = nutrients,
             weight = pickedFoodWeight.value ?: 0.0,
         )
+    }
+
+    fun updatePickedFoodDescription(s: String) {
+        pickedFoodDescription.value = s
+        checkFormValidity()
     }
 
 }

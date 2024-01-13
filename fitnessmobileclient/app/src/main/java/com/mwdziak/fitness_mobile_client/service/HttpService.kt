@@ -85,8 +85,8 @@ class HttpService(private val noAuthHttpClient: HttpClient, private val defaultH
         return response.receive()
     }
 
-    suspend fun getFoodKinds(): List<FoodGetRequest> {
-        val url = "$foodServiceUrl/food/kinds"
+    suspend fun getFoodKinds(): List<String> {
+        val url = "$foodServiceUrl/food/kinds/all"
         val response: HttpResponse = noAuthHttpClient.get(url)
         return response.receive()
     }

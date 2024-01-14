@@ -38,9 +38,12 @@ class AddMealFragment : Fragment() {
             addForm()
         }
         lifecycleScope.launch {
-            viewModel.fetchFoodKinds()
+            val job = viewModel.viewModelScope.launch {
+                viewModel.fetchFoodKinds()
+            }
+            job.join()
+            addForm()
         }
-        addForm()
         binding.discardButton.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
         }
@@ -67,9 +70,9 @@ class AddMealFragment : Fragment() {
 
     private fun initForm(view: View){
         val formViewModel: IngredientFormViewModel by viewModel()
-        formViewModel.setFoodKinds(viewModel.getFoodCategories())
-
         viewModel.addIngredient(formViewModel)
+
+        formViewModel.setFoodKinds(viewModel.getFoodCategories())
 
         val foodKindsAdapter = ArrayAdapter(view.context, R.layout.meal_autocomplete_item, viewModel.getFoodCategories())
 
@@ -97,7 +100,7 @@ class AddMealFragment : Fragment() {
             }
             foodDescriptionAdapter.notifyDataSetChanged()
             foodKindTextView.clearFocus()
-            Log.w("AddMealFragment", formViewModel.getFoodDescriptions().toString())
+            Log.w("Form data: ", formViewModel.toString())
         }
 
         foodKindTextView.setOnFocusChangeListener { v, hasFocus ->
@@ -112,13 +115,12 @@ class AddMealFragment : Fragment() {
         foodDescriptionTextView.setOnItemClickListener { _, _, dropdownPosition, _ ->
             formViewModel.updatePickedFoodDescription(dropdownPosition)
             foodDescriptionTextView.clearFocus()
-            Log.w("AddMealFragment", formViewModel.toString())
         }
 
         unitTextView.setOnItemClickListener { _, _, dropdownPosition, _ ->
             formViewModel.updatePickedWeightUnit(dropdownPosition)
             unitTextView.clearFocus()
-            Log.w("AddMealFragment", formViewModel.toString())
+            Log.w("Form data: ", formViewModel.toString())
         }
 
         weightTextView.addTextChangedListener { text ->

@@ -24,6 +24,7 @@ public class UserService {
         String userEmail = getCurrentUserEmail();
         User user = userRepository.findByEmail(userEmail).orElseThrow();
         NutritionalGoals nutritionalGoals = nutritionalGoalsDtoToNutritionalGoals(nutritionalGoalsDTO);
+        nutritionalGoals.setUser(user);
         user.setNutritionalGoals(nutritionalGoals);
         userRepository.save(user);
     }

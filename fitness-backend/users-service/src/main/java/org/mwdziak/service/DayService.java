@@ -83,6 +83,7 @@ public class DayService {
     public void updateNutritionalProgress(String currentUserEmail, NutritionalProgressDTO nutritionalProgressDTO) {
         var day = getDay(currentUserEmail, getCurrentDate());
         var nutritionalProgress = nutritionalProgressDtoToNutritionalProgress(nutritionalProgressDTO);
+        nutritionalProgress.setDay(day);
         day.setNutritionalProgress(nutritionalProgress);
         dayRepository.save(day);
     }

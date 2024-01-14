@@ -5,10 +5,7 @@ import org.mapstruct.factory.Mappers;
 import org.mwdziak.domain.Day;
 import org.mwdziak.domain.Meal;
 import org.mwdziak.domain.NutritionalProgress;
-import org.mwdziak.dto.DayDTO;
-import org.mwdziak.dto.MealDTO;
-import org.mwdziak.dto.NutritionalGoalsDTO;
-import org.mwdziak.dto.NutritionalProgressDTO;
+import org.mwdziak.dto.*;
 import org.mwdziak.mapper.DayMapper;
 import org.mwdziak.mapper.MealMapper;
 import org.mwdziak.mapper.NutritionalProgressMapper;
@@ -39,13 +36,6 @@ public class DayService {
                 .collect(Collectors.toList());
     }
 
-    public boolean isDayExists(String email, LocalDate date) {
-        var user = userRepository.findByEmail(email).orElseThrow();
-        var days = user.getDays();
-        return days.stream()
-                .anyMatch(day -> day.getDate().equals(date));
-    }
-
     public Day getDay(String email, LocalDate date) {
         var user = userRepository.findByEmail(email).orElseThrow();
         var days = user.getDays();
@@ -55,20 +45,22 @@ public class DayService {
                 .orElseThrow();
     }
 
-    public void createDay(String email, LocalDate date) {
+    public Day createDay(String email, LocalDate date) {
         var user = userRepository.findByEmail(email).orElseThrow();
-        var day = Day.builder()
-                .date(date)
-                .user(user)
-                .build();
+        var day = new Day(date, user);
         user.getDays().add(day);
         userRepository.save(user);
+        return day;
     }
 
     public NutritionalProgressDTO getNutritionalProgress(String email) {
-        var user = userRepository.findByEmail(email).orElseThrow();
-        var day = getDay(email, getCurrentDate());
-        return nutritionalProgressToNutritionalProgressDto(day.getNutritionalProgress());
+        try {
+            var day = getDay(email, getCurrentDate());
+            return nutritionalProgressToNutritionalProgressDto(day.getNutritionalProgress());
+        } catch (NoSuchElementException e) {
+            var day = createDay(email, getCurrentDate());
+            return nutritionalProgressToNutritionalProgressDto(day.getNutritionalProgress());
+        }
     }
 
     public LocalDate parseDate(String date) {
@@ -84,14 +76,12 @@ public class DayService {
     public void updateNutritionalProgress(String currentUserEmail, NutritionalProgressDTO nutritionalProgressDTO) {
         try {
             var day = getDay(currentUserEmail, getCurrentDate());
-            var nutritionalProgressUpdate = nutritionalProgressDtoToNutritionalProgress(nutritionalProgressDTO);
             var currentNutritionalProgress = day.getNutritionalProgress();
-            addNutritionalProgress(currentNutritionalProgress, nutritionalProgressUpdate);
+            addNutritionalProgress(currentNutritionalProgress, nutritionalProgressDTO);
             dayRepository.save(day);
 
         } catch (NoSuchElementException e) {
-            createDay(currentUserEmail, getCurrentDate());
-            var day = getDay(currentUserEmail, getCurrentDate());
+            var day = createDay(currentUserEmail, getCurrentDate());
             var nutritionalProgress = nutritionalProgressDtoToNutritionalProgress(nutritionalProgressDTO);
             nutritionalProgress.setDay(day);
             day.setNutritionalProgress(nutritionalProgress);
@@ -99,17 +89,39 @@ public class DayService {
         }
     }
 
-    private static void addNutritionalProgress(NutritionalProgress currentNutritionalProgress, NutritionalProgress nutritionalProgressUpdate) {
+    private static void addNutritionalProgress(NutritionalProgress currentNutritionalProgress, NutritionalProgressDTO nutritionalProgressUpdate) {
         currentNutritionalProgress.setCalories(currentNutritionalProgress.getCalories() + nutritionalProgressUpdate.getCalories());
         currentNutritionalProgress.setProtein(currentNutritionalProgress.getProtein() + nutritionalProgressUpdate.getProtein());
         currentNutritionalProgress.setCarbohydrates(currentNutritionalProgress.getCarbohydrates() + nutritionalProgressUpdate.getCarbohydrates());
         currentNutritionalProgress.setFat(currentNutritionalProgress.getFat() + nutritionalProgressUpdate.getFat());
     }
 
-    public void addMealToDay(String currentUserEmail, Meal meal) {
+    public void addMealAndUpdateNutritionalProgressForDay(String currentUserEmail, MealDTO mealDTO) {
+        var meal = MealDtoToMeal(mealDTO);
+        var nutritionalProgressUpdate = getNutritionalUpdateFromMealDto(mealDTO);
+        updateNutritionalProgress(currentUserEmail, nutritionalProgressUpdate);
         var day = getDay(currentUserEmail, getCurrentDate());
+        meal.setDay(day);
         day.getMeals().add(meal);
         dayRepository.save(day);
+    }
+
+    public NutritionalProgressDTO getNutritionalUpdateFromMealDto(MealDTO mealDTO) {
+        var nutritionalProgressDTO = new NutritionalProgressDTO();
+        var Ingredients = mealDTO.getIngredients();
+        nutritionalProgressDTO.setCalories(Ingredients.stream()
+                .mapToDouble(IngredientDTO::getCalories)
+                .sum());
+        nutritionalProgressDTO.setProtein(Ingredients.stream()
+                .mapToDouble(IngredientDTO::getProtein)
+                .sum());
+        nutritionalProgressDTO.setCarbohydrates(Ingredients.stream()
+                .mapToDouble(IngredientDTO::getCarbohydrates)
+                .sum());
+        nutritionalProgressDTO.setFat(Ingredients.stream()
+                .mapToDouble(IngredientDTO::getFat)
+                .sum());
+        return nutritionalProgressDTO;
     }
 
     private NutritionalProgressDTO nutritionalProgressToNutritionalProgressDto(NutritionalProgress nutritionalProgress) {

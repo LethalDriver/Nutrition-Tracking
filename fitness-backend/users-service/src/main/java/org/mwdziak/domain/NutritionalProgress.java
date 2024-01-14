@@ -25,4 +25,11 @@ public class NutritionalProgress {
     private Double carbohydrates;
     private Double fat;
 
+    public NutritionalProgress(Day day, double calories, double protein, double carbohydrates, double fat) {
+        this.day = day;
+        this.calories = calories;
+        this.protein = protein;
+        this.carbohydrates = carbohydrates;
+        this.fat = fat;
+    }
 }

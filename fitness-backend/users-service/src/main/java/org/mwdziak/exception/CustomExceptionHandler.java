@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class CustomExceptionHandler {
 
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler({ExpiredJwtException.class, UsernameNotFoundException.class, BadCredentialsException.class})
     public ProblemDetail handleSecurityExceptions(Exception e) {
         ProblemDetail problemDetail;
         if (e instanceof ExpiredJwtException) {
@@ -32,8 +32,8 @@ public class CustomExceptionHandler {
             );
         } else {
             problemDetail = ProblemDetail.forStatusAndDetail(
-                HttpStatusCode.valueOf(403),
-                "Forbidden"
+                HttpStatusCode.valueOf(500),
+                "Internal server error"
             );
         }
 

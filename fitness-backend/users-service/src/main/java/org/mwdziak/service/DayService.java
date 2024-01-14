@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
@@ -81,11 +82,28 @@ public class DayService {
     }
 
     public void updateNutritionalProgress(String currentUserEmail, NutritionalProgressDTO nutritionalProgressDTO) {
-        var day = getDay(currentUserEmail, getCurrentDate());
-        var nutritionalProgress = nutritionalProgressDtoToNutritionalProgress(nutritionalProgressDTO);
-        nutritionalProgress.setDay(day);
-        day.setNutritionalProgress(nutritionalProgress);
-        dayRepository.save(day);
+        try {
+            var day = getDay(currentUserEmail, getCurrentDate());
+            var nutritionalProgressUpdate = nutritionalProgressDtoToNutritionalProgress(nutritionalProgressDTO);
+            var currentNutritionalProgress = day.getNutritionalProgress();
+            addNutritionalProgress(currentNutritionalProgress, nutritionalProgressUpdate);
+            dayRepository.save(day);
+
+        } catch (NoSuchElementException e) {
+            createDay(currentUserEmail, getCurrentDate());
+            var day = getDay(currentUserEmail, getCurrentDate());
+            var nutritionalProgress = nutritionalProgressDtoToNutritionalProgress(nutritionalProgressDTO);
+            nutritionalProgress.setDay(day);
+            day.setNutritionalProgress(nutritionalProgress);
+            dayRepository.save(day);
+        }
+    }
+
+    private static void addNutritionalProgress(NutritionalProgress currentNutritionalProgress, NutritionalProgress nutritionalProgressUpdate) {
+        currentNutritionalProgress.setCalories(currentNutritionalProgress.getCalories() + nutritionalProgressUpdate.getCalories());
+        currentNutritionalProgress.setProtein(currentNutritionalProgress.getProtein() + nutritionalProgressUpdate.getProtein());
+        currentNutritionalProgress.setCarbohydrates(currentNutritionalProgress.getCarbohydrates() + nutritionalProgressUpdate.getCarbohydrates());
+        currentNutritionalProgress.setFat(currentNutritionalProgress.getFat() + nutritionalProgressUpdate.getFat());
     }
 
     public void addMealToDay(String currentUserEmail, Meal meal) {

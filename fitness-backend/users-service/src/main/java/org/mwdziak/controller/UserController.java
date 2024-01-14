@@ -16,12 +16,12 @@ public class UserController {
 
     @PutMapping("/user/goals/update")
     public HttpStatus updateUserNutrients(@RequestBody NutritionalGoalsDTO nutritionalGoalsDTO) {
-        userService.updateUserNutrients(nutritionalGoalsDTO);
+        userService.updateUserNutritionalGoals(nutritionalGoalsDTO);
         return HttpStatus.OK;
     }
 
     @GetMapping("/user/goals/get")
     public NutritionalGoalsDTO getUserNutrients() {
-        return userService.getUserNutrients();
+        return userService.getUserNutritionalGoals();
     }
 }

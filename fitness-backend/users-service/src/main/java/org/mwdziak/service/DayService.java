@@ -1,10 +1,17 @@
 package org.mwdziak.service;
 
 import lombok.RequiredArgsConstructor;
+import org.mapstruct.factory.Mappers;
 import org.mwdziak.domain.Day;
+import org.mwdziak.domain.Meal;
+import org.mwdziak.domain.NutritionalProgress;
 import org.mwdziak.dto.DayDTO;
+import org.mwdziak.dto.MealDTO;
 import org.mwdziak.dto.NutritionalGoalsDTO;
 import org.mwdziak.dto.NutritionalProgressDTO;
+import org.mwdziak.mapper.DayMapper;
+import org.mwdziak.mapper.MealMapper;
+import org.mwdziak.mapper.NutritionalProgressMapper;
 import org.mwdziak.repository.DayRepository;
 import org.mwdziak.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -17,18 +24,10 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class DayService {
-    private final MealService mealService;
     private final UserRepository userRepository;
     private final DayRepository dayRepository;
     public DayDTO DayToDayDto(Day day) {
-        return DayDTO.builder()
-                .date(day.getDate())
-                .meals(
-                        day.getMeals().stream()
-                                .map(mealService::MealToMealDto)
-                                .collect(Collectors.toList())
-                )
-                .build();
+        return Mappers.getMapper(DayMapper.class).DayToDayDto(day);
     }
 
     public List<DayDTO> getUserDays(String email){
@@ -65,15 +64,10 @@ public class DayService {
         userRepository.save(user);
     }
 
-    public NutritionalGoalsDTO getNutritionalProgress(String email) {
+    public NutritionalProgressDTO getNutritionalProgress(String email) {
         var user = userRepository.findByEmail(email).orElseThrow();
         var day = getDay(email, getCurrentDate());
-        return NutritionalGoalsDTO.builder()
-                .calories(day.getNutritionalProgress().getCalories())
-                .protein(day.getNutritionalProgress().getProtein())
-                .carbohydrates(day.getNutritionalProgress().getCarbohydrates())
-                .fat(day.getNutritionalProgress().getFat())
-                .build();
+        return nutritionalProgressToNutritionalProgressDto(day.getNutritionalProgress());
     }
 
     public LocalDate parseDate(String date) {
@@ -87,12 +81,32 @@ public class DayService {
     }
 
     public void updateNutritionalProgress(String currentUserEmail, NutritionalProgressDTO nutritionalProgressDTO) {
-        var user = userRepository.findByEmail(currentUserEmail).orElseThrow();
         var day = getDay(currentUserEmail, getCurrentDate());
-        day.getNutritionalProgress().setCalories(nutritionalProgressDTO.getCalories());
-        day.getNutritionalProgress().setProtein(nutritionalProgressDTO.getProtein());
-        day.getNutritionalProgress().setCarbohydrates(nutritionalProgressDTO.getCarbohydrates());
-        day.getNutritionalProgress().setFat(nutritionalProgressDTO.getFat());
+        var nutritionalProgress = nutritionalProgressDtoToNutritionalProgress(nutritionalProgressDTO);
+        day.setNutritionalProgress(nutritionalProgress);
         dayRepository.save(day);
+    }
+
+    public void addMealToDay(String currentUserEmail, Meal meal) {
+        var day = getDay(currentUserEmail, getCurrentDate());
+        day.getMeals().add(meal);
+        dayRepository.save(day);
+    }
+
+    private NutritionalProgressDTO nutritionalProgressToNutritionalProgressDto(NutritionalProgress nutritionalProgress) {
+        return Mappers.getMapper(NutritionalProgressMapper.class)
+                .NutritionalProgressToNutritionalProgressDto(nutritionalProgress);
+    }
+    private NutritionalProgress nutritionalProgressDtoToNutritionalProgress(NutritionalProgressDTO nutritionalProgressDTO) {
+        return Mappers.getMapper(NutritionalProgressMapper.class)
+                .NutritionalProgressDtoToNutritionalProgress(nutritionalProgressDTO);
+    }
+
+    public MealDTO MealToMealDto(Meal meal) {
+        return Mappers.getMapper(MealMapper.class).MealToMealDto(meal);
+    }
+
+    public Meal MealDtoToMeal(MealDTO mealDto) {
+        return Mappers.getMapper(MealMapper.class).MealDtoToMeal(mealDto);
     }
 }

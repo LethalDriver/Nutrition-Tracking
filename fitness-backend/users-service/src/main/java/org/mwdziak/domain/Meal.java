@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -17,10 +19,8 @@ public class Meal {
     @GeneratedValue
     private Long id;
     private String name;
-    private Double calories;
-    private Double protein;
-    private Double carbohydrates;
-    private Double fat;
+    @OneToMany(mappedBy = "meal", cascade = CascadeType.ALL)
+    private List<Ingredient> ingredients;
     @ManyToOne
     @JoinColumn(name="day_id")
     private Day day;

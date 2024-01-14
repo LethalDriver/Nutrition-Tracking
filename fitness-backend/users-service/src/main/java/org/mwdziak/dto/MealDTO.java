@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -11,8 +13,5 @@ import lombok.NoArgsConstructor;
 public class MealDTO {
     private Long id;
     private String name;
-    private Double calories;
-    private Double protein;
-    private Double carbohydrates;
-    private Double fat;
+    private List<IngredientDTO> ingredients;
 }

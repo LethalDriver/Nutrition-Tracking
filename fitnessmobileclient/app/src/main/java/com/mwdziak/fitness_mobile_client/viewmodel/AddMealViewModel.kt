@@ -58,6 +58,11 @@ class AddMealViewModel(private val httpService: HttpService, private val validat
         )
     }
 
+    suspend fun postMeal() {
+        val meal = mapMealToPostRequest()
+        httpService.postMeal(meal)
+    }
+
     suspend fun updateFormsWithFoodKinds() {
         val job = viewModelScope.launch {
             fetchFoodKinds()

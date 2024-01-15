@@ -50,6 +50,9 @@ class AddMealFragment : Fragment() {
         binding.saveMealButton.setOnClickListener {
             if (viewModel.checkIfAllFieldsValid()) {
                 showSnackBar("Meal saved", false)
+                viewModel.viewModelScope.launch {
+                    viewModel.postMeal()
+                }
                 findNavController().navigate(R.id.action_addMealFragment_to_mainDashboardFragment)
             } else {
                 showSnackBar("Please fill all fields", true)

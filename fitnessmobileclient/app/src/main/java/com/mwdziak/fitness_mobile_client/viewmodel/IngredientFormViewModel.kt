@@ -3,11 +3,12 @@ package com.mwdziak.fitness_mobile_client.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.mwdziak.fitness_mobile_client.dto.FoodGetRequest
-import com.mwdziak.fitness_mobile_client.dto.FoodPostRequest
-import com.mwdziak.fitness_mobile_client.dto.NutrientsRequest
+import com.mwdziak.fitness_mobile_client.dto.IngredientPostRequest
+import com.mwdziak.fitness_mobile_client.dto.IngredientNutrientsPostRequest
 import com.mwdziak.fitness_mobile_client.service.HttpService
+import com.mwdziak.fitness_mobile_client.service.Validator
 
-class IngredientFormViewModel(private val httpService: HttpService) : ViewModel(){
+class IngredientFormViewModel(private val httpService: HttpService, private val validator: Validator) : ViewModel(){
     private val foodsMatchingKind = mutableListOf<FoodGetRequest>()
     private val foodDescriptions = mutableListOf<String>()
     private val foodKinds = mutableListOf<String>()
@@ -17,10 +18,6 @@ class IngredientFormViewModel(private val httpService: HttpService) : ViewModel(
     private val pickedFoodWeight = MutableLiveData<Double>(0.0)
     private val pickedWeightUnit = MutableLiveData<String>("")
     private val weightUnits = arrayOf("g", "kg", "lb")
-    private var calories: Double = 0.0
-    private var protein: Double = 0.0
-    private var carbohydrates: Double = 0.0
-    private var fat: Double = 0.0
     private var isAllFieldsValid = false
 
     private fun mapFoodDtoToDescriptions(foods: List<FoodGetRequest>): List<String> {
@@ -68,7 +65,7 @@ class IngredientFormViewModel(private val httpService: HttpService) : ViewModel(
         this.foodKinds.addAll(foodKinds)
     }
 
-    private fun calculateNutritionalValues(){
+    private fun calculateNutritionalValues(): IngredientNutrientsPostRequest {
         val weight = pickedFoodWeight.value ?: 0.0
         val multiplier = when(pickedWeightUnit.value) {
             "g" -> 1.0
@@ -77,10 +74,12 @@ class IngredientFormViewModel(private val httpService: HttpService) : ViewModel(
             else -> 1.0
         }
         val multiplierWeight = weight * multiplier
-        calories = foodFromDatabase.nutrients.calories * multiplierWeight
-        protein = foodFromDatabase.nutrients.protein * multiplierWeight
-        carbohydrates = foodFromDatabase.nutrients.carbohydrates * multiplierWeight
-        fat = foodFromDatabase.nutrients.fat * multiplierWeight
+        return IngredientNutrientsPostRequest(
+            calories = foodFromDatabase.nutrients.calories * multiplierWeight,
+            protein = foodFromDatabase.nutrients.protein * multiplierWeight,
+            carbohydrates = foodFromDatabase.nutrients.carbohydrates * multiplierWeight,
+            fat = foodFromDatabase.nutrients.fat * multiplierWeight,
+        )
     }
 
     private fun checkFormValidity() {
@@ -91,38 +90,31 @@ class IngredientFormViewModel(private val httpService: HttpService) : ViewModel(
     }
 
     private fun isFoodKindValid(): Boolean {
-        return pickedFoodKind.value in foodKinds
+        return validator.isInCollection(pickedFoodKind.value ?: "", foodKinds)
     }
 
     private fun isFoodDescriptionValid(): Boolean {
-        return pickedFoodDescription.value in foodDescriptions
+        return validator.isInCollection(pickedFoodKind.value ?: "", foodDescriptions)
     }
 
     private fun isFoodWeightValid(): Boolean {
-        return pickedFoodWeight.value != 0.0
+        return validator.isNotZero(pickedFoodWeight.value ?: 0.0)
     }
 
     private fun isWeightUnitValid(): Boolean {
-        return pickedWeightUnit.value in weightUnits
+        return validator.isInCollection(pickedWeightUnit.value ?: "", weightUnits.toList())
     }
 
     fun getIsAllFieldsValid(): Boolean {
         return isAllFieldsValid
     }
 
-    fun mapFormToFoodPostRequest(): FoodPostRequest {
-        calculateNutritionalValues()
-        val nutrients = NutrientsRequest(
-            calories = calories,
-            protein = protein,
-            carbohydrates = carbohydrates,
-            fat = fat,
-        )
-        return FoodPostRequest(
+    fun mapFormToFoodPostRequest(): IngredientPostRequest {
+        return IngredientPostRequest(
             fdcId = foodFromDatabase.fdcId,
             foodKind = pickedFoodKind.value ?: "",
             description = pickedFoodDescription.value ?: "",
-            nutrients = nutrients,
+            nutrients = calculateNutritionalValues(),
             weight = pickedFoodWeight.value ?: 0.0,
         )
     }

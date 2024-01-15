@@ -83,6 +83,6 @@ val viewModelModule = module {
     viewModel { RegisterViewModel(get(), get(), get()) }
     viewModel { UpdateGoalsViewModel(get()) }
     viewModel { MainDashboardViewModel(get()) }
-    viewModel { AddMealViewModel(get()) }
-    viewModel { IngredientFormViewModel(get()) }
+    viewModel { AddMealViewModel(get(), get()) }
+    viewModel { IngredientFormViewModel(get(), get()) }
 }

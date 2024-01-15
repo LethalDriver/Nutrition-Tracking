@@ -7,6 +7,14 @@ class Validator {
         return input.isNotBlank()
     }
 
+    fun isNotZero(input: Double): Boolean {
+        return input != 0.0
+    }
+
+    fun isInCollection(input: String, collection: List<String>): Boolean {
+        return collection.contains(input)
+    }
+
     fun isValidEmail(email: String): Boolean {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }

@@ -1,16 +1,17 @@
 package com.mwdziak.fitness_mobile_client.viewmodel
 
-import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.map
 import com.mwdziak.fitness_mobile_client.dto.FoodGetRequest
-import com.mwdziak.fitness_mobile_client.dto.FoodPostRequest
+import com.mwdziak.fitness_mobile_client.dto.IngredientPostRequest
+import com.mwdziak.fitness_mobile_client.dto.MealPostRequest
 import com.mwdziak.fitness_mobile_client.service.HttpService
+import com.mwdziak.fitness_mobile_client.service.Validator
 
-class AddMealViewModel(private val httpService: HttpService) : ViewModel() {
+class AddMealViewModel(private val httpService: HttpService, private val validator: Validator) : ViewModel() {
     private val forms = mutableListOf<IngredientFormViewModel>()
-    private val foodKinds = mutableListOf("Fruit", "Egg", "Meat", "Dairy", "Grain", "Other")
-    val areAllFormsValid = false
+    private val foodKinds = mutableListOf<String>()
+    private val mealName = MutableLiveData<String>("")
 
     fun addIngredient(formViewModel: IngredientFormViewModel) {
         forms.add(formViewModel)
@@ -33,10 +34,25 @@ class AddMealViewModel(private val httpService: HttpService) : ViewModel() {
         return foodKinds
     }
     fun checkIfAllFieldsValid(): Boolean {
-        return forms.all { it.getIsAllFieldsValid() }
+        return forms.all { it.getIsAllFieldsValid() } && isMealNameValid()
     }
 
-    fun MapFormsToFoodPostRequest(): List<FoodPostRequest> {
+    fun updateMealName(newMealName: String) {
+        mealName.value = newMealName
+    }
+
+    private fun isMealNameValid(): Boolean {
+        return validator.isNotBlank(mealName.value ?: "")
+    }
+
+    fun MapFormsToFoodPostRequest(): List<IngredientPostRequest> {
         return forms.map { it.mapFormToFoodPostRequest() }
+    }
+
+    fun mapMealToPostRequest(): MealPostRequest {
+        return MealPostRequest(
+            mealName = mealName.value ?: "",
+            foods = MapFormsToFoodPostRequest()
+        )
     }
 }

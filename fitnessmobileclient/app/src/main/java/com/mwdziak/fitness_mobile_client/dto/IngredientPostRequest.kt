@@ -1,9 +1,9 @@
 package com.mwdziak.fitness_mobile_client.dto
 
-data class FoodPostRequest(
+data class IngredientPostRequest(
     val fdcId: Int = 0,
     val foodKind: String = "",
     val description: String = "",
-    val nutrients: NutrientsRequest = NutrientsRequest(),
+    val nutrients: IngredientNutrientsPostRequest = IngredientNutrientsPostRequest(),
     val weight : Double = 0.0,
 )

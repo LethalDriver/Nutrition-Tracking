@@ -10,23 +10,40 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/addButton"
-            android:layout_width="wrap_content"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/mealNameCardView"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:text="Add ingredient"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/saveMealButton"
-            app:layout_constraintStart_toEndOf="@+id/discardButton" />
+            android:layout_margin="16dp"
+            app:cardElevation="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/mealNameTextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:hint="Enter meal name">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/mealNameEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </androidx.cardview.widget.CardView>
 
         <ScrollView
             android:id="@+id/scrollView4"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
             app:layout_constraintBottom_toTopOf="@+id/addButton"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@+id/mealNameCardView">
 
             <LinearLayout
                 android:id="@+id/formContainer"
@@ -39,6 +56,18 @@
         </ScrollView>
 
         <Button
+            android:id="@+id/addButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="Add"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/saveMealButton"
+            app:layout_constraintStart_toEndOf="@+id/discardButton"
+            style="?attr/materialButtonOutlinedStyle"
+            />
+
+        <Button
             android:id="@+id/discardButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -46,7 +75,9 @@
             android:layout_marginBottom="16dp"
             android:text="Discard"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            style="?attr/materialButtonOutlinedStyle"
+            />
 
         <Button
             android:id="@+id/saveMealButton"
@@ -56,7 +87,9 @@
             android:layout_marginBottom="16dp"
             android:text="Save"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            style="?attr/materialButtonOutlinedStyle"
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

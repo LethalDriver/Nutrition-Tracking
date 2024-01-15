@@ -42,10 +42,6 @@ class AddMealFragment : Fragment() {
             addForm()
         }
         lifecycleScope.launch {
-            val job = viewModel.viewModelScope.launch {
-                viewModel.fetchFoodKinds()
-            }
-            job.join()
             viewModel.updateFormsWithFoodKinds()
         }
         binding.discardButton.setOnClickListener {

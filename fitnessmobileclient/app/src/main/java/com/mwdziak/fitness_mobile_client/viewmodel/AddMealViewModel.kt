@@ -2,11 +2,13 @@ package com.mwdziak.fitness_mobile_client.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.mwdziak.fitness_mobile_client.dto.FoodGetRequest
 import com.mwdziak.fitness_mobile_client.dto.IngredientPostRequest
 import com.mwdziak.fitness_mobile_client.dto.MealPostRequest
 import com.mwdziak.fitness_mobile_client.service.HttpService
 import com.mwdziak.fitness_mobile_client.service.Validator
+import kotlinx.coroutines.launch
 
 class AddMealViewModel(private val httpService: HttpService, private val validator: Validator) : ViewModel() {
     private val forms = mutableListOf<IngredientFormViewModel>()
@@ -20,7 +22,7 @@ class AddMealViewModel(private val httpService: HttpService, private val validat
         forms.remove(formViewModel)
     }
 
-    suspend fun fetchFoodKinds() {
+    private suspend fun fetchFoodKinds() {
         val kinds = httpService.getFoodKinds()
         foodKinds.clear()
         foodKinds.addAll(kinds)
@@ -56,7 +58,13 @@ class AddMealViewModel(private val httpService: HttpService, private val validat
         )
     }
 
-    fun updateFormsWithFoodKinds() {
+    suspend fun updateFormsWithFoodKinds() {
+        val job = viewModelScope.launch {
+            fetchFoodKinds()
+        }
+        job.join()
         forms.forEach { it.updateFoodKinds(foodKinds) }
     }
+
+
 }

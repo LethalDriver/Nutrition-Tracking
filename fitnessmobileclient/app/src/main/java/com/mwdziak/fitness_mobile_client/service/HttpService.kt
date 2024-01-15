@@ -6,6 +6,7 @@ import com.mwdziak.fitness_mobile_client.auth.TokensDTO
 import com.mwdziak.fitness_mobile_client.dto.NutritionalGoalsRequest
 import com.mwdziak.fitness_mobile_client.dto.NutritionalProgressRequest
 import com.mwdziak.fitness_mobile_client.dto.FoodGetRequest
+import com.mwdziak.fitness_mobile_client.dto.MealPostRequest
 import io.ktor.client.HttpClient
 import io.ktor.client.call.receive
 import io.ktor.client.request.get
@@ -55,26 +56,10 @@ class HttpService(private val noAuthHttpClient: HttpClient, private val defaultH
             body = nutritionalGoals
         }
     }
-
-    suspend fun isDayCreated(): Boolean {
-        val url = "$mainUrl/user/day/exists"
-        val response: HttpResponse = defaultHttpClient.get(url)
-        return response.receive()
-    }
-
-    suspend fun createDay() {
-        val url = "$mainUrl/user/day/create"
-        val response: HttpResponse = defaultHttpClient.post(url)
-    }
     suspend fun getProgress(): NutritionalProgressRequest {
         val url = "$mainUrl/user/day/get"
         val response: HttpResponse = defaultHttpClient.get(url)
         return response.receive()
-    }
-
-    suspend fun updateProgress() {
-        val url = "$mainUrl/user/day/update"
-        val response: HttpResponse = defaultHttpClient.put(url)
     }
 
     suspend fun getFoodsByKind(foodKind: String): List<FoodGetRequest> {
@@ -89,5 +74,13 @@ class HttpService(private val noAuthHttpClient: HttpClient, private val defaultH
         val url = "$foodServiceUrl/food/kinds/all"
         val response: HttpResponse = noAuthHttpClient.get(url)
         return response.receive()
+    }
+
+    suspend fun postMeal(mealPostRequest: MealPostRequest) {
+        val url = "$mainUrl/user/day/meals"
+        val response: HttpResponse = defaultHttpClient.post(url) {
+            contentType(ContentType.Application.Json)
+            body = mealPostRequest
+        }
     }
 }

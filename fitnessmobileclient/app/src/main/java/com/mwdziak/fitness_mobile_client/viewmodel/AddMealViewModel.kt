@@ -55,4 +55,8 @@ class AddMealViewModel(private val httpService: HttpService, private val validat
             foods = MapFormsToFoodPostRequest()
         )
     }
+
+    fun updateFormsWithFoodKinds() {
+        forms.forEach { it.updateFoodKinds(foodKinds) }
+    }
 }

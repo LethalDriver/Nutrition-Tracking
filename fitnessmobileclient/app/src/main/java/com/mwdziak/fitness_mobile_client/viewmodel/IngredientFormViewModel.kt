@@ -94,7 +94,7 @@ class IngredientFormViewModel(private val httpService: HttpService, private val 
     }
 
     private fun isFoodDescriptionValid(): Boolean {
-        return validator.isInCollection(pickedFoodKind.value ?: "", foodDescriptions)
+        return validator.isInCollection(pickedFoodDescription.value ?: "", foodDescriptions)
     }
 
     private fun isFoodWeightValid(): Boolean {
@@ -124,4 +124,12 @@ class IngredientFormViewModel(private val httpService: HttpService, private val 
         checkFormValidity()
     }
 
+    fun updateFoodKinds(foodKinds: MutableList<String>) {
+        this.foodKinds.clear()
+        this.foodKinds.addAll(foodKinds)
+    }
+
+    override fun toString(): String {
+        return "IngredientFormViewModel(foodsMatchingKind=$foodsMatchingKind, foodDescriptions=$foodDescriptions, foodKinds=$foodKinds, foodFromDatabase=$foodFromDatabase, pickedFoodKind=$pickedFoodKind, pickedFoodDescription=$pickedFoodDescription, pickedFoodWeight=$pickedFoodWeight, pickedWeightUnit=$pickedWeightUnit, weightUnits=${weightUnits.contentToString()}, isAllFieldsValid=$isAllFieldsValid)"
+    }
 }

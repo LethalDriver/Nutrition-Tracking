@@ -8,9 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.mwdziak.fitness_mobile_client.viewmodel.AddMealViewModel
 import com.mwdziak.fitness_mobile_client.R
@@ -34,6 +37,7 @@ class AddMealFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        addForm()
         binding.addButton.setOnClickListener {
             addForm()
         }
@@ -42,10 +46,21 @@ class AddMealFragment : Fragment() {
                 viewModel.fetchFoodKinds()
             }
             job.join()
-            addForm()
+            viewModel.updateFormsWithFoodKinds()
         }
         binding.discardButton.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
+        }
+        binding.saveMealButton.setOnClickListener {
+            if (viewModel.checkIfAllFieldsValid()) {
+                showSnackBar("Meal saved", false)
+                findNavController().navigate(R.id.action_addMealFragment_to_mainDashboardFragment)
+            } else {
+                showSnackBar("Please fill all fields", true)
+            }
+        }
+        binding.mealNameEditText.addTextChangedListener { text ->
+            viewModel.updateMealName(text.toString())
         }
     }
 
@@ -131,5 +146,31 @@ class AddMealFragment : Fragment() {
             removeForm(view)
             viewModel.removeIngredient(formViewModel)
         }
+    }
+
+    fun showSnackBar(message: String, error: Boolean) {
+        val snackbar = Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT)
+        snackbar.setTextColor(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.white
+            )
+        )
+        if (error) {
+            snackbar.setBackgroundTint(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.snackBarError
+                )
+            )
+        } else {
+            snackbar.setBackgroundTint(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.snackBarSuccessful
+                )
+            )
+        }
+        snackbar.show()
     }
 }

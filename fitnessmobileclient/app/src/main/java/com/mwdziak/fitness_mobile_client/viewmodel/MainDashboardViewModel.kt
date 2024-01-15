@@ -29,25 +29,30 @@ class MainDashboardViewModel(private val httpService: HttpService) : ViewModel()
         fatProgress.value = progress.fat ?: 0.0
     }
 
-    private suspend fun isDayCreated(): Boolean {
-        return httpService.isDayCreated()
+    fun getCaloriesProgress(): Double {
+        return caloriesProgress.value ?: 0.0
+    }
+    fun getProteinProgress(): Double {
+        return proteinProgress.value ?: 0.0
+    }
+    fun getCarbohydratesProgress(): Double {
+        return carbohydratesProgress.value ?: 0.0
+    }
+    fun getFatProgress(): Double {
+        return fatProgress.value ?: 0.0
     }
 
-    private suspend fun createDay() {
-        httpService.createDay()
+    fun getCaloriesGoal(): Double {
+        return caloriesGoal.value ?: 0.0
     }
-
-    suspend fun onStartup() {
-        if (isDayCreated()) {
-            getProgress()
-        } else {
-            createDay()
-            caloriesProgress.value = 0.0
-            proteinProgress.value = 0.0
-            carbohydratesProgress.value = 0.0
-            fatProgress.value = 0.0
-        }
+    fun getProteinGoal(): Double {
+        return proteinGoal.value ?: 0.0
     }
-
+    fun getCarbohydratesGoal(): Double {
+        return carbohydratesGoal.value ?: 0.0
+    }
+    fun getFatGoal(): Double {
+        return fatGoal.value ?: 0.0
+    }
 
 }

@@ -73,19 +73,17 @@ public class DayService {
         return LocalDate.now();
     }
 
-    public void updateNutritionalProgress(String currentUserEmail, NutritionalProgressDTO nutritionalProgressDTO) {
-        try {
-            var day = getDay(currentUserEmail, getCurrentDate());
-            var currentNutritionalProgress = day.getNutritionalProgress();
-            addNutritionalProgress(currentNutritionalProgress, nutritionalProgressDTO);
-            dayRepository.save(day);
+    public void updateNutritionalProgress(String currentUserEmail, NutritionalProgressDTO nutritionalProgressDTO,
+                                          Day day) {
+        var currentNutritionalProgress = day.getNutritionalProgress();
+        addNutritionalProgress(currentNutritionalProgress, nutritionalProgressDTO);
+    }
 
+    private Day createDayIfNotExists(String currentUserEmail) {
+        try {
+            return getDay(currentUserEmail, getCurrentDate());
         } catch (NoSuchElementException e) {
-            var day = createDay(currentUserEmail, getCurrentDate());
-            var nutritionalProgress = nutritionalProgressDtoToNutritionalProgress(nutritionalProgressDTO);
-            nutritionalProgress.setDay(day);
-            day.setNutritionalProgress(nutritionalProgress);
-            dayRepository.save(day);
+            return createDay(currentUserEmail, getCurrentDate());
         }
     }
 
@@ -99,8 +97,8 @@ public class DayService {
     public void addMealAndUpdateNutritionalProgressForDay(String currentUserEmail, MealDTO mealDTO) {
         var meal = MealDtoToMeal(mealDTO);
         var nutritionalProgressUpdate = getNutritionalUpdateFromMealDto(mealDTO);
-        updateNutritionalProgress(currentUserEmail, nutritionalProgressUpdate);
-        var day = getDay(currentUserEmail, getCurrentDate());
+        var day = createDayIfNotExists(currentUserEmail);
+        updateNutritionalProgress(currentUserEmail, nutritionalProgressUpdate, day);
         meal.setDay(day);
         day.getMeals().add(meal);
         dayRepository.save(day);
@@ -110,16 +108,16 @@ public class DayService {
         var nutritionalProgressDTO = new NutritionalProgressDTO();
         var Ingredients = mealDTO.getIngredients();
         nutritionalProgressDTO.setCalories(Ingredients.stream()
-                .mapToDouble(IngredientDTO::getCalories)
+                .mapToDouble(IngredientDTO -> IngredientDTO.getNutrients().getCalories())
                 .sum());
         nutritionalProgressDTO.setProtein(Ingredients.stream()
-                .mapToDouble(IngredientDTO::getProtein)
+                .mapToDouble(IngredientDTO -> IngredientDTO.getNutrients().getProtein())
                 .sum());
         nutritionalProgressDTO.setCarbohydrates(Ingredients.stream()
-                .mapToDouble(IngredientDTO::getCarbohydrates)
+                .mapToDouble(IngredientDTO -> IngredientDTO.getNutrients().getCarbohydrates())
                 .sum());
         nutritionalProgressDTO.setFat(Ingredients.stream()
-                .mapToDouble(IngredientDTO::getFat)
+                .mapToDouble(IngredientDTO -> IngredientDTO.getNutrients().getFat())
                 .sum());
         return nutritionalProgressDTO;
     }

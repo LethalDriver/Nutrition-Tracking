@@ -13,15 +13,5 @@ public class DayController {
     private final DayService dayService;
     private final UserService userService;
 
-    @GetMapping("/user/day/progress")
-    public NutritionalProgressDTO getNutritionalProgress() {
-        return dayService.getNutritionalProgress(userService.getCurrentUserEmail());
-    }
-
-    @PutMapping("/user/day/progress")
-    public void updateNutrients(@RequestBody NutritionalProgressDTO nutritionalProgressDTO) {
-        dayService.updateNutritionalProgress(userService.getCurrentUserEmail(),
-                nutritionalProgressDTO);
-    }
 
 }

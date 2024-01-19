@@ -44,13 +44,13 @@ class HttpService(private val noAuthHttpClient: HttpClient, private val defaultH
     }
 
     suspend fun getGoals(): NutritionalGoalsRequest {
-        val url = "$mainUrl/user/goals/get"
+        val url = "$mainUrl/user/goals"
         val response: HttpResponse = defaultHttpClient.get(url)
         return response.receive()
     }
 
     suspend fun updateGoals(nutritionalGoals: NutritionalGoalsRequest) {
-        val url = "$mainUrl/user/goals/update"
+        val url = "$mainUrl/user/goals"
         val response: HttpResponse = defaultHttpClient.put(url) {
             contentType(ContentType.Application.Json)
             body = nutritionalGoals

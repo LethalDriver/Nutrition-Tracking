@@ -1,5 +1,7 @@
 package com.mwdziak.fitness_mobile_client.koin
 
+import android.content.Context
+import android.content.SharedPreferences
 import com.mwdziak.fitness_mobile_client.service.HttpService
 import com.mwdziak.fitness_mobile_client.service.TokenManager
 import com.mwdziak.fitness_mobile_client.service.Validator
@@ -25,6 +27,8 @@ import io.ktor.client.features.logging.Logging
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.qualifier.named
 import org.koin.core.scope.get
+
+
 
 
 val httpClientModule = module {
@@ -73,16 +77,19 @@ val httpClientModule = module {
 }
 
 val serviceModule = module {
-    single { TokenManager(androidContext(), get(named("noAuthHttpClient"))) }
+    single { TokenManager(get(named("noAuthHttpClient")), get()) }
     single { Validator() }
     single { HttpService(get(named("noAuthHttpClient")), get(named("defaultHttpClient"))) }
+    single<SharedPreferences> {
+        androidContext().getSharedPreferences("com.mwdziak.fitness_mobile_client", Context.MODE_PRIVATE)
+    }
 }
 
 val viewModelModule = module {
     viewModel { LoginViewModel(get(), get()) }
     viewModel { RegisterViewModel(get(), get(), get()) }
     viewModel { UpdateGoalsViewModel(get()) }
-    viewModel { MainDashboardViewModel(get()) }
+    viewModel { MainDashboardViewModel(get(), get()) }
     viewModel { AddMealViewModel(get(), get()) }
     viewModel { IngredientFormViewModel(get(), get()) }
 }

@@ -53,8 +53,8 @@ class AddMealViewModel(private val httpService: HttpService, private val validat
 
     fun mapMealToPostRequest(): MealPostRequest {
         return MealPostRequest(
-            mealName = mealName.value ?: "",
-            foods = MapFormsToFoodPostRequest()
+            name = mealName.value ?: "",
+            ingredients = MapFormsToFoodPostRequest()
         )
     }
 

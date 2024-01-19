@@ -2,15 +2,14 @@ package com.mwdziak.fitness_mobile_client.service
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.mwdziak.fitness_mobile_client.MyApplication
 import com.mwdziak.fitness_mobile_client.auth.TokensDTO
 import io.ktor.client.HttpClient
 import io.ktor.client.call.receive
 import io.ktor.client.request.post
 import io.ktor.client.statement.HttpResponse
 
-class TokenManager(context: Context, private val httpClient: HttpClient) {
-    private val sharedPreferences: SharedPreferences = context.getSharedPreferences("TokenPrefs", Context.MODE_PRIVATE)
-
+class TokenManager(private val httpClient: HttpClient, private val sharedPreferences: SharedPreferences) {
     fun saveTokens(jwtToken: String, refreshToken: String) {
         val editor = sharedPreferences.edit()
         editor.putString("JWT_TOKEN", jwtToken)

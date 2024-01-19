@@ -1,10 +1,12 @@
 package com.mwdziak.fitness_mobile_client.viewmodel
 
+import android.content.SharedPreferences
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.mwdziak.fitness_mobile_client.service.HttpService
 
-class MainDashboardViewModel(private val httpService: HttpService) : ViewModel() {
+class MainDashboardViewModel(private val httpService: HttpService,
+    private val sharedPreferences: SharedPreferences) : ViewModel() {
     private val caloriesProgress = MutableLiveData<Double>(0.0)
     private val proteinProgress = MutableLiveData<Double>(0.0)
     private val carbohydratesProgress = MutableLiveData<Double>(0.0)
@@ -54,5 +56,23 @@ class MainDashboardViewModel(private val httpService: HttpService) : ViewModel()
     fun getFatGoal(): Double {
         return fatGoal.value ?: 0.0
     }
+
+    fun saveProgressToSharedPreferences() {
+        val editor = sharedPreferences.edit()
+        editor.putFloat("CALORIES_PROGRESS", caloriesProgress.value?.toFloat() ?: 0.0f)
+        editor.putFloat("PROTEIN_PROGRESS", proteinProgress.value?.toFloat() ?: 0.0f)
+        editor.putFloat("CARBOHYDRATES_PROGRESS", carbohydratesProgress.value?.toFloat() ?: 0.0f)
+        editor.putFloat("FAT_PROGRESS", fatProgress.value?.toFloat() ?: 0.0f)
+        editor.apply()
+    }
+    
+    fun getProgressFromSharedPreferences() {
+        caloriesProgress.value = sharedPreferences.getFloat("CALORIES_PROGRESS", 0.0f).toDouble()
+        proteinProgress.value = sharedPreferences.getFloat("PROTEIN_PROGRESS", 0.0f).toDouble()
+        carbohydratesProgress.value = sharedPreferences.getFloat("CARBOHYDRATES_PROGRESS", 0.0f).toDouble()
+        fatProgress.value = sharedPreferences.getFloat("FAT_PROGRESS", 0.0f).toDouble()
+    }
+
+
 
 }

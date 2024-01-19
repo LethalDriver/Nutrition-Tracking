@@ -1,6 +1,10 @@
 package com.mwdziak.fitness_mobile_client.dto
 
+import kotlinx.serialization.Serializable
+
+@Serializable
+
 data class MealPostRequest (
-    val mealName: String = "",
-    val foods: List<IngredientPostRequest> = listOf(),
+    val name: String = "",
+    val ingredients: List<IngredientPostRequest> = listOf(),
 )

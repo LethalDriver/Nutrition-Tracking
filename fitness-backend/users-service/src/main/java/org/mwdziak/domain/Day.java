@@ -16,7 +16,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name="days")
-@Builder
 public class Day {
     @Id
     @GeneratedValue

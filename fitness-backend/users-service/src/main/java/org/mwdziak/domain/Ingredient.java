@@ -12,18 +12,16 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class Ingredient {
     @Id
     private Integer fdcId;
     private String foodKind;
     private String description;
     private Double weight;
-    private Double calories;
-    private Double protein;
-    private Double carbohydrates;
-    private Double fat;
-    @ManyToOne
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="nutrients_id")
+    private Nutrients nutrients;
+    @ManyToOne()
     @JoinColumn(name="meal_id")
     private Meal meal;
 }

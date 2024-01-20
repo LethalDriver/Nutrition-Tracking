@@ -12,8 +12,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@Table(name="meals")
+@Table(name="meal")
 public class Meal {
     @Id
     @GeneratedValue

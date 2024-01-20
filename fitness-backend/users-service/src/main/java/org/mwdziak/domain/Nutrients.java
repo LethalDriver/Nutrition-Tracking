@@ -1,21 +1,25 @@
 package org.mwdziak.domain;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class NutritionalGoals {
+@Table
+@Entity
+public class Nutrients {
     @Id
     @GeneratedValue
     private Long id;
-    @OneToOne()
-    private User user;
+    @OneToOne
+    @JoinColumn(name="ingredient_id")
+    private Ingredient ingredient;
     private Double calories;
     private Double protein;
     private Double carbohydrates;
     private Double fat;
-
 }

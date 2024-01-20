@@ -4,9 +4,7 @@ import org.mwdziak.domain.Ingredient;
 import org.mwdziak.domain.Meal;
 import org.mwdziak.domain.Nutrients;
 import org.mwdziak.domain.NutritionalGoals;
-import org.mwdziak.dto.IngredientDTO;
 import org.mwdziak.dto.MealDTO;
-import org.mwdziak.dto.NutrientsDTO;
 import org.mwdziak.dto.NutritionalGoalsDTO;
 import org.mwdziak.mapper.MealMapper;
 import org.mwdziak.mapper.NutritionalGoalsMapper;
@@ -27,7 +25,7 @@ public class NutritionalMapperIntegrationTest {
         nutritionalGoalsDTO.setFat(4.0);
 
         NutritionalGoalsMapper mapper = Mappers.getMapper(NutritionalGoalsMapper.class);
-        NutritionalGoals nutritionalGoals = mapper.NutritionalGoalsDtoToNutritionalGoals(nutritionalGoalsDTO);
+        NutritionalGoals nutritionalGoals = mapper.toEntity(nutritionalGoalsDTO);
         assertEquals(nutritionalGoalsDTO.getCalories(), nutritionalGoals.getCalories());
         assertEquals(nutritionalGoalsDTO.getProtein(), nutritionalGoals.getProtein());
         assertEquals(nutritionalGoalsDTO.getCarbohydrates(), nutritionalGoals.getCarbohydrates());
@@ -40,7 +38,7 @@ public class NutritionalMapperIntegrationTest {
         Meal meal = getMeal();
 
         MealMapper mapper = Mappers.getMapper(MealMapper.class);
-        MealDTO mealDTO = mapper.MealToMealDto(meal);
+        MealDTO mealDTO = mapper.toDto(meal);
         assertEquals(meal.getName(), mealDTO.getName());
         assertEquals(meal.getIngredients().get(0).getFoodKind(), mealDTO.getIngredients().get(0).getFoodKind());
         assertEquals(meal.getIngredients().get(0).getDescription(), mealDTO.getIngredients().get(0).getDescription());

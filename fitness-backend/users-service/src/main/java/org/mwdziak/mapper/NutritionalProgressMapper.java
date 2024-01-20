@@ -4,8 +4,8 @@ import org.mapstruct.Mapper;
 import org.mwdziak.domain.NutritionalProgress;
 import org.mwdziak.dto.NutritionalProgressDTO;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface NutritionalProgressMapper {
-    NutritionalProgressDTO NutritionalProgressToNutritionalProgressDto(NutritionalProgress nutritionalProgress);
-    NutritionalProgress NutritionalProgressDtoToNutritionalProgress(NutritionalProgressDTO nutritionalProgressDto);
+    NutritionalProgressDTO toDto(NutritionalProgress nutritionalProgress);
+    NutritionalProgress toEntity(NutritionalProgressDTO nutritionalProgressDto);
 }

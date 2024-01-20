@@ -4,8 +4,8 @@ import org.mapstruct.Mapper;
 import org.mwdziak.domain.NutritionalGoals;
 import org.mwdziak.dto.NutritionalGoalsDTO;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface NutritionalGoalsMapper {
-    NutritionalGoalsDTO NutritionalGoalsToNutritionalGoalsDto(NutritionalGoals nutritionalGoals);
-    NutritionalGoals NutritionalGoalsDtoToNutritionalGoals(NutritionalGoalsDTO nutritionalGoalsDto);
+    NutritionalGoalsDTO toDto(NutritionalGoals nutritionalGoals);
+    NutritionalGoals toEntity(NutritionalGoalsDTO nutritionalGoalsDto);
 }

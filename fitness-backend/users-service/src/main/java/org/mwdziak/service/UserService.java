@@ -3,18 +3,13 @@ package org.mwdziak.service;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.mwdziak.domain.NutritionalGoals;
-import org.mwdziak.domain.NutritionalProgress;
 import org.mwdziak.domain.User;
 import org.mwdziak.dto.NutritionalGoalsDTO;
-import org.mwdziak.dto.NutritionalProgressDTO;
 import org.mwdziak.mapper.NutritionalGoalsMapper;
-import org.mwdziak.mapper.NutritionalProgressMapper;
 import org.mwdziak.repository.UserRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
 
 @Service
 @RequiredArgsConstructor
@@ -49,12 +44,12 @@ public class UserService {
 
     private NutritionalGoalsDTO nutritionalGoalsToNutritionalGoalsDto(NutritionalGoals nutritionalGoals) {
         return Mappers.getMapper(NutritionalGoalsMapper.class)
-                .NutritionalGoalsToNutritionalGoalsDto(nutritionalGoals);
+                .toDto(nutritionalGoals);
     }
 
     private NutritionalGoals nutritionalGoalsDtoToNutritionalGoals(NutritionalGoalsDTO nutritionalGoalsDTO) {
         return Mappers.getMapper(NutritionalGoalsMapper.class)
-                .NutritionalGoalsDtoToNutritionalGoals(nutritionalGoalsDTO);
+                .toEntity(nutritionalGoalsDTO);
     }
 
 }

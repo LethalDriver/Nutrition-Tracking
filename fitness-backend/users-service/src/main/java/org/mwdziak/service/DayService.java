@@ -3,15 +3,12 @@ package org.mwdziak.service;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.mwdziak.domain.Day;
-import org.mwdziak.domain.Ingredient;
-import org.mwdziak.domain.Meal;
 import org.mwdziak.domain.NutritionalProgress;
 import org.mwdziak.dto.*;
 import org.mwdziak.mapper.DayMapper;
 import org.mwdziak.mapper.MealMapper;
 import org.mwdziak.mapper.NutritionalProgressMapper;
 import org.mwdziak.repository.DayRepository;
-import org.mwdziak.repository.MealRepository;
 import org.mwdziak.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,10 +25,11 @@ import java.util.stream.Collectors;
 public class DayService {
     private final UserRepository userRepository;
     private final DayRepository dayRepository;
-    private final MealRepository mealRepository;
+    private final NutritionalProgressMapper nutritionalProgressMapper;
+    private final MealMapper mealMapper;
     private static final Logger logger = LoggerFactory.getLogger(DayService.class);
     public DayDTO DayToDayDto(Day day) {
-        return Mappers.getMapper(DayMapper.class).DayToDayDto(day);
+        return Mappers.getMapper(DayMapper.class).toDto(day);
     }
 
     public List<DayDTO> getUserDays(String email){
@@ -62,10 +60,10 @@ public class DayService {
     public NutritionalProgressDTO getNutritionalProgress(String email) {
         try {
             var day = getDay(email, getCurrentDate());
-            return nutritionalProgressToNutritionalProgressDto(day.getNutritionalProgress());
+            return nutritionalProgressMapper.toDto(day.getNutritionalProgress());
         } catch (NoSuchElementException e) {
             var day = createDay(email, getCurrentDate());
-            return nutritionalProgressToNutritionalProgressDto(day.getNutritionalProgress());
+            return nutritionalProgressMapper.toDto(day.getNutritionalProgress());
         }
     }
 
@@ -103,7 +101,7 @@ public class DayService {
     }
 
     public void addMealAndUpdateNutritionalProgressForDay(String currentUserEmail, MealDTO mealDTO) {
-        var meal = MealDtoToMeal(mealDTO);
+        var meal = mealMapper.toEntity(mealDTO);
         var nutritionalProgressUpdate = getNutritionalUpdateFromMealDto(mealDTO);
         var day = createDayIfNotExists(currentUserEmail);
         updateNutritionalProgress(currentUserEmail, nutritionalProgressUpdate, day);
@@ -111,18 +109,6 @@ public class DayService {
         day.getMeals().add(meal);
         dayRepository.save(day);
     }
-
-    public void setIngredientId(Ingredient ingredient){
-        var nutrients = ingredient.getNutrients();
-        nutrients.setIngredient(ingredient);
-    }
-
-    public void setMealId(Meal meal){
-        var ingredients = meal.getIngredients();
-        ingredients.forEach(this::setIngredientId);
-        ingredients.forEach(ingredient -> ingredient.setMeal(meal));
-    }
-
     public NutritionalProgressDTO getNutritionalUpdateFromMealDto(MealDTO mealDTO) {
         var nutritionalProgressDTO = new NutritionalProgressDTO();
         var Ingredients = mealDTO.getIngredients();
@@ -141,20 +127,5 @@ public class DayService {
         return nutritionalProgressDTO;
     }
 
-    private NutritionalProgressDTO nutritionalProgressToNutritionalProgressDto(NutritionalProgress nutritionalProgress) {
-        return Mappers.getMapper(NutritionalProgressMapper.class)
-                .NutritionalProgressToNutritionalProgressDto(nutritionalProgress);
-    }
-    private NutritionalProgress nutritionalProgressDtoToNutritionalProgress(NutritionalProgressDTO nutritionalProgressDTO) {
-        return Mappers.getMapper(NutritionalProgressMapper.class)
-                .NutritionalProgressDtoToNutritionalProgress(nutritionalProgressDTO);
-    }
 
-    public MealDTO MealToMealDto(Meal meal) {
-        return Mappers.getMapper(MealMapper.class).MealToMealDto(meal);
-    }
-
-    public Meal MealDtoToMeal(MealDTO mealDto) {
-        return Mappers.getMapper(MealMapper.class).MealDtoToMeal(mealDto);
-    }
 }

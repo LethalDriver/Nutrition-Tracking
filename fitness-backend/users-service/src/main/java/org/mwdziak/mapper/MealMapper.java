@@ -1,8 +1,6 @@
 package org.mwdziak.mapper;
 
-import org.aspectj.lang.annotation.After;
 import org.mapstruct.*;
-import org.mapstruct.factory.Mappers;
 import org.mwdziak.domain.Ingredient;
 import org.mwdziak.domain.Meal;
 import org.mwdziak.domain.Nutrients;
@@ -12,16 +10,12 @@ import org.mwdziak.dto.NutrientsDTO;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-@Mapper(builder = @Builder(disableBuilder = true))
+@Mapper(builder = @Builder(disableBuilder = true), componentModel = "spring")
 public interface MealMapper {
-    MealDTO MealToMealDto(Meal meal);
-
-    MealMapper INSTANCE = Mappers.getMapper(MealMapper.class);
-
+    MealDTO toDto(Meal meal);
     @Mapping(target = "ingredients", qualifiedByName = "ingredientDtoListToIngredientList")
-    Meal MealDtoToMeal(MealDTO mealDto);
+    Meal toEntity(MealDTO mealDto);
 
     @IterableMapping(qualifiedByName = "ingredientDtoToIngredient")
     @Named("ingredientDtoListToIngredientList")

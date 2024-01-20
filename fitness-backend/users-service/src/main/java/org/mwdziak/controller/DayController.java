@@ -13,5 +13,9 @@ public class DayController {
     private final DayService dayService;
     private final UserService userService;
 
+    @GetMapping("/user/day/progress")
+    public NutritionalProgressDTO getDayProgress() {
+        return dayService.getNutritionalProgress(userService.getCurrentUserEmail());
+    }
 
 }

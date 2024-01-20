@@ -69,7 +69,7 @@ class AddMealFragment : Fragment() {
     }
 
     private fun addForm() {
-        val newForm = LayoutInflater.from(requireContext()).inflate(R.layout.ingredient_item, binding.formContainer, false)
+        val newForm = LayoutInflater.from(requireContext()).inflate(R.layout.add_ingredient_item, binding.formContainer, false)
         binding.formContainer.addView(newForm)
         initForm(newForm)
     }

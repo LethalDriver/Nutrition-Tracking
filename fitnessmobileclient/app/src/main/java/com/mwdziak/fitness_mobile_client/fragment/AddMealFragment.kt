@@ -138,7 +138,9 @@ class AddMealFragment : Fragment() {
         }
 
         weightTextView.addTextChangedListener { text ->
-            formViewModel.updatePickedFoodWeight(text.toString().toDouble())
+            if (text.toString().isNotEmpty()){
+                formViewModel.updatePickedFoodWeight(text.toString().toDouble())
+            }
         }
 
         deleteButton.setOnClickListener {
@@ -147,7 +149,7 @@ class AddMealFragment : Fragment() {
         }
     }
 
-    fun showSnackBar(message: String, error: Boolean) {
+    private fun showSnackBar(message: String, error: Boolean) {
         val snackbar = Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT)
         snackbar.setTextColor(
             ContextCompat.getColor(

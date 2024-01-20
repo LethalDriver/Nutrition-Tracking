@@ -57,7 +57,7 @@ class HttpService(private val noAuthHttpClient: HttpClient, private val defaultH
         }
     }
     suspend fun getProgress(): NutritionalProgressRequest {
-        val url = "$mainUrl/user/day/get"
+        val url = "$mainUrl/user/day/progress"
         val response: HttpResponse = defaultHttpClient.get(url)
         return response.receive()
     }

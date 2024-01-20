@@ -68,12 +68,13 @@ class IngredientFormViewModel(private val httpService: HttpService, private val 
     private fun calculateNutritionalValues(): IngredientNutrientsPostRequest {
         val weight = pickedFoodWeight.value ?: 0.0
         val multiplier = when(pickedWeightUnit.value) {
-            "g" -> 1.0
-            "kg" -> 1000.0
-            "lb" -> 453.592
+            "g" -> 0.001
+            "kg" -> 1.0
+            "lb" -> 0.453592
             else -> 1.0
         }
         val multiplierWeight = weight * multiplier
+        pickedFoodWeight.value = multiplierWeight
         return IngredientNutrientsPostRequest(
             calories = foodFromDatabase.nutrients.calories * multiplierWeight,
             protein = foodFromDatabase.nutrients.protein * multiplierWeight,

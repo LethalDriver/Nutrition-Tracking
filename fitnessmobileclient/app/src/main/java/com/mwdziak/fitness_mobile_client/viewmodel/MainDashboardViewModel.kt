@@ -3,7 +3,9 @@ package com.mwdziak.fitness_mobile_client.viewmodel
 import android.content.SharedPreferences
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.mwdziak.fitness_mobile_client.service.HttpService
+import kotlinx.coroutines.launch
 
 class MainDashboardViewModel(private val httpService: HttpService,
     private val sharedPreferences: SharedPreferences) : ViewModel() {
@@ -15,6 +17,12 @@ class MainDashboardViewModel(private val httpService: HttpService,
     private val proteinGoal = MutableLiveData<Double>(0.0)
     private val carbohydratesGoal = MutableLiveData<Double>(0.0)
     private val fatGoal = MutableLiveData<Double>(0.0)
+    private val previousProgressState = mutableMapOf(
+        "CALORIES_PROGRESS" to 0.0f,
+        "PROTEIN_PROGRESS" to 0.0f,
+        "CARBOHYDRATES_PROGRESS" to 0.0f,
+        "FAT_PROGRESS" to 0.0f
+    )
 
     suspend fun getGoals() {
         val goals = httpService.getGoals()
@@ -23,7 +31,8 @@ class MainDashboardViewModel(private val httpService: HttpService,
         carbohydratesGoal.value = goals.carbohydrates ?: 0.0
         fatGoal.value = goals.fat ?: 0.0
     }
-    private suspend fun getProgress() {
+
+    suspend fun getProgress() {
         val progress = httpService.getProgress()
         caloriesProgress.value = progress.calories ?: 0.0
         proteinProgress.value = progress.protein ?: 0.0
@@ -67,12 +76,19 @@ class MainDashboardViewModel(private val httpService: HttpService,
     }
     
     fun getProgressFromSharedPreferences() {
-        caloriesProgress.value = sharedPreferences.getFloat("CALORIES_PROGRESS", 0.0f).toDouble()
-        proteinProgress.value = sharedPreferences.getFloat("PROTEIN_PROGRESS", 0.0f).toDouble()
-        carbohydratesProgress.value = sharedPreferences.getFloat("CARBOHYDRATES_PROGRESS", 0.0f).toDouble()
-        fatProgress.value = sharedPreferences.getFloat("FAT_PROGRESS", 0.0f).toDouble()
+        val caloriesProgress = sharedPreferences.getFloat("CALORIES_PROGRESS", 0.0f)
+        val proteinProgress = sharedPreferences.getFloat("PROTEIN_PROGRESS", 0.0f)
+        val carbohydratesProgress = sharedPreferences.getFloat("CARBOHYDRATES_PROGRESS", 0.0f)
+        val fatProgress = sharedPreferences.getFloat("FAT_PROGRESS", 0.0f)
+        previousProgressState["CALORIES_PROGRESS"] = caloriesProgress
+        previousProgressState["PROTEIN_PROGRESS"] = proteinProgress
+        previousProgressState["CARBOHYDRATES_PROGRESS"] = carbohydratesProgress
+        previousProgressState["FAT_PROGRESS"] = fatProgress
     }
 
+    fun getPreviousProgressState(s: String): Float {
+        return previousProgressState[s] ?: 0.0f
+    }
 
 
 }

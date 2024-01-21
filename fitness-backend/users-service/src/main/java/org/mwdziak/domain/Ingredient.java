@@ -14,6 +14,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Ingredient {
     @Id
+    @GeneratedValue
+    private Integer id;
     private Integer fdcId;
     private String foodKind;
     private String description;

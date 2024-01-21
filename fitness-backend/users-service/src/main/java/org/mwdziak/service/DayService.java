@@ -27,16 +27,14 @@ public class DayService {
     private final DayRepository dayRepository;
     private final NutritionalProgressMapper nutritionalProgressMapper;
     private final MealMapper mealMapper;
+    private final DayMapper dayMapper;
     private static final Logger logger = LoggerFactory.getLogger(DayService.class);
-    public DayDTO DayToDayDto(Day day) {
-        return Mappers.getMapper(DayMapper.class).toDto(day);
-    }
 
     public List<DayDTO> getUserDays(String email){
         var user = userRepository.findByEmail(email).orElseThrow();
         var days = user.getDays();
         return days.stream()
-                .map(this::DayToDayDto)
+                .map(dayMapper::toDto)
                 .collect(Collectors.toList());
     }
 

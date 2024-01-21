@@ -46,6 +46,8 @@ public class NutritionalMapperIntegrationTest {
         assertEquals(meal.getIngredients().get(0).getNutrients().getProtein(), mealDTO.getIngredients().get(0).getNutrients().getProtein());
         assertEquals(meal.getIngredients().get(0).getNutrients().getCarbohydrates(), mealDTO.getIngredients().get(0).getNutrients().getCarbohydrates());
         assertEquals(meal.getIngredients().get(0).getNutrients().getFat(), mealDTO.getIngredients().get(0).getNutrients().getFat());
+        assertEquals(meal.getIngredients().get(0).getWeight(), mealDTO.getIngredients().get(0).getWeight());
+        assertEquals(meal.getIngredients().get(0).getFdcId(), mealDTO.getIngredients().get(0).getFdcId());
 
     }
 
@@ -60,6 +62,8 @@ public class NutritionalMapperIntegrationTest {
         ingredient.setFoodKind("foodKind");
         ingredient.setDescription("description");
         ingredient.setNutrients(nutrients);
+        ingredient.setWeight(1.0);
+        ingredient.setFdcId(1);
 
         var ingredients = new ArrayList<Ingredient>();
         ingredients.add(ingredient);

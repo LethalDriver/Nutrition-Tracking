@@ -9,11 +9,12 @@ import com.mwdziak.fitness_mobile_client.dto.NutritionalProgressGetRequest
 import com.mwdziak.fitness_mobile_client.dto.FoodGetRequest
 import com.mwdziak.fitness_mobile_client.dto.MealRequest
 import io.ktor.client.HttpClient
-import io.ktor.client.call.receive
+import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.client.request.put
+import io.ktor.client.request.setBody
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
@@ -29,10 +30,10 @@ class HttpService(private val noAuthHttpClient: HttpClient, private val defaultH
 
         val response: HttpResponse = noAuthHttpClient.post(url) {
             contentType(ContentType.Application.Json)
-            body = authenticationRequest
+            setBody(authenticationRequest)
         }
 
-        return response.receive()
+        return response.body<AuthenticationResponse>()
     }
 
     suspend fun register(registrationRequest: RegistrationRequest): AuthenticationResponse {
@@ -40,29 +41,29 @@ class HttpService(private val noAuthHttpClient: HttpClient, private val defaultH
 
         val response: HttpResponse = noAuthHttpClient.post(url) {
             contentType(ContentType.Application.Json)
-            body = registrationRequest
+            setBody(registrationRequest)
         }
 
-        return response.receive()
+        return response.body<AuthenticationResponse>()
     }
 
     suspend fun getGoals(): NutritionalGoalsGetRequest {
         val url = "$mainUrl/user/goals"
         val response: HttpResponse = defaultHttpClient.get(url)
-        return response.receive()
+        return response.body<NutritionalGoalsGetRequest>()
     }
 
     suspend fun updateGoals(nutritionalGoals: NutritionalGoalsGetRequest) {
         val url = "$mainUrl/user/goals"
         val response: HttpResponse = defaultHttpClient.put(url) {
             contentType(ContentType.Application.Json)
-            body = nutritionalGoals
+            setBody(nutritionalGoals)
         }
     }
     suspend fun getProgress(): NutritionalProgressGetRequest {
         val url = "$mainUrl/user/day/progress"
         val response: HttpResponse = defaultHttpClient.get(url)
-        return response.receive()
+        return response.body<NutritionalProgressGetRequest>()
     }
 
     suspend fun getFoodsByKind(foodKind: String): List<FoodGetRequest> {
@@ -70,20 +71,20 @@ class HttpService(private val noAuthHttpClient: HttpClient, private val defaultH
         val response: HttpResponse = noAuthHttpClient.get(url) {
             parameter("foodKind", foodKind)
         }
-        return response.receive()
+        return response.body<List<FoodGetRequest>>()
     }
 
     suspend fun getFoodKinds(): List<String> {
         val url = "$foodServiceUrl/food/kinds/all"
         val response: HttpResponse = noAuthHttpClient.get(url)
-        return response.receive()
+        return response.body<List<String>>()
     }
 
     suspend fun postMeal(mealRequest: MealRequest) {
         val url = "$mainUrl/user/day/meals"
         val response: HttpResponse = defaultHttpClient.post(url) {
             contentType(ContentType.Application.Json)
-            body = mealRequest
+            setBody(mealRequest)
         }
     }
 
@@ -92,7 +93,7 @@ class HttpService(private val noAuthHttpClient: HttpClient, private val defaultH
         val response: HttpResponse = defaultHttpClient.get(url)
         if (response.status == HttpStatusCode.OK) {
             if (response.contentLength() != 0L) {
-                return response.receive()
+                return response.body<List<DayRequest>>()
             }
         }
         return listOf()

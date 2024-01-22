@@ -78,7 +78,7 @@ class RegisterViewModel(private val tokenManager: TokenManager,
 
         val tokensDTO = httpService.register(registrationRequest)
 
-        tokenManager.saveTokens(tokensDTO.token, tokensDTO.refreshToken)
+        tokenManager.saveTokens(tokensDTO.token, tokensDTO.refreshToken, tokensDTO.expirationDate)
     }
 
 }

@@ -57,11 +57,13 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     implementation("io.ktor:ktor-client-core:1.6.4")
 
-    implementation("io.ktor:ktor-client-android:1.6.4")
-    implementation("io.ktor:ktor-client-json:1.6.4")
-    implementation("io.ktor:ktor-client-serialization:1.6.4")
-    implementation("io.ktor:ktor-client-auth:1.6.4")
-    implementation("io.ktor:ktor-client-logging:1.6.4")
+    implementation("io.ktor:ktor-client-android:2.3.7")
+    implementation("io.ktor:ktor-client-json:2.3.7")
+    implementation("io.ktor:ktor-client-serialization:2.3.7")
+    implementation("io.ktor:ktor-client-auth:2.3.7")
+    implementation("io.ktor:ktor-client-logging:2.3.7")
+    implementation("io.ktor:ktor-client-content-negotiation:2.3.7")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.7")
 
     implementation("io.insert-koin:koin-android:3.1.2")
 

@@ -14,20 +14,20 @@ import com.mwdziak.fitness_mobile_client.viewmodel.RegisterViewModel
 import com.mwdziak.fitness_mobile_client.viewmodel.UpdateGoalsViewModel
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.android.Android
-import io.ktor.client.features.auth.Auth
-import io.ktor.client.features.auth.providers.bearer
-import io.ktor.client.features.json.JsonFeature
-import io.ktor.client.features.json.serializer.KotlinxSerializer
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
-import io.ktor.client.features.auth.providers.BearerTokens
-import io.ktor.client.features.logging.DEFAULT
-import io.ktor.client.features.logging.LogLevel
-import io.ktor.client.features.logging.Logger
-import io.ktor.client.features.logging.Logging
+import io.ktor.client.plugins.HttpResponseValidator
+import io.ktor.client.plugins.auth.Auth
+import io.ktor.client.plugins.auth.providers.BearerTokens
+import io.ktor.client.plugins.auth.providers.bearer
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.logging.DEFAULT
+import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logger
+import io.ktor.client.plugins.logging.Logging
+import io.ktor.serialization.kotlinx.json.json
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.qualifier.named
-import org.koin.core.scope.get
 
 
 
@@ -35,8 +35,8 @@ import org.koin.core.scope.get
 val httpClientModule = module {
     single(named("defaultHttpClient")) {
         HttpClient(Android) {
-            install(JsonFeature) {
-                serializer = KotlinxSerializer()
+            install(ContentNegotiation) {
+                json()
             }
             install(Auth) {
                 bearer {
@@ -66,8 +66,8 @@ val httpClientModule = module {
 
     single(named("noAuthHttpClient")) {
         HttpClient(Android) {
-            install(JsonFeature) {
-                serializer = KotlinxSerializer()
+            install(ContentNegotiation) {
+                json()
             }
             install(Logging) {
                 logger = Logger.DEFAULT
@@ -78,7 +78,7 @@ val httpClientModule = module {
 }
 
 val serviceModule = module {
-    single { TokenManager(get(named("noAuthHttpClient")), get()) }
+    single { TokenManager(get(named("noAuthHttpClient")), get())}
     single { Validator() }
     single { HttpService(get(named("noAuthHttpClient")), get(named("defaultHttpClient"))) }
     single<SharedPreferences> {

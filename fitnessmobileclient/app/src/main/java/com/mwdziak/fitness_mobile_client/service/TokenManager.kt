@@ -4,9 +4,14 @@ import android.content.SharedPreferences
 import com.mwdziak.fitness_mobile_client.auth.AuthenticationResponse
 import com.mwdziak.fitness_mobile_client.auth.RefreshRequest
 import io.ktor.client.HttpClient
+import io.ktor.client.call.body
 import io.ktor.client.call.receive
 import io.ktor.client.request.post
+import io.ktor.client.request.setBody
 import io.ktor.client.statement.HttpResponse
+import io.ktor.http.ContentType
+import io.ktor.http.contentLength
+import io.ktor.http.contentType
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -49,14 +54,15 @@ class TokenManager(private val httpClient: HttpClient, private val sharedPrefere
     }
 
     suspend fun refreshTokens() {
-        val token = getRefreshToken()
+        val token = getJwtToken()
         val refreshToken = getRefreshToken()
         val tokens = RefreshRequest(token!!, refreshToken!!)
         val url = "http://10.0.2.2:8080/auth/refresh"
         val response: HttpResponse = httpClient.post(url) {
-            body = tokens
+            contentType(ContentType.Application.Json)
+            setBody(tokens)
         }
-        val newTokens: AuthenticationResponse = response.receive()
+        val newTokens: AuthenticationResponse = response.body()
         saveTokens(newTokens.token, newTokens.refreshToken, newTokens.expirationDate)
     }
 }

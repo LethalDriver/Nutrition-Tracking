@@ -3,8 +3,8 @@ package com.mwdziak.fitness_mobile_client.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.mwdziak.fitness_mobile_client.dto.FoodGetRequest
-import com.mwdziak.fitness_mobile_client.dto.IngredientPostRequest
-import com.mwdziak.fitness_mobile_client.dto.IngredientNutrientsPostRequest
+import com.mwdziak.fitness_mobile_client.dto.IngredientRequest
+import com.mwdziak.fitness_mobile_client.dto.IngredientNutrientsRequest
 import com.mwdziak.fitness_mobile_client.service.HttpService
 import com.mwdziak.fitness_mobile_client.service.Validator
 
@@ -65,7 +65,7 @@ class IngredientFormViewModel(private val httpService: HttpService, private val 
         this.foodKinds.addAll(foodKinds)
     }
 
-    private fun calculateNutritionalValues(): IngredientNutrientsPostRequest {
+    private fun calculateNutritionalValues(): IngredientNutrientsRequest {
         val weight = pickedFoodWeight.value ?: 0.0
         val multiplier = when(pickedWeightUnit.value) {
             "g" -> 0.001
@@ -75,7 +75,7 @@ class IngredientFormViewModel(private val httpService: HttpService, private val 
         }
         val multiplierWeight = weight * multiplier
         pickedFoodWeight.value = multiplierWeight
-        return IngredientNutrientsPostRequest(
+        return IngredientNutrientsRequest(
             calories = foodFromDatabase.nutrients.calories * multiplierWeight,
             protein = foodFromDatabase.nutrients.protein * multiplierWeight,
             carbohydrates = foodFromDatabase.nutrients.carbohydrates * multiplierWeight,
@@ -110,8 +110,8 @@ class IngredientFormViewModel(private val httpService: HttpService, private val 
         return isAllFieldsValid
     }
 
-    fun mapFormToFoodPostRequest(): IngredientPostRequest {
-        return IngredientPostRequest(
+    fun mapFormToFoodPostRequest(): IngredientRequest {
+        return IngredientRequest(
             fdcId = foodFromDatabase.fdcId,
             foodKind = pickedFoodKind.value ?: "",
             description = pickedFoodDescription.value ?: "",

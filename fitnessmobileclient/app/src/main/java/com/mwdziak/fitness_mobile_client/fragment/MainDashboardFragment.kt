@@ -71,6 +71,10 @@ class MainDashboardFragment : Fragment() {
             viewModel.saveProgressToSharedPreferences()
             findNavController().navigate(R.id.action_mainDashboardFragment_to_addMealFragment)
         }
+        binding.historyButton.setOnClickListener {
+            viewModel.saveProgressToSharedPreferences()
+            findNavController().navigate(R.id.action_mainDashboardFragment_to_historyFragment)
+        }
 
 
     }

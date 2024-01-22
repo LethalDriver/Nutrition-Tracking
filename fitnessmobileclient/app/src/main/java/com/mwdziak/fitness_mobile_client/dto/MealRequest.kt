@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 
-data class MealPostRequest (
+data class MealRequest (
     val name: String = "",
-    val ingredients: List<IngredientPostRequest> = listOf(),
+    val ingredients: List<IngredientRequest> = listOf(),
 )

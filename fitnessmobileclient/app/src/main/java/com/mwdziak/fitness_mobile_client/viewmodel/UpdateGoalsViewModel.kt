@@ -2,7 +2,7 @@ package com.mwdziak.fitness_mobile_client.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.mwdziak.fitness_mobile_client.dto.NutritionalGoalsRequest
+import com.mwdziak.fitness_mobile_client.dto.NutritionalGoalsGetRequest
 import com.mwdziak.fitness_mobile_client.service.HttpService
 
 class UpdateGoalsViewModel(private val httpService: HttpService) : ViewModel() {
@@ -25,7 +25,7 @@ class UpdateGoalsViewModel(private val httpService: HttpService) : ViewModel() {
     }
 
     suspend fun updateGoals() {
-        val nutritionalGoals = NutritionalGoalsRequest(
+        val nutritionalGoals = NutritionalGoalsGetRequest(
             calories = calories.value?.toDoubleOrNull(),
             protein = protein.value?.toDoubleOrNull(),
             carbohydrates = carbohydrates.value?.toDoubleOrNull(),

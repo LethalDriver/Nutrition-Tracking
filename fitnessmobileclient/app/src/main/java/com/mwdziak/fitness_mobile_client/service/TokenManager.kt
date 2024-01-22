@@ -1,20 +1,36 @@
 package com.mwdziak.fitness_mobile_client.service
 
-import android.content.Context
 import android.content.SharedPreferences
-import com.mwdziak.fitness_mobile_client.MyApplication
-import com.mwdziak.fitness_mobile_client.auth.TokensDTO
+import com.mwdziak.fitness_mobile_client.auth.AuthenticationResponse
+import com.mwdziak.fitness_mobile_client.auth.RefreshRequest
 import io.ktor.client.HttpClient
 import io.ktor.client.call.receive
 import io.ktor.client.request.post
 import io.ktor.client.statement.HttpResponse
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class TokenManager(private val httpClient: HttpClient, private val sharedPreferences: SharedPreferences) {
-    fun saveTokens(jwtToken: String, refreshToken: String) {
+    fun saveTokens(jwtToken: String, refreshToken: String, expirationDate: String) {
         val editor = sharedPreferences.edit()
         editor.putString("JWT_TOKEN", jwtToken)
         editor.putString("REFRESH_TOKEN", refreshToken)
+        editor.putString("EXPIRATION_DATE", expirationDate)
         editor.apply()
+    }
+
+    fun parseDate(date: String): Date {
+        val format = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US)
+        val parsedDate = format.parse(date)
+        return parsedDate
+    }
+
+    fun isRefreshTokenExpired(): Boolean {
+        val expirationDate = sharedPreferences.getString("EXPIRATION_DATE", null) ?: return true
+        val parsedDate = parseDate(expirationDate)
+        val currentDate = Date()
+        return currentDate.after(parsedDate)
     }
 
     fun deleteTokens() {
@@ -35,12 +51,12 @@ class TokenManager(private val httpClient: HttpClient, private val sharedPrefere
     suspend fun refreshTokens() {
         val token = getRefreshToken()
         val refreshToken = getRefreshToken()
-        val tokens = TokensDTO(token!!, refreshToken!!)
+        val tokens = RefreshRequest(token!!, refreshToken!!)
         val url = "http://10.0.2.2:8080/auth/refresh"
         val response: HttpResponse = httpClient.post(url) {
             body = tokens
         }
-        val newTokens: TokensDTO = response.receive()
-        saveTokens(newTokens.token, newTokens.refreshToken)
+        val newTokens: AuthenticationResponse = response.receive()
+        saveTokens(newTokens.token, newTokens.refreshToken, newTokens.expirationDate)
     }
 }

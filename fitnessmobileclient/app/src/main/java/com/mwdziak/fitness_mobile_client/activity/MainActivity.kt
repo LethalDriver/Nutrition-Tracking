@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.ProgressBar
 import androidx.annotation.RequiresApi
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.findNavController
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.navigation.NavigationView
 import com.mwdziak.fitness_mobile_client.R
@@ -26,10 +27,21 @@ class MainActivity : AppCompatActivity() {
         }
 
         navigationView.setNavigationItemSelectedListener { menuItem ->
-            // Handle menu item selected
-            menuItem.isChecked = true
-            drawerLayout.close()
-            true
+            when (menuItem.itemId) {
+                R.id.nav_history -> {
+                    findNavController(R.id.nav_host_fragment).navigate(R.id.historyFragment)
+                    true
+                }
+                R.id.anv_profile -> {
+                    // Handle profile item click
+                    true
+                }
+                R.id.nav_logout -> {
+                    // Handle logout item click
+                    true
+                }
+                else -> false
+            }
         }
     }
 }

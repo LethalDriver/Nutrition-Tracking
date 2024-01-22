@@ -12,6 +12,9 @@
         <action
             android:id="@+id/action_mainDashboardFragment_to_addMealFragment"
             app:destination="@id/addMealFragment" />
+        <action
+            android:id="@+id/action_mainDashboardFragment_to_historyFragment"
+            app:destination="@id/historyFragment" />
     </fragment>
     <fragment
         android:id="@+id/addMealFragment"
@@ -22,4 +25,12 @@
             android:id="@+id/action_addMealFragment_to_mainDashboardFragment"
             app:destination="@id/mainDashboardFragment" />
     </fragment>
+    <action
+        android:id="@+id/action_global_historyFragment"
+        app:destination="@id/historyFragment" />
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="com.mwdziak.fitness_mobile_client.fragment.HistoryFragment"
+        android:label="fragment_history"
+        tools:layout="@layout/fragment_history" />
 </navigation>

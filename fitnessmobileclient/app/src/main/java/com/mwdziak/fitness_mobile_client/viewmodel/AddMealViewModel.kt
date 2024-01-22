@@ -4,8 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mwdziak.fitness_mobile_client.dto.FoodGetRequest
-import com.mwdziak.fitness_mobile_client.dto.IngredientPostRequest
-import com.mwdziak.fitness_mobile_client.dto.MealPostRequest
+import com.mwdziak.fitness_mobile_client.dto.IngredientRequest
+import com.mwdziak.fitness_mobile_client.dto.MealRequest
 import com.mwdziak.fitness_mobile_client.service.HttpService
 import com.mwdziak.fitness_mobile_client.service.Validator
 import kotlinx.coroutines.launch
@@ -47,12 +47,12 @@ class AddMealViewModel(private val httpService: HttpService, private val validat
         return validator.isNotBlank(mealName.value ?: "")
     }
 
-    fun MapFormsToFoodPostRequest(): List<IngredientPostRequest> {
+    fun MapFormsToFoodPostRequest(): List<IngredientRequest> {
         return forms.map { it.mapFormToFoodPostRequest() }
     }
 
-    fun mapMealToPostRequest(): MealPostRequest {
-        return MealPostRequest(
+    fun mapMealToPostRequest(): MealRequest {
+        return MealRequest(
             name = mealName.value ?: "",
             ingredients = MapFormsToFoodPostRequest()
         )

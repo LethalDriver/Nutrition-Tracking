@@ -3,18 +3,22 @@ package com.mwdziak.fitness_mobile_client.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mwdziak.fitness_mobile_client.R
+import com.mwdziak.fitness_mobile_client.dto.DayRequest
 
-class DayAdapter(private val days: List<Day>) : RecyclerView.Adapter<DayAdapter.DayViewHolder>() {
+class DayAdapter(private val days: List<DayRequest>) : RecyclerView.Adapter<DayAdapter.DayViewHolder>() {
 
     inner class DayViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val mealsRecyclerView: RecyclerView = view.findViewById(R.id.mealsRecyclerView)
+        private val dateTextView: TextView = view.findViewById(R.id.dayTextView)
 
-        fun bind(day: Day) {
-            // TODO: Bind day data to views
-
+        fun bind(day: DayRequest) {
+            dateTextView.text = day.date
             val mealAdapter = MealAdapter(day.meals)
+            mealsRecyclerView.layoutManager = LinearLayoutManager(itemView.context)
             mealsRecyclerView.adapter = mealAdapter
         }
     }

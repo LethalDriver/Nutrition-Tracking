@@ -34,7 +34,7 @@ class TokenManager(private val httpClient: HttpClient, private val sharedPrefere
     fun isRefreshTokenExpired(): Boolean {
         val expirationDate = sharedPreferences.getString("EXPIRATION_DATE", null) ?: return true
         val parsedDate = parseDate(expirationDate)
-        val currentDate = Date()
+        val currentDate = Date(
         return currentDate.after(parsedDate)
     }
 

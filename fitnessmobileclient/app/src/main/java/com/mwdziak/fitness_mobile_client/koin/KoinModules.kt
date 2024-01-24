@@ -13,7 +13,9 @@ import com.mwdziak.fitness_mobile_client.viewmodel.MainDashboardViewModel
 import com.mwdziak.fitness_mobile_client.viewmodel.RegisterViewModel
 import com.mwdziak.fitness_mobile_client.viewmodel.UpdateGoalsViewModel
 import io.ktor.client.HttpClient
+import io.ktor.client.call.body
 import io.ktor.client.engine.android.Android
+import io.ktor.client.plugins.ClientRequestException
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import io.ktor.client.plugins.HttpResponseValidator
@@ -25,6 +27,7 @@ import io.ktor.client.plugins.logging.DEFAULT
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
+import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.json
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.qualifier.named
@@ -73,6 +76,18 @@ val httpClientModule = module {
                 logger = Logger.DEFAULT
                 level = LogLevel.ALL
             }
+            expectSuccess = true
+            HttpResponseValidator {
+                handleResponseExceptionWithRequest { exception, request ->
+                    val clientException = exception as? ClientRequestException ?: return@handleResponseExceptionWithRequest
+                    val exceptionResponse = clientException.response
+                    if (exceptionResponse.status == HttpStatusCode.Unauthorized) {
+                        val errorDetails = exceptionResponse.body<ErrorResponse>()
+
+                    }
+                }
+            }
+
         }
     }
 }

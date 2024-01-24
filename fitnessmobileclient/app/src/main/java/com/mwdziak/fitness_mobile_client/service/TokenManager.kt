@@ -5,12 +5,10 @@ import com.mwdziak.fitness_mobile_client.auth.AuthenticationResponse
 import com.mwdziak.fitness_mobile_client.auth.RefreshRequest
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
-import io.ktor.client.call.receive
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.ContentType
-import io.ktor.http.contentLength
 import io.ktor.http.contentType
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -25,16 +23,15 @@ class TokenManager(private val httpClient: HttpClient, private val sharedPrefere
         editor.apply()
     }
 
-    fun parseDate(date: String): Date {
+    fun parseDate(date: String): Date? {
         val format = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US)
-        val parsedDate = format.parse(date)
-        return parsedDate
+        return format.parse(date)
     }
 
     fun isRefreshTokenExpired(): Boolean {
         val expirationDate = sharedPreferences.getString("EXPIRATION_DATE", null) ?: return true
         val parsedDate = parseDate(expirationDate)
-        val currentDate = Date(
+        val currentDate = Date()
         return currentDate.after(parsedDate)
     }
 

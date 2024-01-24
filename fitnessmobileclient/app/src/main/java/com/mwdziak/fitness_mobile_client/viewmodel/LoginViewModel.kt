@@ -2,14 +2,20 @@ package com.mwdziak.fitness_mobile_client.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.mwdziak.fitness_mobile_client.auth.AuthenticationRequest
 import com.mwdziak.fitness_mobile_client.service.HttpService
 import com.mwdziak.fitness_mobile_client.service.TokenManager
+import kotlinx.coroutines.launch
 
 class LoginViewModel(private val tokenManager: TokenManager, private val httpService: HttpService) : ViewModel() {
     private val email = MutableLiveData<String>("")
     private val password = MutableLiveData<String>("")
-
+    val exceptionMessage = MutableLiveData<String>()
+    val authenticationState = MutableLiveData<AuthenticationState>()
+    enum class AuthenticationState {
+        LOADING, AUTHENTICATED, FAILED
+    }
     fun updateEmail(newEmail: String) {
         email.value = newEmail
     }
@@ -18,13 +24,19 @@ class LoginViewModel(private val tokenManager: TokenManager, private val httpSer
         password.value = newPassword
     }
 
-    suspend fun authenticate(){
-
-        val authenticationRequest = AuthenticationRequest(email.value ?: "", password.value ?: "")
-
-        val tokensDTO = httpService.authenticate(authenticationRequest)
-
-        tokenManager.saveTokens(tokensDTO.token, tokensDTO.refreshToken, tokensDTO.expirationDate)
+    fun authenticate() {
+        viewModelScope.launch {
+            authenticationState.value = AuthenticationState.LOADING
+            try {
+                val authenticationRequest = AuthenticationRequest(email.value ?: "", password.value ?: "")
+                val tokensDTO = httpService.authenticate(authenticationRequest)
+                tokenManager.saveTokens(tokensDTO.token, tokensDTO.refreshToken, tokensDTO.expirationDate)
+                authenticationState.value = AuthenticationState.AUTHENTICATED
+            } catch (e: Exception) {
+                exceptionMessage.postValue(e.message)
+                authenticationState.value = AuthenticationState.FAILED
+            }
+        }
     }
 
     fun isUserLogginedIn(): Boolean {

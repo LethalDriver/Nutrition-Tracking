@@ -1,7 +1,8 @@
-package com.mwdziak.fitness_mobile_client.koin
+package com.mwdziak.fitness_mobile_client.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.mwdziak.fitness_mobile_client.dto.ErrorResponse
 import com.mwdziak.fitness_mobile_client.service.HttpService
 import com.mwdziak.fitness_mobile_client.service.TokenManager
 import com.mwdziak.fitness_mobile_client.service.Validator
@@ -83,7 +84,12 @@ val httpClientModule = module {
                     val exceptionResponse = clientException.response
                     if (exceptionResponse.status == HttpStatusCode.Unauthorized) {
                         val errorDetails = exceptionResponse.body<ErrorResponse>()
-
+                        when(errorDetails.detail) {
+                            "User not found" -> throw Exception("User not found")
+                            "Bad credentials" -> throw Exception("Password incorrect")
+                            "User already exists" -> throw Exception("User already exists")
+                            else -> throw Exception("Unknown error")
+                        }
                     }
                 }
             }

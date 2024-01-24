@@ -18,6 +18,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.mwdziak.fitness_mobile_client.viewmodel.AddMealViewModel
 import com.mwdziak.fitness_mobile_client.R
 import com.mwdziak.fitness_mobile_client.databinding.FragmentAddMealBinding
+import com.mwdziak.fitness_mobile_client.utils.showSnackBar
 import com.mwdziak.fitness_mobile_client.viewmodel.IngredientFormViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -147,31 +148,5 @@ class AddMealFragment : Fragment() {
             removeForm(view)
             viewModel.removeIngredient(formViewModel)
         }
-    }
-
-    private fun showSnackBar(message: String, error: Boolean) {
-        val snackbar = Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT)
-        snackbar.setTextColor(
-            ContextCompat.getColor(
-                requireContext(),
-                R.color.white
-            )
-        )
-        if (error) {
-            snackbar.setBackgroundTint(
-                ContextCompat.getColor(
-                    requireContext(),
-                    R.color.snackBarError
-                )
-            )
-        } else {
-            snackbar.setBackgroundTint(
-                ContextCompat.getColor(
-                    requireContext(),
-                    R.color.snackBarSuccessful
-                )
-            )
-        }
-        snackbar.show()
     }
 }

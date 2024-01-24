@@ -1,11 +1,9 @@
 package com.mwdziak.fitness_mobile_client
 
 import android.app.Application
-import android.content.Context
-import android.content.SharedPreferences
-import com.mwdziak.fitness_mobile_client.koin.httpClientModule
-import com.mwdziak.fitness_mobile_client.koin.serviceModule
-import com.mwdziak.fitness_mobile_client.koin.viewModelModule
+import com.mwdziak.fitness_mobile_client.utils.httpClientModule
+import com.mwdziak.fitness_mobile_client.utils.serviceModule
+import com.mwdziak.fitness_mobile_client.utils.viewModelModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 

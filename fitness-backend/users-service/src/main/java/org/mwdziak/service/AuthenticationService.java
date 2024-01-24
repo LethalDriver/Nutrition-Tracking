@@ -8,6 +8,7 @@ import org.mwdziak.domain.NutritionalGoals;
 import org.mwdziak.domain.User;
 import org.mwdziak.dto.AuthenticationResponse;
 import org.mwdziak.dto.TokensDTO;
+import org.mwdziak.exception.TokenBlacklistedException;
 import org.mwdziak.exception.UserAlreadyExistsException;
 import org.mwdziak.repository.BlacklistedTokenRepository;
 import org.mwdziak.repository.UserRepository;
@@ -84,26 +85,22 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse refresh(TokensDTO request) {
-        try {
-            var email = jwtService.extractUsername(request.getRefreshToken());
-            var isTokenBlacklisted = blacklistedTokenRepository.existsByToken(request.getRefreshToken());
-            if (isTokenBlacklisted) {
-                throw new RuntimeException("Token is blacklisted");
-            }
-            blacklistedTokenRepository.save(new BlacklistedToken(request.getToken()));
-            blacklistedTokenRepository.save(new BlacklistedToken(request.getRefreshToken()));
-            var user = repository.findByEmail(email).orElseThrow();
-            var jwtToken = jwtService.generateToken(user);
-            var refreshToken = jwtService.generateRefreshToken(user);
-            var expirationDate = jwtService.extractExpiration(jwtToken);
-            return AuthenticationResponse.builder()
-                    .token(jwtToken)
-                    .refreshToken(refreshToken)
-                    .expirationDate(expirationDate.toString())
-                    .build();
-        } catch (Exception e) {
-            throw new JwtException("Invalid token");
+        var email = jwtService.extractUsername(request.getRefreshToken());
+        var isTokenBlacklisted = blacklistedTokenRepository.existsByToken(request.getRefreshToken());
+        if (isTokenBlacklisted) {
+            throw new TokenBlacklistedException("Token is blacklisted");
         }
+        blacklistedTokenRepository.save(new BlacklistedToken(request.getToken()));
+        blacklistedTokenRepository.save(new BlacklistedToken(request.getRefreshToken()));
+        var user = repository.findByEmail(email).orElseThrow();
+        var jwtToken = jwtService.generateToken(user);
+        var refreshToken = jwtService.generateRefreshToken(user);
+        var expirationDate = jwtService.extractExpiration(jwtToken);
+        return AuthenticationResponse.builder()
+                .token(jwtToken)
+                .refreshToken(refreshToken)
+                .expirationDate(expirationDate.toString())
+                .build();
 
     }
 

@@ -13,8 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class CustomExceptionHandler {
 
-    @ExceptionHandler({ExpiredJwtException.class, JwtException.class, RuntimeException.class,
-            UsernameNotFoundException.class, BadCredentialsException.class})
+    @ExceptionHandler({RuntimeException.class})
     public ProblemDetail handleSecurityExceptions(Exception e) {
         ProblemDetail problemDetail;
         if (e instanceof ExpiredJwtException) {
@@ -37,6 +36,16 @@ public class CustomExceptionHandler {
             problemDetail = ProblemDetail.forStatusAndDetail(
                 HttpStatusCode.valueOf(401),
                 "Invalid token"
+            );
+        } else if (e instanceof TokenBlacklistedException) {
+            problemDetail = ProblemDetail.forStatusAndDetail(
+                HttpStatusCode.valueOf(401),
+                "Token blacklisted"
+            );
+        } else if (e instanceof UserAlreadyExistsException) {
+            problemDetail = ProblemDetail.forStatusAndDetail(
+                HttpStatusCode.valueOf(409),
+                "User already exists"
             );
         } else {
             problemDetail = ProblemDetail.forStatusAndDetail(

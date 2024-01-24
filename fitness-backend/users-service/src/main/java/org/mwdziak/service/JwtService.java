@@ -27,7 +27,7 @@ public class JwtService {
     }
 
     public String generateToken(UserDetails userDetails){
-        return generateToken(userDetails, 1000 * 60L * 60L);
+        return generateToken(userDetails, 1000 * 60L);
     }
 
     public String generateToken(
@@ -50,7 +50,6 @@ public class JwtService {
         return generateToken(userDetails, refreshDuration);
     }
 
-
     public boolean isTokenValid(String token, UserDetails userDetails){
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
@@ -60,7 +59,7 @@ public class JwtService {
         return extractExpiration(token).before(new Date());
     }
 
-    private Date extractExpiration(String token) {
+    Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
 

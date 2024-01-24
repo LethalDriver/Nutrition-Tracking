@@ -1,6 +1,7 @@
 package org.mwdziak.exception;
 
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
@@ -12,7 +13,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class CustomExceptionHandler {
 
-    @ExceptionHandler({ExpiredJwtException.class, UsernameNotFoundException.class, BadCredentialsException.class})
+    @ExceptionHandler({ExpiredJwtException.class, JwtException.class, RuntimeException.class,
+            UsernameNotFoundException.class, BadCredentialsException.class})
     public ProblemDetail handleSecurityExceptions(Exception e) {
         ProblemDetail problemDetail;
         if (e instanceof ExpiredJwtException) {
@@ -29,6 +31,12 @@ public class CustomExceptionHandler {
             problemDetail = ProblemDetail.forStatusAndDetail(
                 HttpStatusCode.valueOf(401),
                 "Bad credentials"
+            );
+
+        } else if (e instanceof JwtException) {
+            problemDetail = ProblemDetail.forStatusAndDetail(
+                HttpStatusCode.valueOf(401),
+                "Invalid token"
             );
         } else {
             problemDetail = ProblemDetail.forStatusAndDetail(

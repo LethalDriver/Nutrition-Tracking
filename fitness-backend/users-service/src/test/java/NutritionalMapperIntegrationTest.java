@@ -1,16 +1,18 @@
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mapstruct.factory.Mappers;
-import org.mwdziak.domain.Ingredient;
-import org.mwdziak.domain.Meal;
-import org.mwdziak.domain.Nutrients;
-import org.mwdziak.domain.NutritionalGoals;
+import org.mwdziak.domain.*;
+import org.mwdziak.dto.DayDTO;
 import org.mwdziak.dto.MealDTO;
 import org.mwdziak.dto.NutritionalGoalsDTO;
+import org.mwdziak.mapper.DayMapper;
 import org.mwdziak.mapper.MealMapper;
 import org.mwdziak.mapper.NutritionalGoalsMapper;
 
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -72,5 +74,28 @@ public class NutritionalMapperIntegrationTest {
         meal.setName("name");
         meal.setIngredients(ingredients);
         return meal;
+    }
+
+    public void givenDayToDayDto_whenMaps_thenCorrect() {
+        Day day = getDay();
+
+        DayMapper mapper = Mappers.getMapper(DayMapper.class);
+        DayDTO dayDTO = mapper.toDto(day);
+        assertEquals(day.getDate(), dayDTO.getDate());
+        assertEquals(day.getMeals().size(), dayDTO.getMeals().size());
+        assertEquals(day.getMeals().get(0).getName(), dayDTO.getMeals().get(0).getName());
+    }
+
+    private static Day getDay() {
+        Meal meal = new Meal();
+        meal.setName("mealName");
+
+        List<Meal> meals = new ArrayList<>();
+        meals.add(meal);
+
+        Day day = new Day();
+        day.setDate(LocalDate.now());
+        day.setMeals(meals);
+        return day;
     }
 }

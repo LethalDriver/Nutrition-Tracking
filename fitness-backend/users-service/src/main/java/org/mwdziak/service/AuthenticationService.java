@@ -1,12 +1,14 @@
 package org.mwdziak.service;
 
 
+import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import org.mwdziak.domain.BlacklistedToken;
 import org.mwdziak.domain.NutritionalGoals;
 import org.mwdziak.domain.User;
 import org.mwdziak.dto.AuthenticationResponse;
 import org.mwdziak.dto.TokensDTO;
+import org.mwdziak.exception.UserAlreadyExistsException;
 import org.mwdziak.repository.BlacklistedTokenRepository;
 import org.mwdziak.repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,6 +29,10 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final BlacklistedTokenRepository blacklistedTokenRepository;
     public AuthenticationResponse register(RegistrationRequest request) {
+        if (repository.existsByEmail(request.getEmail())) {
+            throw new UserAlreadyExistsException("User already exists");
+        }
+
         var user = User.builder()
             .firstName(request.getFirstName())
             .lastName(request.getLastName())
@@ -39,10 +45,12 @@ public class AuthenticationService {
 
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
+        var expirationDate = jwtService.extractExpiration(jwtToken);
 
         return AuthenticationResponse.builder()
             .token(jwtToken)
             .refreshToken(refreshToken)
+            .expirationDate(expirationDate.toString())
             .build();
     }
 
@@ -66,27 +74,37 @@ public class AuthenticationService {
         var user = userOptional.get();
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
+        var expirationDate = jwtService.extractExpiration(jwtToken);
+
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .refreshToken(refreshToken)
+                .expirationDate(expirationDate.toString())
                 .build();
     }
 
     public AuthenticationResponse refresh(TokensDTO request) {
-        var email = jwtService.extractUsername(request.getRefreshToken());
-        var isTokenBlacklisted = blacklistedTokenRepository.existsByToken(request.getRefreshToken());
-        if (isTokenBlacklisted) {
-            throw new RuntimeException("Token is blacklisted");
+        try {
+            var email = jwtService.extractUsername(request.getRefreshToken());
+            var isTokenBlacklisted = blacklistedTokenRepository.existsByToken(request.getRefreshToken());
+            if (isTokenBlacklisted) {
+                throw new RuntimeException("Token is blacklisted");
+            }
+            blacklistedTokenRepository.save(new BlacklistedToken(request.getToken()));
+            blacklistedTokenRepository.save(new BlacklistedToken(request.getRefreshToken()));
+            var user = repository.findByEmail(email).orElseThrow();
+            var jwtToken = jwtService.generateToken(user);
+            var refreshToken = jwtService.generateRefreshToken(user);
+            var expirationDate = jwtService.extractExpiration(jwtToken);
+            return AuthenticationResponse.builder()
+                    .token(jwtToken)
+                    .refreshToken(refreshToken)
+                    .expirationDate(expirationDate.toString())
+                    .build();
+        } catch (Exception e) {
+            throw new JwtException("Invalid token");
         }
-        blacklistedTokenRepository.save(new BlacklistedToken(request.getToken()));
-        blacklistedTokenRepository.save(new BlacklistedToken(request.getRefreshToken()));
-        var user = repository.findByEmail(email).orElseThrow();
-        var jwtToken = jwtService.generateToken(user);
-        var refreshToken = jwtService.generateRefreshToken(user);
-        return AuthenticationResponse.builder()
-            .token(jwtToken)
-            .refreshToken(refreshToken)
-            .build();
+
     }
 
     public void logout(TokensDTO request) {

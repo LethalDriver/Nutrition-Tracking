@@ -99,7 +99,7 @@ val httpClientModule = module {
 }
 
 val serviceModule = module {
-    single { TokenManager(get(named("noAuthHttpClient")), get())}
+    single { TokenManager(get(), get())}
     single { Validator() }
     single { HttpService(get(named("noAuthHttpClient")), get(named("defaultHttpClient"))) }
     single<SharedPreferences> {

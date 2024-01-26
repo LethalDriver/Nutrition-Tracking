@@ -3,6 +3,7 @@ package com.mwdziak.fitness_mobile_client.service
 import com.mwdziak.fitness_mobile_client.auth.AuthenticationRequest
 import com.mwdziak.fitness_mobile_client.auth.RegistrationRequest
 import com.mwdziak.fitness_mobile_client.auth.AuthenticationResponse
+import com.mwdziak.fitness_mobile_client.auth.RefreshRequest
 import com.mwdziak.fitness_mobile_client.dto.DayRequest
 import com.mwdziak.fitness_mobile_client.dto.NutritionalGoalsGetRequest
 import com.mwdziak.fitness_mobile_client.dto.NutritionalProgressGetRequest
@@ -23,10 +24,10 @@ import io.ktor.http.contentType
 
 
 class HttpService(private val noAuthHttpClient: HttpClient, private val defaultHttpClient: HttpClient) {
-    private val mainUrl = "http://10.0.2.2:8080"
-    private val foodServiceUrl = "http://10.0.2.2:8081"
+    private val usersUrl = "http://10.0.2.2:8080/users"
+    private val foodServiceUrl = "http://10.0.2.2:8080/food"
     suspend fun authenticate(authenticationRequest: AuthenticationRequest): AuthenticationResponse {
-        val url = "$mainUrl/auth/login"
+        val url = "$usersUrl/auth/login"
 
         val response: HttpResponse = noAuthHttpClient.post(url) {
             contentType(ContentType.Application.Json)
@@ -37,7 +38,7 @@ class HttpService(private val noAuthHttpClient: HttpClient, private val defaultH
     }
 
     suspend fun register(registrationRequest: RegistrationRequest): AuthenticationResponse {
-        val url = "$mainUrl/auth/register"
+        val url = "$usersUrl/auth/register"
 
         val response: HttpResponse = noAuthHttpClient.post(url) {
             contentType(ContentType.Application.Json)
@@ -48,26 +49,26 @@ class HttpService(private val noAuthHttpClient: HttpClient, private val defaultH
     }
 
     suspend fun getGoals(): NutritionalGoalsGetRequest {
-        val url = "$mainUrl/user/goals"
+        val url = "$usersUrl/user/goals"
         val response: HttpResponse = defaultHttpClient.get(url)
         return response.body<NutritionalGoalsGetRequest>()
     }
 
     suspend fun updateGoals(nutritionalGoals: NutritionalGoalsGetRequest) {
-        val url = "$mainUrl/user/goals"
+        val url = "$usersUrl/user/goals"
         val response: HttpResponse = defaultHttpClient.put(url) {
             contentType(ContentType.Application.Json)
             setBody(nutritionalGoals)
         }
     }
     suspend fun getProgress(): NutritionalProgressGetRequest {
-        val url = "$mainUrl/user/day/progress"
+        val url = "$usersUrl/user/day/progress"
         val response: HttpResponse = defaultHttpClient.get(url)
         return response.body<NutritionalProgressGetRequest>()
     }
 
     suspend fun getFoodsByKind(foodKind: String): List<FoodGetRequest> {
-        val url = "$foodServiceUrl/food/kinds"
+        val url = "$foodServiceUrl/foods"
         val response: HttpResponse = noAuthHttpClient.get(url) {
             parameter("foodKind", foodKind)
         }
@@ -75,13 +76,13 @@ class HttpService(private val noAuthHttpClient: HttpClient, private val defaultH
     }
 
     suspend fun getFoodKinds(): List<String> {
-        val url = "$foodServiceUrl/food/kinds/all"
+        val url = "$foodServiceUrl/kinds"
         val response: HttpResponse = noAuthHttpClient.get(url)
         return response.body<List<String>>()
     }
 
     suspend fun postMeal(mealRequest: MealRequest) {
-        val url = "$mainUrl/user/day/meals"
+        val url = "$usersUrl/user/day/meals"
         val response: HttpResponse = defaultHttpClient.post(url) {
             contentType(ContentType.Application.Json)
             setBody(mealRequest)
@@ -89,7 +90,7 @@ class HttpService(private val noAuthHttpClient: HttpClient, private val defaultH
     }
 
     suspend fun getUserDays(): List<DayRequest> {
-        val url = "$mainUrl/user/days"
+        val url = "$usersUrl/user/days"
         val response: HttpResponse = defaultHttpClient.get(url)
         if (response.status == HttpStatusCode.OK) {
             if (response.contentLength() != 0L) {
@@ -97,5 +98,14 @@ class HttpService(private val noAuthHttpClient: HttpClient, private val defaultH
             }
         }
         return listOf()
+    }
+
+    suspend fun getRefreshTokens(refreshRequest: RefreshRequest): AuthenticationResponse {
+        val url = "$usersUrl/auth/refresh"
+        val response: HttpResponse = defaultHttpClient.post(url) {
+            contentType(ContentType.Application.Json)
+            setBody(refreshRequest)
+        }
+        return response.body<AuthenticationResponse>()
     }
 }

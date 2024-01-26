@@ -56,14 +56,13 @@ class MainDashboardFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         lifecycleScope.launch {
-            val getGoalsJob = async { viewModel.getGoals() }
-            val getProgressJob = async { viewModel.getProgress() }
-
-            getGoalsJob.await()
-            getProgressJob.await()
-
+            val fetch = viewModel.viewModelScope.launch {
+                viewModel.getGoals()
+                viewModel.getProgress()
+            }
             viewModel.getProgressFromSharedPreferences()
 
+            fetch.join()
             updateProgressBars()
             updateTextViews()
         }

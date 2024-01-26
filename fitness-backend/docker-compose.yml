@@ -5,7 +5,9 @@ services:
     ports:
       - 8081:8081
     networks:
-      - backend
+      backend:
+        aliases:
+          [users, u]
     depends_on:
       - users-db
     environment:
@@ -20,7 +22,10 @@ services:
     ports:
       - 8082:8082
     networks:
-      - backend
+      backend:
+        aliases:
+          [food, f]
+
     depends_on:
       - food-db
     environment:
@@ -30,7 +35,7 @@ services:
       - SERVER_PORT=8082
         
   api-gateway:
-    build: ./ApiGateway
+    build: ./api-gateway
     ports:
       - 8080:8080
     networks:

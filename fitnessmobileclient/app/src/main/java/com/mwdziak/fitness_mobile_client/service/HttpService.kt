@@ -23,8 +23,8 @@ import io.ktor.http.contentType
 
 
 class HttpService(private val noAuthHttpClient: HttpClient, private val defaultHttpClient: HttpClient) {
-    private val usersServiceUrl = "https://lasting-honeybee-thankful.ngrok-free.app/users"
-    private val foodServiceUrl = "https://lasting-honeybee-thankful.ngrok-free.app/food"
+    private val usersServiceUrl = "http://10.0.2.2:8080/users"
+    private val foodServiceUrl = "http://10.0.2.2:8080/food"
     suspend fun authenticate(authenticationRequest: AuthenticationRequest): AuthenticationResponse {
         val url = "$usersServiceUrl/auth/login"
 

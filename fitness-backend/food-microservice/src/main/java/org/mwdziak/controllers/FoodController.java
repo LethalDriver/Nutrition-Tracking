@@ -15,11 +15,11 @@ public class FoodController {
     private FoodService foodService;
 
 
-    @GetMapping("/food/kinds")
+    @GetMapping("/foods")
     public List<FoodDTO> fetchFoodsByKind(@RequestParam("foodKind") String foodKind){
         return foodService.getFoodToSend(foodKind);
     }
-    @GetMapping("/food/kinds/all")
+    @GetMapping("/kinds")
     public List<String> fetchAllFoodKinds(){
         return foodService.getAllFoodKinds();
     }

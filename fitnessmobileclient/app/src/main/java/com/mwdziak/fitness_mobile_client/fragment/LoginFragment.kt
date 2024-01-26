@@ -6,10 +6,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.appbar.MaterialToolbar
 import com.mwdziak.fitness_mobile_client.R
 import com.mwdziak.fitness_mobile_client.activity.MainActivity
 import com.mwdziak.fitness_mobile_client.databinding.FragmentLoginBinding
@@ -33,6 +35,7 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
 
         if (viewModel.isUserLogginedIn()) {
             val intent = Intent(requireContext(), MainActivity::class.java)

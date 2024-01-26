@@ -14,8 +14,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class TokenManager(private val sharedPreferences: SharedPreferences,
-    private val httpService: HttpService) {
+class TokenManager(private val httpClient: HttpClient, private val sharedPreferences: SharedPreferences) {
     fun saveTokens(jwtToken: String, refreshToken: String, expirationDate: String) {
         val editor = sharedPreferences.edit()
         editor.putString("JWT_TOKEN", jwtToken)
@@ -55,7 +54,12 @@ class TokenManager(private val sharedPreferences: SharedPreferences,
         val token = getJwtToken()
         val refreshToken = getRefreshToken()
         val tokens = RefreshRequest(token!!, refreshToken!!)
-        val newTokens = httpService.getRefreshTokens(tokens)
+        val url = "http://10.0.2.2:8080/auth/refresh"
+        val response: HttpResponse = httpClient.post(url) {
+            contentType(ContentType.Application.Json)
+            setBody(tokens)
+        }
+        val newTokens: AuthenticationResponse = response.body()
         saveTokens(newTokens.token, newTokens.refreshToken, newTokens.expirationDate)
     }
 }

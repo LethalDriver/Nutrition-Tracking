@@ -95,7 +95,7 @@ public class AuthenticationService {
         var user = repository.findByEmail(email).orElseThrow();
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
-        var expirationDate = jwtService.extractExpiration(jwtToken);
+        var expirationDate = jwtService.extractExpiration(refreshToken);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .refreshToken(refreshToken)

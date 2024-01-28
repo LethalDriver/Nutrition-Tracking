@@ -74,7 +74,7 @@ class IngredientFormViewModel(private val httpService: HttpService, private val 
             else -> 1.0
         }
         val multiplierWeight = weight * multiplier
-        pickedFoodWeight.value = multiplierWeight
+        pickedFoodWeight.value = multiplierWeight * 1000
         return IngredientNutrientsRequest(
             calories = foodFromDatabase.nutrients.calories * multiplierWeight,
             protein = foodFromDatabase.nutrients.protein * multiplierWeight,

@@ -21,7 +21,6 @@ class MainActivity : AppCompatActivity() {
         val drawerLayout = findViewById<DrawerLayout>(R.id.drawerLayout)
         val navigationView = findViewById<NavigationView>(R.id.navigationView)
 
-
         topAppBar.setNavigationOnClickListener {
             drawerLayout.open()
         }

@@ -13,6 +13,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.mwdziak.fitness_mobile_client.viewmodel.AddMealViewModel
@@ -37,6 +38,8 @@ class AddMealFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.topAppBar)
+        topAppBar?.title = "Add meal"
         super.onViewCreated(view, savedInstanceState)
         addForm()
         binding.addButton.setOnClickListener {

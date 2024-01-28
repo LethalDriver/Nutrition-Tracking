@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.appbar.MaterialToolbar
+import com.mwdziak.fitness_mobile_client.R
 import com.mwdziak.fitness_mobile_client.adapters.DayAdapter
 import com.mwdziak.fitness_mobile_client.databinding.FragmentHistoryBinding
 import com.mwdziak.fitness_mobile_client.databinding.FragmentMainDashboardBinding
@@ -34,6 +36,8 @@ class HistoryFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.topAppBar)
+        topAppBar?.title = "History"
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentHistoryBinding.bind(view)
         lifecycleScope.launch {

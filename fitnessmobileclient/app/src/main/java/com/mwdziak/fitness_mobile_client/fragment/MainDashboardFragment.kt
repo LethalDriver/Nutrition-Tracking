@@ -14,10 +14,12 @@ import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
 import android.widget.ProgressBar
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.android.material.snackbar.Snackbar
 import com.mwdziak.fitness_mobile_client.R
@@ -55,15 +57,16 @@ class MainDashboardFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.topAppBar)
+        topAppBar?.title = "Main Dashboard"
         lifecycleScope.launch {
-            val getGoalsJob = async { viewModel.getGoals() }
-            val getProgressJob = async { viewModel.getProgress() }
-
-            getGoalsJob.await()
-            getProgressJob.await()
-
+            val fetch = viewModel.viewModelScope.launch {
+                viewModel.getGoals()
+                viewModel.getProgress()
+            }
             viewModel.getProgressFromSharedPreferences()
 
+            fetch.join()
             updateProgressBars()
             updateTextViews()
         }
@@ -71,11 +74,6 @@ class MainDashboardFragment : Fragment() {
             viewModel.saveProgressToSharedPreferences()
             findNavController().navigate(R.id.action_mainDashboardFragment_to_addMealFragment)
         }
-        binding.historyButton.setOnClickListener {
-            viewModel.saveProgressToSharedPreferences()
-            findNavController().navigate(R.id.action_mainDashboardFragment_to_historyFragment)
-        }
-
 
     }
 

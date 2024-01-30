@@ -21,12 +21,16 @@ class MainDashboardViewModel(private val httpService: HttpService,
     fun updateData() {
         getProgressFromSharedPreferences()
         viewModelScope.launch {
-            getGoals()
-            getProgress()
+            val fetch = viewModelScope.launch {
+                getGoals()
+                getProgress()
+            }
+            fetch.join()
+            saveProgressToSharedPreferences()
         }
     }
 
-    suspend fun getGoals() {
+    private suspend fun getGoals() {
         val goals = httpService.getGoals()
         caloriesGoal.value = goals.calories ?: 0.0
         proteinGoal.value = goals.protein ?: 0.0
@@ -34,7 +38,7 @@ class MainDashboardViewModel(private val httpService: HttpService,
         fatGoal.value = goals.fat ?: 0.0
     }
 
-    suspend fun getProgress() {
+    private suspend fun getProgress() {
         val progress = httpService.getProgress()
         caloriesProgress.value = progress.calories ?: 0.0
         proteinProgress.value = progress.protein ?: 0.0
@@ -68,7 +72,7 @@ class MainDashboardViewModel(private val httpService: HttpService,
         return fatGoal
     }
 
-    fun saveProgressToSharedPreferences() {
+    private fun saveProgressToSharedPreferences() {
         val editor = sharedPreferences.edit()
         editor.putFloat("CALORIES_PROGRESS", caloriesProgress.value?.toFloat() ?: 0.0f)
         editor.putFloat("PROTEIN_PROGRESS", proteinProgress.value?.toFloat() ?: 0.0f)
@@ -77,7 +81,7 @@ class MainDashboardViewModel(private val httpService: HttpService,
         editor.apply()
     }
     
-    fun getProgressFromSharedPreferences() {
+    private fun getProgressFromSharedPreferences() {
         caloriesProgress.value = sharedPreferences.getFloat("CALORIES_PROGRESS", 0.0f).toDouble()
         proteinProgress.value = sharedPreferences.getFloat("PROTEIN_PROGRESS", 0.0f).toDouble()
         carbohydratesProgress.value = sharedPreferences.getFloat("CARBOHYDRATES_PROGRESS", 0.0f).toDouble()

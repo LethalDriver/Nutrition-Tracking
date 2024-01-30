@@ -64,7 +64,6 @@ class MainDashboardFragment : Fragment() {
         observeViewModel()
 
         binding.addMealButton.setOnClickListener {
-            viewModel.saveProgressToSharedPreferences()
             findNavController().navigate(R.id.action_mainDashboardFragment_to_addMealFragment)
         }
 

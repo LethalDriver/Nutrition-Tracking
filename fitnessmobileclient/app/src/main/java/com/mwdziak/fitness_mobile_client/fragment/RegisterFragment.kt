@@ -94,13 +94,18 @@ class RegisterFragment : Fragment() {
 
                 RegisterViewModel.AuthenticationState.FAILED -> {
                     binding.registerButton.isEnabled = true
-                    showSnackBar(viewModel.exceptionMessage.value ?: "", true)
                 }
                 null -> {
                     binding.registerButton.isEnabled = true
                 }
             }
         }
+        viewModel.exceptionMessage.observe(viewLifecycleOwner) { message ->
+            if (!message.isNullOrEmpty()) {
+                showSnackBar(message, true)
+            }
+        }
+
     }
 
     override fun onDestroyView() {

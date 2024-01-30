@@ -64,15 +64,20 @@ class LoginFragment : Fragment() {
                     binding.loginButton.isEnabled = true
                     val intent = Intent(requireContext(), MainActivity::class.java)
                     startActivity(intent)
+                    activity?.finish()
                 }
 
                 LoginViewModel.AuthenticationState.FAILED -> {
                     binding.loginButton.isEnabled = true
-                    showSnackBar(viewModel.exceptionMessage.value ?: "", true)
                 }
                 null -> {
                     binding.loginButton.isEnabled = true
                 }
+            }
+        }
+        viewModel.exceptionMessage.observe(viewLifecycleOwner) { message ->
+            if (!message.isNullOrEmpty()) {
+                showSnackBar(message, true)
             }
         }
     }

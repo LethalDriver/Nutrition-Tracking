@@ -83,13 +83,21 @@ val httpClientModule = module {
                 handleResponseExceptionWithRequest { exception, request ->
                     val clientException = exception as? ClientRequestException ?: return@handleResponseExceptionWithRequest
                     val exceptionResponse = clientException.response
-                    if (exceptionResponse.status == HttpStatusCode.Unauthorized) {
-                        val errorDetails = exceptionResponse.body<ErrorResponse>()
-                        when(errorDetails.detail) {
-                            "User not found" -> throw Exception("User not found")
-                            "Bad credentials" -> throw Exception("Password incorrect")
-                            "User already exists" -> throw Exception("User already exists")
-                            else -> throw Exception("Unknown error")
+                    when (exceptionResponse.status) {
+                        HttpStatusCode.Unauthorized -> {
+                            val errorDetails = exceptionResponse.body<ErrorResponse>()
+                            when(errorDetails.detail) {
+                                "User not found" -> throw Exception("User not found")
+                                "Bad credentials" -> throw Exception("Password incorrect")
+                                else -> throw Exception("Unknown error")
+                            }
+                        }
+                        HttpStatusCode.Conflict -> {
+                            val errorDetails = exceptionResponse.body<ErrorResponse>()
+                            when(errorDetails.detail) {
+                                "User already exists" -> throw Exception("User already exists")
+                                else -> throw Exception("Unknown error")
+                            }
                         }
                     }
                 }

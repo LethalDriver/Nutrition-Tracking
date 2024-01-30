@@ -47,13 +47,16 @@ class UpdateGoalsFragment : Fragment() {
             viewModel.updateFat(text.toString())
         }
         binding.saveButton.setOnClickListener {
-            lifecycleScope.launch {
-                viewModel.updateGoals()
-            }
-            val intent = Intent(requireContext(), MainActivity::class.java)
-            startActivity(intent)
+            viewModel.updateGoals()
         }
+        viewModel.getUpdateGoalsComplete().observe(viewLifecycleOwner) { updateGoalsComplete ->
+            if (updateGoalsComplete) {
+                val intent = Intent(requireContext(), MainActivity::class.java)
+                startActivity(intent)
+                activity?.finish()
+            }
 
+        }
     }
 
     override fun onDestroyView() {

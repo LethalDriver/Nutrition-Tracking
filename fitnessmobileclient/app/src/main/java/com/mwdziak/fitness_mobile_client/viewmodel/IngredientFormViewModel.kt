@@ -1,16 +1,20 @@
 package com.mwdziak.fitness_mobile_client.viewmodel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.mwdziak.fitness_mobile_client.dto.FoodGetRequest
 import com.mwdziak.fitness_mobile_client.dto.IngredientRequest
 import com.mwdziak.fitness_mobile_client.dto.IngredientNutrientsRequest
 import com.mwdziak.fitness_mobile_client.service.HttpService
 import com.mwdziak.fitness_mobile_client.service.Validator
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 class IngredientFormViewModel(private val httpService: HttpService, private val validator: Validator) : ViewModel(){
     private val foodsMatchingKind = mutableListOf<FoodGetRequest>()
-    private val foodDescriptions = mutableListOf<String>()
+    private val foodDescriptions = MutableLiveData<MutableList<String>>(mutableListOf())
     private val foodKinds = mutableListOf<String>()
     private var foodFromDatabase = FoodGetRequest()
     private val pickedFoodKind = MutableLiveData<String>("")
@@ -24,16 +28,18 @@ class IngredientFormViewModel(private val httpService: HttpService, private val 
         return foods.map { it.description }
     }
 
-    suspend fun fetchFoodsByKind() {
-        val foods = httpService.getFoodsByKind(pickedFoodKind.value ?: "")
-        foodsMatchingKind.clear()
-        foodsMatchingKind.addAll(foods)
-        val descriptions = mapFoodDtoToDescriptions(foods)
-        foodDescriptions.clear()
-        foodDescriptions.addAll(descriptions)
+    fun fetchFoodsByKind() {
+        viewModelScope.launch {
+            val foods = async { httpService.getFoodsByKind(pickedFoodKind.value ?: "") }.await()
+            foodsMatchingKind.clear()
+            foodsMatchingKind.addAll(foods)
+            val descriptions = mapFoodDtoToDescriptions(foods)
+            foodDescriptions.value?.clear()
+            foodDescriptions.value?.addAll(descriptions)
+        }
     }
 
-    fun getFoodDescriptions(): List<String> {
+    fun getFoodDescriptions(): LiveData<MutableList<String>> {
         return foodDescriptions
     }
 
@@ -47,7 +53,7 @@ class IngredientFormViewModel(private val httpService: HttpService, private val 
     }
 
     fun updatePickedFoodDescription(dropdownPosition: Int) {
-        pickedFoodDescription.value = foodDescriptions[dropdownPosition]
+        pickedFoodDescription.value = foodDescriptions.value?.get(dropdownPosition) ?: ""
         foodFromDatabase = foodsMatchingKind[dropdownPosition]
         checkFormValidity()
     }
@@ -95,7 +101,8 @@ class IngredientFormViewModel(private val httpService: HttpService, private val 
     }
 
     private fun isFoodDescriptionValid(): Boolean {
-        return validator.isInCollection(pickedFoodDescription.value ?: "", foodDescriptions)
+        return validator.isInCollection(pickedFoodDescription.value ?: "",
+            foodDescriptions.value ?: listOf())
     }
 
     private fun isFoodWeightValid(): Boolean {

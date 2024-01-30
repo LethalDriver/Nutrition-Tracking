@@ -22,6 +22,12 @@ class AddMealViewModel(private val httpService: HttpService, private val validat
         forms.remove(formViewModel)
     }
 
+    init {
+        viewModelScope.launch {
+            updateFormsWithFoodKinds()
+        }
+    }
+
     private suspend fun fetchFoodKinds() {
         val kinds = httpService.getFoodKinds()
         foodKinds.clear()
@@ -47,23 +53,25 @@ class AddMealViewModel(private val httpService: HttpService, private val validat
         return validator.isNotBlank(mealName.value ?: "")
     }
 
-    fun MapFormsToFoodPostRequest(): List<IngredientRequest> {
+    private fun MapFormsToFoodPostRequest(): List<IngredientRequest> {
         return forms.map { it.mapFormToFoodPostRequest() }
     }
 
-    fun mapMealToPostRequest(): MealRequest {
+    private fun mapMealToPostRequest(): MealRequest {
         return MealRequest(
             name = mealName.value ?: "",
             ingredients = MapFormsToFoodPostRequest()
         )
     }
 
-    suspend fun postMeal() {
-        val meal = mapMealToPostRequest()
-        httpService.postMeal(meal)
+    fun postMeal() {
+        viewModelScope.launch {
+            val meal = mapMealToPostRequest()
+            httpService.postMeal(meal)
+        }
     }
 
-    suspend fun updateFormsWithFoodKinds() {
+    private suspend fun updateFormsWithFoodKinds() {
         val job = viewModelScope.launch {
             fetchFoodKinds()
         }

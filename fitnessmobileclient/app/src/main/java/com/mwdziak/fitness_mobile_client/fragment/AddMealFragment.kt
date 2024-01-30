@@ -8,13 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
-import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.appbar.MaterialToolbar
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.mwdziak.fitness_mobile_client.viewmodel.AddMealViewModel
 import com.mwdziak.fitness_mobile_client.R
@@ -45,18 +42,14 @@ class AddMealFragment : Fragment() {
         binding.addButton.setOnClickListener {
             addForm()
         }
-        lifecycleScope.launch {
-            viewModel.updateFormsWithFoodKinds()
-        }
         binding.discardButton.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
         }
+
         binding.saveMealButton.setOnClickListener {
             if (viewModel.checkIfAllFieldsValid()) {
                 showSnackBar("Meal saved", false)
-                viewModel.viewModelScope.launch {
-                    viewModel.postMeal()
-                }
+                viewModel.postMeal()
                 findNavController().navigate(R.id.action_addMealFragment_to_mainDashboardFragment)
             } else {
                 showSnackBar("Please fill all fields", true)
@@ -92,17 +85,20 @@ class AddMealFragment : Fragment() {
 
         formViewModel.setFoodKinds(viewModel.getFoodCategories())
 
-        val foodKindsAdapter = ArrayAdapter(view.context, R.layout.meal_autocomplete_item, viewModel.getFoodCategories())
+        val foodKindsAdapter = ArrayAdapter(view.context, R.layout.meal_autocomplete_item,
+            viewModel.getFoodCategories())
 
         val foodKindTextView = view.findViewById<AutoCompleteTextView>(R.id.foodKindTextView)
 
         val foodDescriptionTextView = view.findViewById<AutoCompleteTextView>(R.id.foodDescriptionTextView)
-        val foodDescriptionAdapter = ArrayAdapter(view.context, R.layout.meal_autocomplete_item, formViewModel.getFoodDescriptions())
+        val foodDescriptionAdapter = ArrayAdapter(view.context,
+            R.layout.meal_autocomplete_item, formViewModel.getFoodDescriptions().value ?: mutableListOf())
 
         val weightTextView = view.findViewById<TextInputEditText>(R.id.weightEditText)
 
         val unitTextView = view.findViewById<AutoCompleteTextView>(R.id.unitAutoCompleteTextView)
-        val unitsAdapter = ArrayAdapter(view.context, R.layout.meal_autocomplete_item, formViewModel.getWeightUnits())
+        val unitsAdapter = ArrayAdapter(view.context,
+            R.layout.meal_autocomplete_item, formViewModel.getWeightUnits())
 
 
         val deleteButton = view.findViewById<View>(R.id.deleteButton)
@@ -112,13 +108,16 @@ class AddMealFragment : Fragment() {
         unitTextView.setAdapter(unitsAdapter)
 
         foodKindTextView.setOnItemClickListener { _, _, dropdownPosition, _ ->
-            formViewModel.viewModelScope.launch {
-                formViewModel.updatePickedFoodKind(viewModel.getFoodCategories()[dropdownPosition])
-                formViewModel.fetchFoodsByKind()
-            }
-            foodDescriptionAdapter.notifyDataSetChanged()
+            formViewModel.updatePickedFoodKind(viewModel.getFoodCategories()[dropdownPosition])
+            formViewModel.fetchFoodsByKind()
             foodKindTextView.clearFocus()
             Log.w("Form data: ", formViewModel.toString())
+        }
+
+        formViewModel.getFoodDescriptions().observe(viewLifecycleOwner) { descriptions ->
+            foodDescriptionAdapter.clear()
+            foodDescriptionAdapter.addAll(descriptions)
+            foodDescriptionAdapter.notifyDataSetChanged()
         }
 
         foodKindTextView.setOnFocusChangeListener { v, hasFocus ->

@@ -1,5 +1,8 @@
 package com.mwdziak.fitness_mobile_client.utils
 
+import android.content.Context
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
@@ -29,4 +32,9 @@ fun Fragment.showSnackBar(message: String, error: Boolean) {
         )
     }
     snackbar.show()
+}
+
+fun Fragment.hideKeyboard(view: View) {
+    val inputMethodManager = view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
 }

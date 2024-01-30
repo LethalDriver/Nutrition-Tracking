@@ -15,6 +15,7 @@ import com.mwdziak.fitness_mobile_client.viewmodel.RegisterViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.mwdziak.fitness_mobile_client.databinding.FragmentRegisterBinding;
+import com.mwdziak.fitness_mobile_client.utils.hideKeyboard
 import com.mwdziak.fitness_mobile_client.utils.showSnackBar
 
 class RegisterFragment : Fragment() {
@@ -61,7 +62,7 @@ class RegisterFragment : Fragment() {
         binding.editTextPassword.addTextChangedListener { text ->
             viewModel.updatePassword(text.toString())
             if (!viewModel.isPasswordValid()) {
-                binding.editTextPassword.error = "Password must be at least 8 characters long," +
+                binding.editTextPassword.error = "Password must be at least 8 characters long, " +
                         "contain a number, and a special character"
             }
         }
@@ -79,6 +80,7 @@ class RegisterFragment : Fragment() {
 
         binding.registerButton.setOnClickListener {
             viewModel.register()
+            hideKeyboard(it)
         }
 
         viewModel.authenticationState.observe(viewLifecycleOwner) { authenticationState ->

@@ -16,6 +16,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.mwdziak.fitness_mobile_client.viewmodel.AddMealViewModel
 import com.mwdziak.fitness_mobile_client.R
 import com.mwdziak.fitness_mobile_client.databinding.FragmentAddMealBinding
+import com.mwdziak.fitness_mobile_client.utils.hideKeyboard
 import com.mwdziak.fitness_mobile_client.utils.showSnackBar
 import com.mwdziak.fitness_mobile_client.viewmodel.IngredientFormViewModel
 import kotlinx.coroutines.launch
@@ -112,6 +113,7 @@ class AddMealFragment : Fragment() {
             formViewModel.fetchFoodsByKind()
             foodKindTextView.clearFocus()
             Log.w("Form data: ", formViewModel.toString())
+            hideKeyboard(view)
         }
 
         formViewModel.getFoodDescriptions().observe(viewLifecycleOwner) { descriptions ->
@@ -133,6 +135,7 @@ class AddMealFragment : Fragment() {
             formViewModel.updatePickedFoodDescription(dropdownPosition)
             foodDescriptionTextView.clearFocus()
         }
+
 
         unitTextView.setOnItemClickListener { _, _, dropdownPosition, _ ->
             formViewModel.updatePickedWeightUnit(dropdownPosition)

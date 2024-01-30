@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.mwdziak.fitness_mobile_client.R
 import com.mwdziak.fitness_mobile_client.activity.MainActivity
 import com.mwdziak.fitness_mobile_client.databinding.FragmentLoginBinding
+import com.mwdziak.fitness_mobile_client.utils.hideKeyboard
 import com.mwdziak.fitness_mobile_client.utils.showSnackBar
 import com.mwdziak.fitness_mobile_client.viewmodel.LoginViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -34,7 +35,6 @@ class LoginFragment : Fragment() {
 
         if (viewModel.isUserLoggedIn()) {
             val intent = Intent(requireContext(), MainActivity::class.java)
-            intent.putExtra("FROM_ACTIVITY", "StartupActivity")
             startActivity(intent)
         }
 
@@ -52,6 +52,7 @@ class LoginFragment : Fragment() {
 
         binding.loginButton.setOnClickListener {
             viewModel.authenticate()
+            hideKeyboard(it)
         }
 
         viewModel.authenticationState.observe(viewLifecycleOwner) { authenticationState ->

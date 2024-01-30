@@ -1,6 +1,7 @@
 package com.mwdziak.fitness_mobile_client.viewmodel
 
 import android.content.SharedPreferences
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -17,12 +18,13 @@ class MainDashboardViewModel(private val httpService: HttpService,
     private val proteinGoal = MutableLiveData<Double>(0.0)
     private val carbohydratesGoal = MutableLiveData<Double>(0.0)
     private val fatGoal = MutableLiveData<Double>(0.0)
-    private val previousProgressState = mutableMapOf(
-        "CALORIES_PROGRESS" to 0.0f,
-        "PROTEIN_PROGRESS" to 0.0f,
-        "CARBOHYDRATES_PROGRESS" to 0.0f,
-        "FAT_PROGRESS" to 0.0f
-    )
+    fun updateData() {
+        getProgressFromSharedPreferences()
+        viewModelScope.launch {
+            getGoals()
+            getProgress()
+        }
+    }
 
     suspend fun getGoals() {
         val goals = httpService.getGoals()
@@ -40,30 +42,30 @@ class MainDashboardViewModel(private val httpService: HttpService,
         fatProgress.value = progress.fat ?: 0.0
     }
 
-    fun getCaloriesProgress(): Double {
-        return caloriesProgress.value ?: 0.0
+    fun getCaloriesProgress(): LiveData<Double> {
+        return caloriesProgress
     }
-    fun getProteinProgress(): Double {
-        return proteinProgress.value ?: 0.0
+    fun getProteinProgress(): LiveData<Double> {
+        return proteinProgress
     }
-    fun getCarbohydratesProgress(): Double {
-        return carbohydratesProgress.value ?: 0.0
+    fun getCarbohydratesProgress(): LiveData<Double> {
+        return carbohydratesProgress
     }
-    fun getFatProgress(): Double {
-        return fatProgress.value ?: 0.0
+    fun getFatProgress(): LiveData<Double> {
+        return fatProgress
     }
 
-    fun getCaloriesGoal(): Double {
-        return caloriesGoal.value ?: 0.0
+    fun getCaloriesGoal(): LiveData<Double> {
+        return caloriesGoal
     }
-    fun getProteinGoal(): Double {
-        return proteinGoal.value ?: 0.0
+    fun getProteinGoal(): LiveData<Double> {
+        return proteinGoal
     }
-    fun getCarbohydratesGoal(): Double {
-        return carbohydratesGoal.value ?: 0.0
+    fun getCarbohydratesGoal(): LiveData<Double> {
+        return carbohydratesGoal
     }
-    fun getFatGoal(): Double {
-        return fatGoal.value ?: 0.0
+    fun getFatGoal(): LiveData<Double> {
+        return fatGoal
     }
 
     fun saveProgressToSharedPreferences() {
@@ -76,19 +78,9 @@ class MainDashboardViewModel(private val httpService: HttpService,
     }
     
     fun getProgressFromSharedPreferences() {
-        val caloriesProgress = sharedPreferences.getFloat("CALORIES_PROGRESS", 0.0f)
-        val proteinProgress = sharedPreferences.getFloat("PROTEIN_PROGRESS", 0.0f)
-        val carbohydratesProgress = sharedPreferences.getFloat("CARBOHYDRATES_PROGRESS", 0.0f)
-        val fatProgress = sharedPreferences.getFloat("FAT_PROGRESS", 0.0f)
-        previousProgressState["CALORIES_PROGRESS"] = caloriesProgress
-        previousProgressState["PROTEIN_PROGRESS"] = proteinProgress
-        previousProgressState["CARBOHYDRATES_PROGRESS"] = carbohydratesProgress
-        previousProgressState["FAT_PROGRESS"] = fatProgress
+        caloriesProgress.value = sharedPreferences.getFloat("CALORIES_PROGRESS", 0.0f).toDouble()
+        proteinProgress.value = sharedPreferences.getFloat("PROTEIN_PROGRESS", 0.0f).toDouble()
+        carbohydratesProgress.value = sharedPreferences.getFloat("CARBOHYDRATES_PROGRESS", 0.0f).toDouble()
+        fatProgress.value = sharedPreferences.getFloat("FAT_PROGRESS", 0.0f).toDouble()
     }
-
-    fun getPreviousProgressState(s: String): Float {
-        return previousProgressState[s] ?: 0.0f
-    }
-
-
 }

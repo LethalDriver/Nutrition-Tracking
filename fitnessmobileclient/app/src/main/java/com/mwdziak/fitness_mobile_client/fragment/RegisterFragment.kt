@@ -15,6 +15,7 @@ import com.mwdziak.fitness_mobile_client.viewmodel.RegisterViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.mwdziak.fitness_mobile_client.databinding.FragmentRegisterBinding;
+import com.mwdziak.fitness_mobile_client.utils.showSnackBar
 
 class RegisterFragment : Fragment() {
     private var _binding: FragmentRegisterBinding? = null
@@ -77,10 +78,28 @@ class RegisterFragment : Fragment() {
         }
 
         binding.registerButton.setOnClickListener {
-            lifecycleScope.launch {
-                viewModel.register()
+            viewModel.register()
+        }
+
+        viewModel.authenticationState.observe(viewLifecycleOwner) { authenticationState ->
+            when (authenticationState) {
+                RegisterViewModel.AuthenticationState.LOADING -> {
+                    binding.registerButton.isEnabled = false
+                }
+
+                RegisterViewModel.AuthenticationState.AUTHENTICATED -> {
+                    binding.registerButton.isEnabled = true
+                    findNavController().navigate(R.id.action_registerFragment_to_updateGoalsFragment)
+                }
+
+                RegisterViewModel.AuthenticationState.FAILED -> {
+                    binding.registerButton.isEnabled = true
+                    showSnackBar(viewModel.exceptionMessage.value ?: "", true)
+                }
+                null -> {
+                    binding.registerButton.isEnabled = true
+                }
             }
-            findNavController().navigate(R.id.action_registerFragment_to_updateGoalsFragment)
         }
     }
 

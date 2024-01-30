@@ -59,16 +59,10 @@ class MainDashboardFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.topAppBar)
         topAppBar?.title = "Main Dashboard"
-        lifecycleScope.launch {
-            val fetch = viewModel.viewModelScope.launch {
-                viewModel.getGoals()
-                viewModel.getProgress()
-            }
-            viewModel.getProgressFromSharedPreferences()
-            fetch.join()
-            updateProgressBars()
-            updateTextViews()
-        }
+
+        viewModel.updateData()
+        observeViewModel()
+
         binding.addMealButton.setOnClickListener {
             viewModel.saveProgressToSharedPreferences()
             findNavController().navigate(R.id.action_mainDashboardFragment_to_addMealFragment)
@@ -76,57 +70,40 @@ class MainDashboardFragment : Fragment() {
 
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun updateProgressBars() {
-        binding.caloriesBar.min = 0
-        binding.caloriesBar.max = viewModel.getCaloriesGoal().toInt()
-        binding.proteinBar.min = 0
-        binding.proteinBar.max = viewModel.getProteinGoal().toInt()
-        binding.carbohydratesBar.min = 0
-        binding.carbohydratesBar.max = viewModel.getCarbohydratesGoal().toInt()
-        binding.fatBar.min = 0
-        binding.fatBar.max = viewModel.getFatGoal().toInt()
-
-
-
-        val navController = findNavController()
-        val previousFragmentId = navController.previousBackStackEntry?.destination?.id
-        val fromActivity = activity?.intent?.getStringExtra("FROM_ACTIVITY")
-
-        if (previousFragmentId == R.id.addMealFragment) {
-            animateProgressBar(binding.caloriesBar,
-                viewModel.getPreviousProgressState("CALORIES_PROGRESS").toInt(), viewModel.getCaloriesProgress().toInt())
-            animateProgressBar(binding.proteinBar,
-                viewModel.getPreviousProgressState("PROTEIN_PROGRESS").toInt(), viewModel.getProteinProgress().toInt())
-            animateProgressBar(binding.carbohydratesBar,
-                viewModel.getPreviousProgressState("CARBOHYDRATES_PROGRESS").toInt(), viewModel.getCarbohydratesProgress().toInt())
-            animateProgressBar(binding.fatBar,
-                viewModel.getPreviousProgressState("FAT_PROGRESS").toInt(), viewModel.getFatProgress().toInt())
-
-        } else if (fromActivity == "StartupActivity") {
-            animateProgressBar(binding.caloriesBar, 0, viewModel.getCaloriesProgress().toInt())
-            animateProgressBar(binding.proteinBar, 0, viewModel.getProteinProgress().toInt())
+    @SuppressLint("SetTextI18n")
+    private fun observeViewModel() {
+        viewModel.getCaloriesGoal().observe(viewLifecycleOwner) { newValue: Double ->
+            binding.caloriesBar.max = newValue.toInt()
+        }
+        viewModel.getProteinGoal().observe(viewLifecycleOwner) { newValue: Double ->
+            binding.proteinBar.max = newValue.toInt()
+        }
+        viewModel.getCarbohydratesGoal().observe(viewLifecycleOwner) { newValue: Double ->
+            binding.carbohydratesBar.max = newValue.toInt()
+        }
+        viewModel.getFatGoal().observe(viewLifecycleOwner) { newValue: Double ->
+            binding.fatBar.max = newValue.toInt()
+        }
+        viewModel.getCaloriesProgress().observe(viewLifecycleOwner) { newValue: Double ->
+            animateProgressBar(binding.caloriesBar, binding.caloriesBar.progress, newValue.toInt())
+            binding.caloriesTextView.text = "${newValue.toInt()}kJ"
+        }
+        viewModel.getProteinProgress().observe(viewLifecycleOwner) { newValue: Double ->
+            animateProgressBar(binding.proteinBar, binding.proteinBar.progress, newValue.toInt())
+            binding.proteinTextView.text = "${newValue.toInt()}g"
+        }
+        viewModel.getCarbohydratesProgress().observe(viewLifecycleOwner) { newValue: Double ->
             animateProgressBar(
                 binding.carbohydratesBar,
-                0,
-                viewModel.getCarbohydratesProgress().toInt()
+                binding.carbohydratesBar.progress,
+                newValue.toInt()
             )
-            animateProgressBar(binding.fatBar, 0, viewModel.getFatProgress().toInt())
-            activity?.intent?.removeExtra("FROM_ACTIVITY")
-        } else {
-            binding.caloriesBar.progress = viewModel.getCaloriesProgress().toInt()
-            binding.proteinBar.progress = viewModel.getProteinProgress().toInt()
-            binding.carbohydratesBar.progress = viewModel.getCarbohydratesProgress().toInt()
-            binding.fatBar.progress = viewModel.getFatProgress().toInt()
+            binding.carbsTextView.text = "${newValue.toInt()}g"
         }
-    }
-
-    @SuppressLint("SetTextI18n")
-    private fun updateTextViews() {
-        binding.caloriesTextView.text = "${viewModel.getCaloriesProgress().toInt()}kJ"
-        binding.proteinTextView.text = "${viewModel.getProteinProgress().toInt()}g"
-        binding.carbsTextView.text = "${viewModel.getCarbohydratesProgress().toInt()}g"
-        binding.fatTextView.text = "${viewModel.getFatProgress().toInt()}g"
+        viewModel.getFatProgress().observe(viewLifecycleOwner) { newValue: Double ->
+            animateProgressBar(binding.fatBar, binding.fatBar.progress, newValue.toInt())
+            binding.fatTextView.text = "${newValue.toInt()}g"
+        }
     }
 
     private fun animateProgressBar(progressBar: ProgressBar, oldValue: Int, newValue: Int) {

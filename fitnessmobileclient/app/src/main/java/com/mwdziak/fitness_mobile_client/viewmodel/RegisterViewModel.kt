@@ -2,10 +2,12 @@ package com.mwdziak.fitness_mobile_client.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.mwdziak.fitness_mobile_client.auth.RegistrationRequest
 import com.mwdziak.fitness_mobile_client.service.HttpService
 import com.mwdziak.fitness_mobile_client.service.TokenManager
 import com.mwdziak.fitness_mobile_client.service.Validator
+import kotlinx.coroutines.launch
 
 class RegisterViewModel(private val tokenManager: TokenManager,
                         private val validator: Validator,
@@ -18,6 +20,11 @@ class RegisterViewModel(private val tokenManager: TokenManager,
     private val firstName = MutableLiveData<String>("")
     private val lastName = MutableLiveData<String>("")
     val isAllFieldsValid = MutableLiveData<Boolean>(false)
+    val exceptionMessage = MutableLiveData<String>()
+    val authenticationState = MutableLiveData<AuthenticationState>()
+    enum class AuthenticationState {
+        LOADING, AUTHENTICATED, FAILED
+    }
 
     fun updateEmail(newEmail: String) {
         email.value = newEmail
@@ -72,13 +79,22 @@ class RegisterViewModel(private val tokenManager: TokenManager,
                 isConfirmPasswordValid()
     }
 
-    suspend fun register(){
-        val registrationRequest = RegistrationRequest(email.value ?: "", password.value ?: "",
-            firstName.value ?: "", lastName.value ?: "")
+    fun register(){
+        viewModelScope.launch {
+            authenticationState.value = AuthenticationState.LOADING
+            try {
+                val registrationRequest = RegistrationRequest(email.value ?: "", password.value ?: "",
+                    firstName.value ?: "", lastName.value ?: "")
 
-        val tokensDTO = httpService.register(registrationRequest)
+                val tokensDTO = httpService.register(registrationRequest)
 
-        tokenManager.saveTokens(tokensDTO.token, tokensDTO.refreshToken, tokensDTO.expirationDate)
+                tokenManager.saveTokens(tokensDTO.token, tokensDTO.refreshToken, tokensDTO.expirationDate)
+                authenticationState.value = AuthenticationState.AUTHENTICATED
+            } catch (e: Exception) {
+                exceptionMessage.postValue(e.message)
+                authenticationState.value = AuthenticationState.FAILED
+            }
+        }
     }
 
 }

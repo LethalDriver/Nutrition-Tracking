@@ -39,7 +39,7 @@ class LoginViewModel(private val tokenManager: TokenManager, private val httpSer
         }
     }
 
-    fun isUserLogginedIn(): Boolean {
+    fun isUserLoggedIn(): Boolean {
         return !tokenManager.isRefreshTokenExpired();
     }
 

@@ -28,6 +28,9 @@
     <action
         android:id="@+id/action_global_historyFragment"
         app:destination="@id/historyFragment" />
+    <action
+        android:id="@+id/action_global_mainDashboardFragment"
+        app:destination="@id/mainDashboardFragment" />
     <fragment
         android:id="@+id/historyFragment"
         android:name="com.mwdziak.fitness_mobile_client.fragment.HistoryFragment"

@@ -2,6 +2,7 @@ package com.mwdziak.fitness_mobile_client.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.mwdziak.fitness_mobile_client.activity.MainActivity
 import com.mwdziak.fitness_mobile_client.dto.ErrorResponse
 import com.mwdziak.fitness_mobile_client.service.HttpService
 import com.mwdziak.fitness_mobile_client.service.TokenManager

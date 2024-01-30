@@ -3,6 +3,7 @@ package com.mwdziak.fitness_mobile_client.service
 import com.mwdziak.fitness_mobile_client.auth.AuthenticationRequest
 import com.mwdziak.fitness_mobile_client.auth.RegistrationRequest
 import com.mwdziak.fitness_mobile_client.auth.AuthenticationResponse
+import com.mwdziak.fitness_mobile_client.auth.LogoutRequest
 import com.mwdziak.fitness_mobile_client.dto.DayRequest
 import com.mwdziak.fitness_mobile_client.dto.NutritionalGoalsGetRequest
 import com.mwdziak.fitness_mobile_client.dto.NutritionalProgressGetRequest
@@ -97,5 +98,14 @@ class HttpService(private val noAuthHttpClient: HttpClient, private val defaultH
             }
         }
         return listOf()
+    }
+
+    suspend fun logout(logoutRequest: LogoutRequest): HttpResponse {
+        val url = "$usersServiceUrl/auth/logout"
+        val response = noAuthHttpClient.post(url) {
+            contentType(ContentType.Application.Json)
+            setBody(logoutRequest)
+        }
+        return response
     }
 }

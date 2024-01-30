@@ -4,12 +4,12 @@
     tools:ignore="HardcodedText">
 
     <item
-        android:id="@+id/nav_history"
-        android:title="History" />
+        android:id="@+id/nav_main_dashboard"
+        android:title="Main dashboard" />
 
     <item
-        android:id="@+id/anv_profile"
-        android:title="Profile" />
+        android:id="@+id/nav_history"
+        android:title="History" />
 
     <item
         android:id="@+id/nav_logout"

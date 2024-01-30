@@ -39,6 +39,7 @@ class TokenManager(private val httpClient: HttpClient, private val sharedPrefere
         val editor = sharedPreferences.edit()
         editor.remove("JWT_TOKEN")
         editor.remove("REFRESH_TOKEN")
+        editor.remove("EXPIRATION_DATE")
         editor.apply()
     }
 
@@ -63,3 +64,4 @@ class TokenManager(private val httpClient: HttpClient, private val sharedPrefere
         saveTokens(newTokens.token, newTokens.refreshToken, newTokens.expirationDate)
     }
 }
+

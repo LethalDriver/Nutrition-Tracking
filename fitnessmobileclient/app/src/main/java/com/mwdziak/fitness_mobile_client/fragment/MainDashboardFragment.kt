@@ -65,7 +65,6 @@ class MainDashboardFragment : Fragment() {
                 viewModel.getProgress()
             }
             viewModel.getProgressFromSharedPreferences()
-
             fetch.join()
             updateProgressBars()
             updateTextViews()
@@ -92,6 +91,7 @@ class MainDashboardFragment : Fragment() {
 
         val navController = findNavController()
         val previousFragmentId = navController.previousBackStackEntry?.destination?.id
+        val fromActivity = activity?.intent?.getStringExtra("FROM_ACTIVITY")
 
         if (previousFragmentId == R.id.addMealFragment) {
             animateProgressBar(binding.caloriesBar,
@@ -102,11 +102,22 @@ class MainDashboardFragment : Fragment() {
                 viewModel.getPreviousProgressState("CARBOHYDRATES_PROGRESS").toInt(), viewModel.getCarbohydratesProgress().toInt())
             animateProgressBar(binding.fatBar,
                 viewModel.getPreviousProgressState("FAT_PROGRESS").toInt(), viewModel.getFatProgress().toInt())
-        } else {
+
+        } else if (fromActivity == "StartupActivity") {
             animateProgressBar(binding.caloriesBar, 0, viewModel.getCaloriesProgress().toInt())
             animateProgressBar(binding.proteinBar, 0, viewModel.getProteinProgress().toInt())
-            animateProgressBar(binding.carbohydratesBar, 0, viewModel.getCarbohydratesProgress().toInt())
+            animateProgressBar(
+                binding.carbohydratesBar,
+                0,
+                viewModel.getCarbohydratesProgress().toInt()
+            )
             animateProgressBar(binding.fatBar, 0, viewModel.getFatProgress().toInt())
+            activity?.intent?.removeExtra("FROM_ACTIVITY")
+        } else {
+            binding.caloriesBar.progress = viewModel.getCaloriesProgress().toInt()
+            binding.proteinBar.progress = viewModel.getProteinProgress().toInt()
+            binding.carbohydratesBar.progress = viewModel.getCarbohydratesProgress().toInt()
+            binding.fatBar.progress = viewModel.getFatProgress().toInt()
         }
     }
 

@@ -37,35 +37,35 @@
                 android:id="@+id/textView4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Calories [kJ]"
+                android:text="Calories"
                 android:gravity="center"/>
 
             <TextView
                 android:id="@+id/textView5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Protein [g]"
+                android:text="Protein"
                 android:gravity="center"/>
 
             <TextView
                 android:id="@+id/textView6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Carbs [g]"
+                android:text="Carbs"
                 android:gravity="center"/>
 
             <TextView
                 android:id="@+id/textView11"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Fat [g]"
+                android:text="Fat"
                 android:gravity="center"/>
 
             <TextView
                 android:id="@+id/textView12"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Weight [g]"
+                android:text="Weight"
                 android:gravity="center"/>
         </TableRow>
         <TableRow

@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="16dp"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginTop="16dp"
     app:cardElevation="4dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -32,7 +33,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:text="Delete"
-            app:backgroundTint="#D32F2F"
+            app:backgroundTint="@color/rejectButton"
             app:iconGravity="start"
             app:iconSize="24dp"
             app:layout_constraintEnd_toEndOf="parent"

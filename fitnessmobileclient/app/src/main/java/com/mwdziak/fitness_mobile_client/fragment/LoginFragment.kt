@@ -39,6 +39,7 @@ class LoginFragment : Fragment() {
 
         if (viewModel.isUserLogginedIn()) {
             val intent = Intent(requireContext(), MainActivity::class.java)
+            intent.putExtra("FROM_ACTIVITY", "StartupActivity")
             startActivity(intent)
         }
 
@@ -67,6 +68,7 @@ class LoginFragment : Fragment() {
                 LoginViewModel.AuthenticationState.AUTHENTICATED -> {
                     binding.loginButton.isEnabled = true
                     val intent = Intent(requireContext(), MainActivity::class.java)
+                    intent.putExtra("FROM_ACTIVITY", "StartupActivity")
                     startActivity(intent)
                 }
 

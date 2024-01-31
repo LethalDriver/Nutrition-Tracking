@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardElevation="4dp">
 <LinearLayout android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingTop="8dp"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:padding="8dp"
     >
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/light_grey"
-        android:layout_marginHorizontal="2dp">
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/mealNameTextView"
@@ -30,3 +33,4 @@
         android:layout_height="wrap_content"
         android:nestedScrollingEnabled="false" />
 </LinearLayout>
+</androidx.cardview.widget.CardView>

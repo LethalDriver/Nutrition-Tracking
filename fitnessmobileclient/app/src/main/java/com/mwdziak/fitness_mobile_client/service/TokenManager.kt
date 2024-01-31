@@ -55,7 +55,7 @@ class TokenManager(private val httpClient: HttpClient, private val sharedPrefere
         val token = getJwtToken()
         val refreshToken = getRefreshToken()
         val tokens = RefreshRequest(token!!, refreshToken!!)
-        val url = "http://10.0.2.2:8080/users/auth/refresh"
+        val url = "https://lasting-honeybee-thankful.ngrok-free.app/users/auth/refresh"
         val response: HttpResponse = httpClient.post(url) {
             contentType(ContentType.Application.Json)
             setBody(tokens)

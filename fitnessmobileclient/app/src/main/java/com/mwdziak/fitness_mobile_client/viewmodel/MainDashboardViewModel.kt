@@ -32,18 +32,34 @@ class MainDashboardViewModel(private val httpService: HttpService,
 
     private suspend fun getGoals() {
         val goals = httpService.getGoals()
-        caloriesGoal.value = goals.calories ?: 0.0
-        proteinGoal.value = goals.protein ?: 0.0
-        carbohydratesGoal.value = goals.carbohydrates ?: 0.0
-        fatGoal.value = goals.fat ?: 0.0
+        if (goals.calories != caloriesGoal.value) {
+            caloriesGoal.value = goals.calories ?: 0.0
+        }
+        if (goals.protein != proteinGoal.value) {
+            proteinGoal.value = goals.protein ?: 0.0
+        }
+        if (goals.carbohydrates != carbohydratesGoal.value) {
+            carbohydratesGoal.value = goals.carbohydrates ?: 0.0
+        }
+        if (goals.fat != fatGoal.value) {
+            fatGoal.value = goals.fat ?: 0.0
+        }
     }
 
     private suspend fun getProgress() {
         val progress = httpService.getProgress()
-        caloriesProgress.value = progress.calories ?: 0.0
-        proteinProgress.value = progress.protein ?: 0.0
-        carbohydratesProgress.value = progress.carbohydrates ?: 0.0
-        fatProgress.value = progress.fat ?: 0.0
+        if (progress.calories != caloriesProgress.value) {
+            caloriesProgress.value = progress.calories ?: 0.0
+        }
+        if (progress.protein != proteinProgress.value) {
+            proteinProgress.value = progress.protein ?: 0.0
+        }
+        if (progress.carbohydrates != carbohydratesProgress.value) {
+            carbohydratesProgress.value = progress.carbohydrates ?: 0.0
+        }
+        if (progress.fat != fatProgress.value) {
+            fatProgress.value = progress.fat ?: 0.0
+        }
     }
 
     fun getCaloriesProgress(): LiveData<Double> {

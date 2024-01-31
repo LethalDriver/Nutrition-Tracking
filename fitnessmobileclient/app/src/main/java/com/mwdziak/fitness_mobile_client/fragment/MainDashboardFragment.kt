@@ -59,28 +59,13 @@ class MainDashboardFragment : Fragment() {
         val topAppBar = activity?.findViewById<MaterialToolbar>(R.id.topAppBar)
         topAppBar?.title = "Main Dashboard"
 
-        Log.w("MainDashboardFragment", "onViewCreated: ${viewModel.getCaloriesProgress().value}")
-
-        initializeBars()
         observeViewModel()
         viewModel.updateData()
 
         binding.addMealButton.setOnClickListener {
             findNavController().navigate(R.id.action_mainDashboardFragment_to_addMealFragment)
-            Log.w("MainDashboardFragment", "onNavAway: ${viewModel.getCaloriesProgress().value}")
         }
 
-    }
-
-    private fun initializeBars() {
-        binding.caloriesBar.max = (viewModel.getCaloriesGoal().value?.toInt()?.times(1000)) ?: 0
-        binding.proteinBar.max = (viewModel.getProteinGoal().value?.toInt()?.times(1000)) ?: 0
-        binding.carbohydratesBar.max = (viewModel.getCarbohydratesGoal().value?.toInt()?.times(1000)) ?: 0
-        binding.fatBar.max = (viewModel.getFatGoal().value?.toInt()?.times(1000)) ?: 0
-        binding.caloriesBar.progress = (viewModel.getCaloriesProgress().value?.toInt()?.times(1000)) ?: 0
-        binding.proteinBar.progress = (viewModel.getProteinProgress().value?.toInt()?.times(1000)) ?: 0
-        binding.carbohydratesBar.progress = (viewModel.getCarbohydratesProgress().value?.toInt()?.times(1000)) ?: 0
-        binding.fatBar.progress = (viewModel.getFatProgress().value?.toInt()?.times(1000)) ?: 0
     }
 
     @SuppressLint("SetTextI18n")

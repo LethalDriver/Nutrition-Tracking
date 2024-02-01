@@ -6,7 +6,7 @@
     <string name="password">password</string>
     <string name="email">email</string>
     <string name="login">Login</string>
-    <string name="register">Register</string>
+    <string name="register">Don\'t have an account yet? Register here!</string>
     <string name="confirm_password">confirm password</string>
     <string name="already_have_an_account_login_here">Already have an account? Login here!</string>
     <string name="dummy_button">Dummy Button</string>

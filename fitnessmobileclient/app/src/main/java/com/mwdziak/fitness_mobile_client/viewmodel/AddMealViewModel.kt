@@ -45,6 +45,10 @@ class AddMealViewModel(private val httpService: HttpService, private val validat
         return forms.all { it.getIsAllFieldsValid() } && isMealNameValid()
     }
 
+    fun checkIfFormsNotEmpty(): Boolean {
+        return forms.isNotEmpty()
+    }
+
     fun updateMealName(newMealName: String) {
         mealName.value = newMealName
     }

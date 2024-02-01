@@ -1,5 +1,6 @@
 package com.mwdziak.fitness_mobile_client.adapters
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,13 +20,14 @@ class IngredientAdapter(private val ingredients: List<IngredientRequest>) : Recy
         private val carbohydrates: TextView = view.findViewById<TextView>(R.id.carbsTextView)
         private val fat: TextView = view.findViewById<TextView>(R.id.fatTextView)
         private val weight: TextView = view.findViewById<TextView>(R.id.weightTextView)
+        @SuppressLint("SetTextI18n")
         fun bind(ingredient: IngredientRequest) {
             ingredientTextView.text = "${ingredient.foodKind}, ${ingredient.description}"
-            calories.text = ingredient.nutrients?.calories?.roundToInt().toString()
-            protein.text = ingredient.nutrients?.protein?.roundToInt().toString()
-            carbohydrates.text = ingredient.nutrients?.carbohydrates?.roundToInt().toString()
-            fat.text = ingredient.nutrients?.fat?.roundToInt().toString()
-            weight.text = ingredient.weight?.roundToInt().toString()
+            calories.text = ingredient.nutrients.calories.roundToInt().toString() + "kJ"
+            protein.text = ingredient.nutrients.protein.roundToInt().toString() + "g"
+            carbohydrates.text = ingredient.nutrients.carbohydrates.roundToInt().toString() + "g"
+            fat.text = ingredient.nutrients.fat.roundToInt().toString() + "g"
+            weight.text = ingredient.weight.roundToInt().toString() + "g"
         }
     }
 

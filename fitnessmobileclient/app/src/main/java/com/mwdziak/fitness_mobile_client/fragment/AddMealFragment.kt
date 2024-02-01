@@ -48,11 +48,16 @@ class AddMealFragment : Fragment() {
         }
 
         binding.saveMealButton.setOnClickListener {
-            if (viewModel.checkIfAllFieldsValid()) {
+            val allFieldsValid = viewModel.checkIfAllFieldsValid()
+            val formsNotEmpty = viewModel.checkIfFormsNotEmpty()
+            if (allFieldsValid && formsNotEmpty) {
                 showSnackBar("Meal saved", false)
                 viewModel.postMeal()
                 findNavController().navigate(R.id.action_addMealFragment_to_mainDashboardFragment)
-            } else {
+            } else if (!formsNotEmpty) {
+                showSnackBar("Meal has to have at least one ingredient", true)
+            }
+            else {
                 showSnackBar("Please fill all fields", true)
             }
         }
@@ -112,7 +117,6 @@ class AddMealFragment : Fragment() {
             formViewModel.updatePickedFoodKind(viewModel.getFoodCategories()[dropdownPosition])
             formViewModel.fetchFoodsByKind()
             foodKindTextView.clearFocus()
-            Log.w("Form data: ", formViewModel.toString())
             hideKeyboard(view)
         }
 

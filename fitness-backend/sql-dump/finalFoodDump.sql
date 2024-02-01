@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 14.10
--- Dumped by pg_dump version 14.10
+-- Dumped from database version 16.1
+-- Dumped by pg_dump version 16.1
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -17,7 +17,7 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- Name: foods; Type: SCHEMA; Schema: -; Owner: admin
+-- Name: foods; Type: SCHEMA; Schema: -; Owner: postgres
 --
 
 CREATE SCHEMA foods;
@@ -44,7 +44,7 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- Name: food; Type: TABLE; Schema: foods; Owner: admin
+-- Name: food; Type: TABLE; Schema: foods; Owner: postgres
 --
 
 CREATE TABLE foods.food (
@@ -58,20 +58,7 @@ CREATE TABLE foods.food (
 ALTER TABLE foods.food OWNER TO postgres;
 
 --
--- Name: food_backup; Type: TABLE; Schema: foods; Owner: admin
---
-
-CREATE TABLE foods.food_backup (
-    fdc_id integer,
-    description text,
-    food_category_id integer
-);
-
-
-ALTER TABLE foods.food_backup OWNER TO postgres;
-
---
--- Name: food_nutrient; Type: TABLE; Schema: foods; Owner: admin
+-- Name: food_nutrient; Type: TABLE; Schema: foods; Owner: postgres
 --
 
 CREATE TABLE foods.food_nutrient (
@@ -85,7 +72,7 @@ CREATE TABLE foods.food_nutrient (
 ALTER TABLE foods.food_nutrient OWNER TO postgres;
 
 --
--- Name: nutrient; Type: TABLE; Schema: foods; Owner: admin
+-- Name: nutrient; Type: TABLE; Schema: foods; Owner: postgres
 --
 
 CREATE TABLE foods.nutrient (
@@ -98,7 +85,7 @@ CREATE TABLE foods.nutrient (
 ALTER TABLE foods.nutrient OWNER TO postgres;
 
 --
--- Data for Name: food; Type: TABLE DATA; Schema: foods; Owner: admin
+-- Data for Name: food; Type: TABLE DATA; Schema: foods; Owner: postgres
 --
 
 COPY foods.food (fdc_id, description, food_category_id, food_kind) FROM stdin;
@@ -114,57 +101,25 @@ COPY foods.food (fdc_id, description, food_category_id, food_kind) FROM stdin;
 2346406	With Peel, Raw	11	Cucumber
 2346407	Green, Raw	11	Cabbage
 2346408	Red, Raw	11	Cabbage
-2346409	Raw	9	Strawberries
-2346410	Raw	9	Raspberries
-2346411	Raw	9	Blueberries
-2346412	Red, Seedless, Raw	9	Grapes
-2346413	Green, Seedless, Raw	9	Grapes
-2346414	Unsweetened, With Added Vitamin C	9	Applesauce
 323121	Beef, Unheated	7	Frankfurter
 323604	Whole, Raw, Frozen, Pasteurized	1	Egg
 323697	White, Raw, Frozen, Pasteurized	1	Egg
 329716	Yolk, Dried	1	Egg
 332397	Sliced, Pre-Packaged, Deli Meat (96%Fat Free, Water Added)	7	Ham
-746766	Ricotta, Whole Milk	1	Cheese
-746767	Swiss	1	Cheese
-746768	Dried, Uncooked	9	Figs
-746769	Cos Or Romaine, Raw	11	Lettuce
-746770	Cantaloupe, Raw	9	Melons
 746771	Raw, Navels	9	Oranges
-746772	Lowfat, Fluid, 1% Milkfat, With Added Vitamin A And Vitamin D	1	Milk
 746773	Raw, Bartlett	9	Pears
-746776	Nonfat, Fluid, With Added Vitamin A And Vitamin D (Fat Free Or Skim)	1	Milk
-746777	Salsa, Ready-To-Serve	6	Sauce
-746778	Reduced Fat, Fluid, 2% Milkfat, With Added Vitamin A And Vitamin D	1	Milk
-746779	Breakfast Sausage, Beef, Pre-Cooked, Unprepared	7	Sausage
-746780	Italian, Pork, Mild, Cooked, Pan-Fried	7	Sausage
-746781	Pork, Chorizo, Link Or Ground, Cooked, Pan-Fried	7	Sausage
-746782	Whole, 3.25% Milkfat, With Added Vitamin D	1	Milk
-746783	Turkey, Breakfast Links, Mild, Raw	7	Sausage
-746784	Granulated	19	Sugars
-746785	Ground, 93% Lean, 7% Fat, Pan-Broiled Crumbles	5	Turkey
 746952	Sliced, Restaurant	10	Ham
 321358	Commercial	16	Hummus
-321359	Reduced Fat, Fluid, 2% Milkfat, With Added Vitamin A And Vitamin D	1	Milk
 321360	Grape, Raw	11	Tomatoes
 747429	American, Restaurant	1	Cheese
-747447	Raw	11	Broccoli
-747448	Raw	9	Strawberries
 321611	Snap, Green, Canned, Regular Pack, Drained Solids	11	Beans
-321900	Raw	11	Broccoli
-322228	Lowfat, Fluid, 1% Milkfat, With Added Vitamin A And Vitamin D	1	Milk
-322559	Nonfat, Fluid, With Added Vitamin A And Vitamin D (Fat Free Or Skim)	1	Milk
-322892	Whole, 3.25% Milkfat, With Added Vitamin D	1	Milk
 747693	Restaurant	11	Ketchup
 747997	Grade A, Large, Egg White	1	Eggs
 748236	Grade A, Large, Egg Yolk	1	Eggs
 748967	Grade A, Large, Egg Whole	1	Eggs
 323294	Almonds, Dry Roasted, With Salt Added	12	Nuts
-323444	Ricotta, Whole Milk	1	Cheese
 323505	Raw	11	Kale
 323793	White, Dried	1	Egg
-324038	Salsa, Ready-To-Serve	6	Sauce
-324157	Breakfast Sausage, Beef, Pre-Cooked, Unprepared	7	Sausage
 324317	Breaded, Par Fried, Frozen, Prepared, Heated In Oven	11	Onion rings
 324653	Cucumber, Dill Or Kosher Dill	11	Pickles
 324860	Smooth Style, With Salt	16	Peanut butter
@@ -173,56 +128,32 @@ COPY foods.food (fdc_id, description, food_category_id, food_kind) FROM stdin;
 325287	White, Canned Or Bottled, Unsweetened	9	Grapefruit juice
 325430	Yellow, Raw	9	Peaches
 325524	Sunflower Seed Kernels, Dry Roasted, With Salt Added	12	Seeds
-325658	Italian, Pork, Mild, Cooked, Pan-Fried	7	Sausage
 325871	White, Commercially Prepared	18	Bread
-325992	Turkey, Breakfast Links, Mild, Raw	7	Sausage
-326135	Swiss	1	Cheese
 326196	Frozen, Cooked, Boiled, Drained, Without Salt	11	Kale
 326458	Frozen, Unprepared (Includes Foods For Usda'S Food Distribution Program)	11	Carrots
 326698	Prepared, Yellow	2	Mustard
-326905	Dried, Uncooked	9	Figs
 327046	Green, Raw	9	Kiwifruit
-327198	Cantaloupe, Raw	9	Melons
 327357	Raw	9	Nectarines
 327501	Raw, Navels (Includes Foods For Usda'S Food Distribution Program)	9	Oranges
-327699	Raw	9	Strawberries
-327923	Cos Or Romaine, Raw	11	Lettuce
 328637	Cheddar	1	Cheese
 328841	Cottage, Lowfat, 2% Milkfat	1	Cheese
 329370	Mozzarella, Low Moisture, Part-Skim	1	Cheese
 329490	Whole, Dried	1	Egg
 329596	Yolk, Raw, Frozen, Pasteurized	1	Egg
-329830	Dry White, Queso Seco	1	Cheese
 330137	Greek, Plain, Nonfat	1	Yogurt
 330415	Greek, Strawberry, Nonfat	1	Yogurt
 330458	Coconut	4	Oil
-330869	Ground, 93% Lean, 7% Fat, Pan-Broiled Crumbles	5	Turkey
 331897	Broilers Or Fryers, Drumstick, Meat Only, Cooked, Braised	5	Chicken
 331960	Broiler Or Fryers, Breast, Skinless, Boneless, Meat Only, Cooked, Braised	5	Chicken
 332282	Pasta, Spaghetti/Marinara, Ready-To-Serve	6	Sauce
 332597	Raw, Bartlett (Includes Foods For Usda'S Food Distribution Program)	9	Pears
 332791	Green, Manzanilla, Stuffed With Pimiento	9	Olives
-332864	Pork, Chorizo, Link Or Ground, Cooked, Pan-Fried	7	Sausage
 333008	Oatmeal, Soft, With Raisins	18	Cookies
 333281	Canned, Red, Ripe, Diced	11	Tomatoes
 333374	Haddock, Raw	15	Fish
 333476	Pollock, Raw	15	Fish
 334194	Tuna, Light, Canned In Water, Drained Solids	15	Fish
-334247	Granulated	19	Sugars
-334849	Loin, Top Loin Steak, Boneless, Lip-On, Separable Lean Only, Trimmed To 1/8" Fat, Choice, Raw	13	Beef
-334897	Loin, Tenderloin Roast, Separable Lean Only, Boneless, Trimmed To 0" Fat, Select, Cooked, Roasted	13	Beef
-334898	Round, Eye Of Round Roast, Boneless, Separable Lean Only, Trimmed To 0" Fat, Select, Raw	13	Beef
-334963	Round, Top Round Roast, Boneless, Separable Lean Only, Trimmed To 0" Fat, Select, Raw	13	Beef
-335061	Short Loin, T-Bone Steak, Bone-In, Separable Lean Only, Trimmed To 1/8" Fat, Choice, Cooked, Grilled	13	Beef
-335109	Short Loin, Porterhouse Steak, Separable Lean Only, Trimmed To 1/8" Fat, Select, Raw	13	Beef
 335240	Whole-Wheat, Commercially Prepared	18	Bread
-746765	Dry White, Queso Seco	1	Cheese
-746758	Loin, Tenderloin Roast, Separable Lean Only, Boneless, Trimmed To 0" Fat, Select, Cooked, Roasted	13	Beef
-746759	Loin, Top Loin Steak, Boneless, Lip-On, Separable Lean Only, Trimmed To 1/8" Fat, Choice, Raw	13	Beef
-746760	Round, Eye Of Round Roast, Boneless, Separable Lean Only, Trimmed To 0" Fat, Select, Raw	13	Beef
-746761	Round, Top Round Roast, Boneless, Separable Lean Only, Trimmed To 0" Fat, Select, Raw	13	Beef
-746762	Short Loin, Porterhouse Steak, Separable Lean Only, Trimmed To 1/8" Fat, Select, Raw	13	Beef
-746763	Short Loin, T-Bone Steak, Bone-In, Separable Lean Only, Trimmed To 1/8" Fat, Choice, Cooked, Grilled	13	Beef
 746764	Frozen, Unprepared	11	Carrots
 749420	Cured, Bacon, Cooked, Restaurant	10	Pork
 789890	Wheat, All-Purpose, Enriched, Bleached	20	Flour
@@ -234,8 +165,6 @@ COPY foods.food (fdc_id, description, food_category_id, food_kind) FROM stdin;
 790276	Corn, Yellow, Fine Meal, Enriched	20	Flour
 790577	Red, Raw	11	Onions
 790646	Yellow, Raw	11	Onions
-790774	Overripe, Raw	9	Bananas
-790991	Ripe And Slightly Ripe, Raw	9	Bananas
 1104647	Raw	11	Garlic
 1104705	Soy, Defatted	16	Flour
 1104766	Soy, Full-Fat	16	Flour
@@ -243,36 +172,6 @@ COPY foods.food (fdc_id, description, food_category_id, food_kind) FROM stdin;
 1104867	Rice, Glutinous	20	Flour
 1104913	Pastry, Unenriched, Unbleached	20	Flour
 1104962	White, Raw	11	Onions
-1105073	Overripe, Raw	9	Bananas
-1105314	Ripe And Slightly Ripe, Raw	9	Bananas
-1105430	Red Delicious, With Skin, Raw	9	Apples
-1105547	Honeycrisp, With Skin, Raw	9	Apples
-1105664	Granny Smith, With Skin, Raw	9	Apples
-1105781	Gala, With Skin, Raw	9	Apples
-1105897	Fuji, With Skin, Raw	9	Apples
-1750337	Unsweetened, Plain, Shelf Stable	16	Soy milk
-1750338	Unsweetened, Plain, Shelf Stable	14	Almond milk
-1750339	Red Delicious, With Skin, Raw	9	Apples
-1750340	Fuji, With Skin, Raw	9	Apples
-1750341	Gala, With Skin, Raw	9	Apples
-1750342	Granny Smith, With Skin, Raw	9	Apples
-1750343	Honeycrisp, With Skin, Raw	9	Apples
-1750344	Lion'S Mane	11	Mushroom
-1750345	Oyster	11	Mushroom
-1750346	Shiitake	11	Mushrooms
-1750347	White Button	11	Mushrooms
-1750352	Baby	11	Spinach
-1750353	Mature	11	Spinach
-1750354	Roma	11	Tomato
-1999626	Lion'S Mane	11	Mushroom
-1999627	Oyster	11	Mushroom
-1999628	Shiitake	11	Mushrooms
-1999629	White Button	11	Mushrooms
-1999630	Unsweetened, Plain, Shelf Stable	16	Soy milk
-1999631	Unsweetened, Plain, Shelf Stable	14	Almond milk
-1999632	Baby	11	Spinach
-1999633	Mature	11	Spinach
-1999634	Roma	11	Tomato
 2003586	00	20	Flour
 2003587	Spelt, Whole Grain	20	Flour
 2003588	Semolina, Coarse And Semi-Coarse	20	Flour
@@ -313,12 +212,6 @@ COPY foods.food (fdc_id, description, food_category_id, food_kind) FROM stdin;
 2262073	Creamy	12	Sesame butter
 2262074	Creamy	12	Almond butter
 2262075	Ground	12	Flaxseed
-2263887	Raw	9	Strawberries
-2263888	Raw	9	Raspberries
-2263889	Raw	9	Blueberries
-2263890	Red, Seedless, Raw	9	Grapes
-2263891	Green, Seedless, Raw	9	Grapes
-2263892	Unsweetened, With Added Vitamin C	9	Applesauce
 2346384	Full Fat, Large Or Small Curd	1	Cottage cheese
 2346385	Full Fat, Block	1	Cream cheese
 2346386	Heavy	1	Cream
@@ -391,527 +284,52 @@ COPY foods.food (fdc_id, description, food_category_id, food_kind) FROM stdin;
 
 
 --
--- Data for Name: food_backup; Type: TABLE DATA; Schema: foods; Owner: admin
---
-
-COPY foods.food_backup (fdc_id, description, food_category_id) FROM stdin;
-323121	Frankfurter, beef, unheated	7
-323604	Egg, whole, raw, frozen, pasteurized	1
-323697	Egg, white, raw, frozen, pasteurized	1
-329716	Egg, yolk, dried	1
-332397	Ham, sliced, pre-packaged, deli meat (96%fat free, water added)	7
-746766	Cheese, ricotta, whole milk	1
-746767	Cheese, swiss	1
-746768	Figs, dried, uncooked	9
-746769	Lettuce, cos or romaine, raw	11
-746770	Melons, cantaloupe, raw	9
-746771	Oranges, raw, navels	9
-746772	Milk, lowfat, fluid, 1% milkfat, with added vitamin A and vitamin D	1
-746773	Pears, raw, bartlett	9
-746774	Restaurant, Chinese, sweet and sour pork	25
-746776	Milk, nonfat, fluid, with added vitamin A and vitamin D (fat free or skim)	1
-746777	Sauce, salsa, ready-to-serve	6
-746778	Milk, reduced fat, fluid, 2% milkfat, with added vitamin A and vitamin D	1
-746779	Sausage, breakfast sausage, beef, pre-cooked, unprepared	7
-746780	Sausage, Italian, pork, mild, cooked, pan-fried	7
-746781	Sausage, pork, chorizo, link or ground, cooked, pan-fried	7
-746782	Milk, whole, 3.25% milkfat, with added vitamin D	1
-746783	Sausage, turkey, breakfast links, mild, raw	7
-746784	Sugars, granulated	19
-746785	Turkey, ground, 93% lean, 7% fat, pan-broiled crumbles	5
-746952	Ham, sliced, restaurant	10
-321358	Hummus, commercial	16
-321359	Milk, reduced fat, fluid, 2% milkfat, with added vitamin A and vitamin D	1
-321360	Tomatoes, grape, raw	11
-747429	Cheese, American, restaurant	1
-747447	Broccoli, raw	11
-747448	Strawberries, raw	9
-321611	Beans, snap, green, canned, regular pack, drained solids	11
-321900	Broccoli, raw	11
-322228	Milk, lowfat, fluid, 1% milkfat, with added vitamin A and vitamin D	1
-322559	Milk, nonfat, fluid, with added vitamin A and vitamin D (fat free or skim)	1
-322892	Milk, whole, 3.25% milkfat, with added vitamin D	1
-747693	Ketchup, restaurant	11
-747997	Eggs, Grade A, Large, egg white	1
-748236	Eggs, Grade A, Large, egg yolk	1
-748967	Eggs, Grade A, Large, egg whole	1
-323294	Nuts, almonds, dry roasted, with salt added	12
-323444	Cheese, ricotta, whole milk	1
-323505	Kale, raw	11
-323793	Egg, white, dried	1
-324038	Sauce, salsa, ready-to-serve	6
-324157	Sausage, breakfast sausage, beef, pre-cooked, unprepared	7
-324317	Onion rings, breaded, par fried, frozen, prepared, heated in oven	11
-324653	Pickles, cucumber, dill or kosher dill	11
-324860	Peanut butter, smooth style, with salt	16
-325036	Cheese, parmesan, grated	1
-325198	Cheese, pasteurized process, American, vitamin D fortified	1
-325287	Grapefruit juice, white, canned or bottled, unsweetened	9
-325430	Peaches, yellow, raw	9
-325524	Seeds, sunflower seed kernels, dry roasted, with salt added	12
-325658	Sausage, Italian, pork, mild, cooked, pan-fried	7
-325871	Bread, white, commercially prepared	18
-325992	Sausage, turkey, breakfast links, mild, raw	7
-326135	Cheese, swiss	1
-326196	Kale, frozen, cooked, boiled, drained, without salt	11
-326458	Carrots, frozen, unprepared (Includes foods for USDA's Food Distribution Program)	11
-326698	Mustard, prepared, yellow	2
-326905	Figs, dried, uncooked	9
-327046	Kiwifruit, green, raw	9
-327198	Melons, cantaloupe, raw	9
-327357	Nectarines, raw	9
-327501	Oranges, raw, navels (Includes foods for USDA's Food Distribution Program)	9
-327699	Strawberries, raw	9
-327923	Lettuce, cos or romaine, raw	11
-328637	Cheese, cheddar	1
-328841	Cheese, cottage, lowfat, 2% milkfat	1
-329370	Cheese, mozzarella, low moisture, part-skim	1
-329490	Egg, whole, dried	1
-329596	Egg, yolk, raw, frozen, pasteurized	1
-329830	Cheese, dry white, queso seco	1
-330137	Yogurt, Greek, plain, nonfat	1
-330415	Yogurt, Greek, strawberry, nonfat	1
-330458	Oil, coconut	4
-330869	Turkey, ground, 93% lean, 7% fat, pan-broiled crumbles	5
-331897	Chicken, broilers or fryers, drumstick, meat only, cooked, braised	5
-331960	Chicken, broiler or fryers, breast, skinless, boneless, meat only, cooked, braised	5
-332282	Sauce, pasta, spaghetti/marinara, ready-to-serve	6
-332597	Pears, raw, bartlett (Includes foods for USDA's Food Distribution Program)	9
-332791	Olives, green, Manzanilla, stuffed with pimiento	9
-332864	Sausage, pork, chorizo, link or ground, cooked, pan-fried	7
-333008	Cookies, oatmeal, soft, with raisins	18
-333281	Tomatoes, canned, red, ripe, diced	11
-333374	Fish, haddock, raw	15
-333476	Fish, pollock, raw	15
-334194	Fish, tuna, light, canned in water, drained solids	15
-334247	Sugars, granulated	19
-334462	Restaurant, Chinese, sweet and sour pork	25
-334536	Restaurant, Chinese, fried rice, without meat	25
-334628	Restaurant, Latino, tamale, pork	25
-334720	Restaurant, Latino, pupusas con frijoles (pupusas, bean)	25
-334849	Beef, loin, top loin steak, boneless, lip-on, separable lean only, trimmed to 1/8" fat, choice, raw	13
-334897	Beef, loin, tenderloin roast, separable lean only, boneless, trimmed to 0" fat, select, cooked, roasted	13
-334898	Beef, round, eye of round roast, boneless, separable lean only, trimmed to 0" fat, select, raw	13
-334963	Beef, round, top round roast, boneless, separable lean only, trimmed to 0" fat, select, raw	13
-335061	Beef, short loin, t-bone steak, bone-in, separable lean only, trimmed to 1/8" fat, choice, cooked, grilled	13
-335109	Beef, short loin, porterhouse steak, separable lean only, trimmed to 1/8" fat, select, raw	13
-335240	Bread, whole-wheat, commercially prepared	18
-746765	Cheese, dry white, queso seco	1
-746758	Beef, loin, tenderloin roast, separable lean only, boneless, trimmed to 0" fat, select, cooked, roasted	13
-746759	Beef, loin, top loin steak, boneless, lip-on, separable lean only, trimmed to 1/8" fat, choice, raw	13
-746760	Beef, round, eye of round roast, boneless, separable lean only, trimmed to 0" fat, select, raw	13
-746761	Beef, round, top round roast, boneless, separable lean only, trimmed to 0" fat, select, raw	13
-746762	Beef, short loin, porterhouse steak, separable lean only, trimmed to 1/8" fat, select, raw	13
-746763	Beef, short loin, t-bone steak, bone-in, separable lean only, trimmed to 1/8" fat, choice, cooked, grilled	13
-746764	Carrots, frozen, unprepared	11
-749420	Pork, cured, bacon, cooked, restaurant	10
-789890	Flour, wheat, all-purpose, enriched, bleached	20
-789951	Flour, wheat, all-purpose, enriched, unbleached	20
-790085	Flour, whole wheat, unenriched	20
-790018	Flour, wheat, all-purpose, unenriched, unbleached	20
-790146	Flour, bread, white, enriched, unbleached	20
-790214	Flour, rice, white, unenriched	20
-790276	Flour, corn, yellow, fine meal, enriched	20
-790577	Onions, red, raw	11
-790646	Onions, yellow, raw	11
-790774	Bananas, overripe, raw	9
-790991	Bananas, ripe and slightly ripe, raw	9
-1104647	Garlic, raw	11
-1104705	Flour, soy, defatted	16
-1104766	Flour, soy, full-fat	16
-1104812	Flour, rice, brown	20
-1104867	Flour, rice, glutinous	20
-1104913	Flour, pastry, unenriched, unbleached	20
-1104962	Onions, white, raw	11
-1105073	Bananas, overripe, raw	9
-1105314	Bananas, ripe and slightly ripe, raw	9
-1105430	Apples, red delicious, with skin, raw	9
-1105547	Apples, honeycrisp, with skin, raw	9
-1105664	Apples, granny smith, with skin, raw	9
-1105781	Apples, gala, with skin, raw	9
-1105897	Apples, fuji, with skin, raw	9
-1750337	Soy milk, unsweetened, plain, shelf stable	16
-1750338	Almond milk, unsweetened, plain, shelf stable	14
-1750339	Apples, red delicious, with skin, raw	9
-1750340	Apples, fuji, with skin, raw	9
-1750341	Apples, gala, with skin, raw	9
-1750342	Apples, granny smith, with skin, raw	9
-1750343	Apples, honeycrisp, with skin, raw	9
-1750344	Mushroom, lion's mane	11
-1750345	Mushroom, oyster	11
-1750346	Mushrooms, shiitake	11
-1750347	Mushrooms, white button	11
-1750352	Spinach, baby	11
-1750353	Spinach, mature	11
-1750354	Tomato, roma	11
-1999626	Mushroom, lion's mane	11
-1999627	Mushroom, oyster	11
-1999628	Mushrooms, shiitake	11
-1999629	Mushrooms, white button	11
-1999630	Soy milk, unsweetened, plain, shelf stable	16
-1999631	Almond milk, unsweetened, plain, shelf stable	14
-1999632	Spinach, baby	11
-1999633	Spinach, mature	11
-1999634	Tomato, roma	11
-2003586	Flour, 00	20
-2003587	Flour, spelt, whole grain	20
-2003588	Flour, semolina, coarse and semi-coarse	20
-2003589	Flour, semolina, fine	20
-2003590	Apple juice, with added vitamin C, from concentrate, shelf stable	9
-2003591	Orange juice, no pulp, not fortified, from concentrate, refrigerated	9
-2003592	Grape juice, purple, with added vitamin C, from concentrate, shelf stable	9
-2003593	Grape juice, white, with added vitamin C, from concentrate, shelf stable	9
-2003594	Cranberry juice, not fortified, from concentrate, shelf stable	9
-2003595	Grapefruit juice, red, not fortified, not from concentrate, refrigerated	9
-2003596	Tomato juice, with added ingredients, from concentrate, shelf stable	11
-2003597	Orange juice, no pulp, not fortified, not from concentrate, refrigerated	9
-2003598	Mushroom, portabella	11
-2003599	Mushroom, king oyster	11
-2003600	Mushroom, enoki	11
-2003601	Mushroom, crimini	11
-2003602	Mushroom, maitake	11
-2003603	Mushroom, beech	11
-2003604	Mushroom, pioppini	11
-2257044	Soy milk, sweetened, plain, refrigerated	16
-2257045	Almond milk, unsweetened, plain, refrigerated	14
-2257046	Oat milk, unsweetened, plain, refrigerated	14
-2258586	Carrots, mature, raw	11
-2258587	Carrots, baby, raw	11
-2258588	Peppers, bell, green, raw	11
-2258589	Peppers, bell, yellow, raw	11
-2258590	Peppers, bell, red, raw	11
-2258591	Peppers, bell, orange, raw	11
-2259792	Buttermilk, low fat	1
-2259793	Yogurt, plain, whole milk	1
-2259794	Yogurt, Greek, plain, whole milk	1
-2259795	Cheese, parmesan, grated, refrigerated	1
-2259796	Cheese, feta, whole milk, crumbled	1
-2261420	Flour, almond	12
-2261421	Flour, oat, whole grain	20
-2261422	Flour, potato	11
-2262072	Peanut butter, creamy	16
-2262073	Sesame butter, creamy	12
-2262074	Almond butter, creamy	12
-2262075	Flaxseed, ground	12
-2263887	Strawberries, raw	9
-2263888	Raspberries, raw	9
-2263889	Blueberries, raw	9
-2263890	Grapes, red, seedless, raw	9
-2263891	Grapes, green, seedless, raw	9
-2263892	Applesauce, unsweetened, with added vitamin C	9
-2346384	Cottage cheese, full fat, large or small curd	1
-2346385	Cream cheese, full fat, block	1
-2346386	Cream, heavy	1
-2346387	Cream, sour, full fat	1
-2346388	Lettuce, iceberg, raw	11
-2346389	Lettuce, romaine, green, raw	11
-2346390	Lettuce, leaf, red, raw	11
-2346391	Lettuce, leaf, green, raw	11
-2346392	Nuts, pine nuts, raw	12
-2346393	Nuts, almonds, whole, raw	12
-2346394	Nuts, walnuts, English, halves, raw	12
-2346395	Nuts, pecans, halves, raw	12
-2346396	Oats, whole grain, rolled, old fashioned	20
-2346397	Oats, whole grain, steel cut	20
-2346398	Pineapple, raw	9
-2346399	Cherries, sweet, dark red, raw	9
-2346400	Beans, snap, green, raw	11
-2346401	Potatoes, russet, without skin, raw	11
-2346402	Potatoes, red, without skin, raw	11
-2346403	Potatoes, gold, without skin, raw	11
-2346404	Sweet potatoes, orange flesh, without skin, raw	11
-2346405	Celery, raw	11
-2346406	Cucumber, with peel, raw	11
-2346407	Cabbage, green, raw	11
-2346408	Cabbage, red, raw	11
-2346409	Strawberries, raw	9
-2346410	Raspberries, raw	9
-2346411	Blueberries, raw	9
-2346412	Grapes, red, seedless, raw	9
-2346413	Grapes, green, seedless, raw	9
-2346414	Applesauce, unsweetened, with added vitamin C	9
-2512371	Flour, amaranth	20
-2512372	Flour, quinoa	20
-2512373	Flour, sorghum	20
-2512374	Flour, buckwheat	20
-2512375	Flour, rye	20
-2512376	Flour, barley	20
-2512377	Flour, cassava	11
-2512378	Buckwheat, whole grain	20
-2512379	Millet, whole grain	20
-2512380	Rice, brown, long grain, unenriched, raw	20
-2512381	Rice, white, long grain, unenriched, raw	20
-2514743	Beef, ground, 90% lean meat / 10% fat, raw	13
-2514744	Beef, ground, 80% lean meat / 20% fat, raw	13
-2514745	Pork, ground, raw	10
-2514746	Chicken, ground, with additives, raw	5
-2514747	Turkey, ground, 93% lean/ 7% fat, raw	5
-2515373	Nuts, brazilnuts, raw	12
-2515374	Nuts, cashew nuts, raw	12
-2515375	Nuts, hazelnuts or filberts, raw	12
-2515376	Peanuts, raw	16
-2515377	Flour, chestnut	12
-2515378	Nuts, macadamia nuts, raw	12
-2515379	Nuts, pistachio nuts, raw	12
-2515380	Seeds, pumpkin seeds (pepitas), raw	12
-2515381	Seeds, sunflower seed, kernel, raw	12
-2515382	Flour, coconut	12
-2644281	Beans, cannellini, dry	16
-2644282	Chickpeas, (garbanzo beans, bengal gram), dry	16
-2644283	Lentils, dry	16
-2644284	Blackeye pea, dry	16
-2644285	Beans, black, canned, sodium added, drained and rinsed	16
-2644286	Beans, navy, canned, sodium added, drained and rinsed	16
-2644287	Beans, cannellini, canned, sodium added, drained and rinsed	16
-2644288	Chickpeas (garbanzo beans, bengal gram), canned, sodium added, drained and rinsed	16
-2644289	Beans, kidney, dark red, canned, sodium added, sugar added, drained and rinsed	16
-2644290	Beans, kidney, light red, canned, sodium added, sugar added, drained and rinsed	16
-2644291	Peas, green, sweet, canned, sodium added, sugar added, drained and rinsed	11
-2644292	Beans, pinto, canned, sodium added, drained and rinsed	16
-2644293	Blackeye pea, canned, sodium added, drained and rinsed	16
-2644294	Beans, great northern, canned, sodium added, drained and rinsed	16
-2646168	Pork, loin, boneless, raw	10
-2646169	Pork, loin, tenderloin, boneless, raw	10
-2646170	Chicken, breast, boneless, skinless, raw	5
-2646171	Chicken, thigh, boneless, skinless, raw	5
-2646172	Beef, ribeye, steak, boneless, choice, raw	13
-2646173	Beef, round, top round, boneless, choice, raw	13
-2646174	Beef, chuck, roast, boneless, choice, raw	13
-2646175	Beef, flank, steak, boneless, choice, raw	13
-2647437	Yogurt, plain, nonfat	1
-2647438	Cheese, monterey jack, solid	1
-2647439	Cheese, pasteurized process cheese food or product, American, singles	1
-2647440	Cheese, provolone, sliced	1
-2647441	Cheese, oaxaca, solid	1
-2647442	Cheese, queso fresco, solid	1
-2647443	Cheese, cotija, solid	1
-\.
-
-
---
--- Data for Name: food_nutrient; Type: TABLE DATA; Schema: foods; Owner: admin
+-- Data for Name: food_nutrient; Type: TABLE DATA; Schema: foods; Owner: postgres
 --
 
 COPY foods.food_nutrient (id, fdc_id, nutrient_id, amount) FROM stdin;
-21115660	1750338	1085	1.1089
-21115515	1750338	2048	14.5562
-21115514	1750338	2047	14.5562
-21115513	1750338	1005	0.3371125
-21115233	1750338	1004	1.221
-21115519	1750339	2048	55.622745
-21115518	1750339	2047	61.7893
-21115517	1750339	1005	14.7817
-21115269	1750339	1004	0.2125
-21115523	1750340	2048	58.20306
-21115522	1750340	2047	64.6609
-21115521	1750340	1005	15.6511625
-21115474	1750340	1004	0.1625
-21115527	1750341	2048	54.866865
-21115526	1750341	2047	60.9536
-21115525	1750341	1005	14.7680875
-21115499	1750341	1004	0.15
-21115531	1750342	2048	52.958085
-21115530	1750342	2047	58.8719
-21115529	1750342	1005	14.142975
-21115424	1750342	1004	0.1375
-21115535	1750343	2048	54.033225
-21115534	1750343	2047	60.034
-21115533	1750343	1005	14.6819375
-21115449	1750343	1004	0.1
-21115539	1750344	2048	35.107387
-21115538	1750344	2047	42.6655
-21115537	1750344	1005	7.5897
-21114816	1750344	1004	0.2563
-21115543	1750345	2048	33.31965
-21115542	1750345	2047	41.0475
-21115541	1750345	1005	6.94125
-21114835	1750345	1004	0.1875
-21115547	1750346	2048	36.3915875
-21115546	1750346	2047	44.095
-21115545	1750346	1005	8.170625
-21114778	1750346	1004	0.195
-21115551	1750347	2048	24.8732585
-21115550	1750347	2047	31.2172
-21115549	1750347	1005	4.079375
-21114797	1750347	1004	0.3708
-21115555	1750352	2048	20.72851125
-21115554	1750352	2047	26.602
-21115553	1750352	1005	2.406325
-21114733	1750352	1004	0.6188
-21115559	1750353	2048	21.5796975
-21115558	1750353	2047	27.63
-21115557	1750353	1005	2.64135
-21114765	1750353	1004	0.6044
-21115563	1750354	2048	18.95436075
-21115562	1750354	2047	21.9574
-21115561	1750354	1005	3.837475
-21114701	1750354	1004	0.425
 2219788	321358	1008	229
 2219740	321358	1003	7.35
-2219829	321359	1003	3.35
-2219881	321359	1008	50
 2220034	321360	1008	27
 2220031	321360	1003	0.83
 2220543	321611	1003	1.04
 2220533	321611	1008	21
-2221316	321900	1003	2.57
-2221279	321900	1008	32
 2219825	321358	1085	16.1
 2219786	321358	1004	17.1
 2219787	321358	1005	14.9
 13338510	321358	2047	243
 13338412	321358	2048	229
-2219880	321359	1005	4.91
-2219980	321359	1085	1.64
-2219914	321359	1004	1.9
 2220032	321360	1005	5.51
 2219986	321360	1004	0.63
 13338494	321360	2047	31
 13338396	321360	2048	27
-2222953	322228	1003	3.38
-8513929	746758	1005	0
-8513928	746758	1004	6.36
-2222981	322228	1008	43
-8513992	746758	1085	5.56
-13338546	746758	2047	168
-13338448	746758	2048	176
-8514008	746759	1005	0
-8514007	746759	1004	6.39
-8514079	746759	1085	5.93
-13338543	746759	2047	149
-13338445	746759	2048	155
-8514108	746760	1005	0
-8514107	746760	1004	2.48
-8514144	746760	1085	2.23
-13338549	746760	2047	116
-13338451	746760	2048	122
-8514231	746761	1085	2.14
-8514145	746761	1004	2.41
 2220532	321611	1005	4.11
 2220531	321611	1004	0.39
 13338489	321611	2047	24
 13338391	321611	2048	20
-8514146	746761	1005	0
-13338553	746761	2047	116
-13338455	746761	2048	123
-8514296	746762	1085	4.5
 2259098	331897	1004	5.95
 2259150	331897	1085	5.23
 2259099	331897	1005	0
-8514283	746762	1005	0
-8514232	746762	1004	5.32
-13338544	746762	2047	139
-13338446	746762	2048	145
-8514361	746763	1085	10.5
-8514348	746763	1005	0
 13338545	331897	2047	149
 13338447	331897	2048	156
-8514345	746763	1004	11.4
-13338541	746763	2047	212
-13338443	746763	2048	219
 8514443	746764	1085	0.33
 8514368	746764	1004	0.47
 8514411	746764	1005	7.92
 13338511	746764	2047	39
 13338413	746764	2048	37
-8514515	746765	1005	2.07
-8514514	746765	1004	24.3
-8514597	746765	1085	21.4
-13338524	746765	2047	325
-13338426	746765	2048	326
-8514661	746766	1004	11
-8514662	746766	1005	6.86
-8514713	746766	1085	10.3
-13338516	746766	2047	158
-13338418	746766	2048	157
-8514836	746767	1085	27.6
-8514744	746767	1004	31
-8514745	746767	1005	1.44
-13338520	746767	2047	393
-13338422	746767	2048	393
-8514876	746768	1004	0.92
-8514838	746768	1005	63.9
 2259605	331960	1085	3.05
 2259525	331960	1005	0
 2259524	331960	1004	3.24
 13338548	331960	2047	158
 13338450	331960	2048	166
-13338499	746768	2047	277
-13338401	746768	2048	249
-8514933	746769	1004	0.26
-8514928	746769	1005	3.24
-13338490	746769	2047	20
-13338392	746769	2048	17
-2224695	322559	1003	3.43
-2224702	322559	1008	34
-8515031	746770	1004	0.18
-8514985	746770	1005	8.16
-13338498	746770	2047	38
-13338400	746770	2048	34
 8515094	746771	1005	11.8
-2221370	321900	1085	0.07
 8515073	746771	1004	0.15
 13338500	746771	2047	52
 13338402	746771	2048	47
-2221296	321900	1004	0.34
-2221278	321900	1005	6.29
-8515257	746772	1085	0.85
-8515137	746772	1005	5.18
-8515119	746772	1004	0.95
-13338521	746772	2047	43
-13338423	746772	2048	43
 8515293	746773	1004	0.16
 8515294	746773	1005	15.1
 13338501	746773	2047	63
 13338403	746773	2048	57
-8515488	746776	1005	4.92
-8515478	746776	1004	0.08
-8515622	746776	1085	0.07
-13338522	746776	2047	34
-13338424	746776	2048	34
-8515633	746777	1005	6.74
-8515642	746777	1004	0.19
-13338491	746777	2047	34
-13338393	746777	2048	29
-8515759	746778	1004	1.9
-8515825	746778	1085	1.64
-8515725	746778	1005	4.9
-13338523	746778	2047	50
-13338425	746778	2048	50
-8515956	746779	1085	27.1
-8515856	746779	1005	3.37
-8515855	746779	1004	28.7
-13338530	746779	2047	341
-13338432	746779	2048	346
-8515975	746780	1005	2.15
-8516069	746780	1085	25.8
-8515974	746780	1004	26.2
-13338531	746780	2047	317
-13338433	746780	2048	322
-8516171	746781	1085	26
-8516113	746781	1004	28.1
-8516172	746781	1005	2.63
-2226468	322892	1003	3.28
-2226446	322892	1008	60
-8516330	746782	1085	2.77
-8516211	746782	1005	4.63
-8516189	746782	1004	3.2
-13338514	746782	2047	61
-13338416	746782	2048	60
-8516454	746783	1085	8.86
-8516375	746783	1004	10.4
-8516376	746783	1005	0.93
-13338538	746783	2047	164
-13338440	746783	2048	169
-8516466	746784	1004	0.32
-8516475	746784	1005	99.6
-13338513	746784	2047	401
-13338415	746784	2048	385
-8516500	746785	1004	11.6
-8516555	746785	1005	0
-8516578	746785	1085	10.4
-13338540	746785	2047	213
-13338442	746785	2048	220
 2261047	332282	1004	1.48
 2261099	332282	1085	1.05
 2261048	332282	1005	8.05
@@ -919,9 +337,6 @@ COPY foods.food_nutrient (id, fdc_id, nutrient_id, amount) FROM stdin;
 13338397	332282	2048	45
 2227751	323121	1003	11.7
 2227686	323121	1008	314
-2223100	322228	1085	0.85
-2222962	322228	1004	0.95
-2222980	322228	1005	5.19
 2228481	323294	1008	620
 2228493	323294	1003	20.4
 31222705	2512371	2048	377.9609
@@ -973,8 +388,6 @@ COPY foods.food_nutrient (id, fdc_id, nutrient_id, amount) FROM stdin;
 31222744	2512381	2047	358.705
 31222743	2512381	1005	80.31315
 31222586	2512381	1004	1.033
-2229341	323444	1008	157
-2229304	323444	1003	7.81
 2229550	323505	1003	2.92
 2229572	323505	1008	35
 2229859	323604	1008	150
@@ -989,24 +402,14 @@ COPY foods.food_nutrient (id, fdc_id, nutrient_id, amount) FROM stdin;
 8518359	746952	1004	3.68
 8518377	746952	1085	3.54
 13338564	746952	2047	121
-2230983	324038	1008	29
 13338459	746952	2048	126
-2230974	324038	1003	1.44
-2231514	324157	1003	13.3
-2231466	324157	1008	328
 2263039	332791	1004	12.9
 2263140	332791	1085	11.8
-2224691	322559	1004	0.08
-2224701	322559	1005	4.89
-2224835	322559	1085	0.07
 2263141	332791	1005	4.96
 13338505	332791	2047	141
 13338407	332791	2048	130
 2232241	324317	1003	4.52
 2232168	324317	1008	288
-2263567	332864	1005	2.63
-2263566	332864	1085	26
-2263508	332864	1004	28.1
 2233036	324653	1003	0.48
 2233050	324653	1008	12
 2264177	333008	1085	13.7
@@ -1039,9 +442,6 @@ COPY foods.food_nutrient (id, fdc_id, nutrient_id, amount) FROM stdin;
 2264832	333281	1005	3.32
 13338493	333281	2047	21
 13338395	333281	2048	18
-2226423	322892	1004	3.2
-2226445	322892	1005	4.67
-2226564	322892	1085	2.77
 2235089	325036	1008	421
 2235128	325036	1003	29.6
 31224734	2515373	1004	57.43
@@ -1095,58 +495,18 @@ COPY foods.food_nutrient (id, fdc_id, nutrient_id, amount) FROM stdin;
 2236075	325287	1008	37
 2236397	325430	1008	42
 2236428	325430	1003	0.91
-24474113	1999626	2048	35.107387
-24474112	1999626	2047	42.6655
-24474110	1999626	1005	7.5897
-24469997	1999626	1004	0.2563
-24474120	1999627	2048	33.31965
-24474119	1999627	2047	41.0475
-24474117	1999627	1005	6.94125
-24470030	1999627	1004	0.1875
-24474127	1999628	2048	36.3915875
-24474126	1999628	2047	44.095
-24474124	1999628	1005	8.170625
-24469931	1999628	1004	0.195
-24474134	1999629	2048	24.8732585
-24474133	1999629	2047	31.2172
-24474131	1999629	1005	4.079375
 2236792	325524	1008	612
 2236810	325524	1003	21
-24469964	1999629	1004	0.3708
-24474146	1999630	1085	1.8841
-24474142	1999630	2048	38.485
-24474141	1999630	2047	38.485
-24474138	1999630	1005	1.293125
-24469778	1999630	1004	2.125
-24474173	1999631	1085	1.1089
-24474169	1999631	2048	14.5562
-24474168	1999631	2047	14.5562
-24474165	1999631	1005	0.3371125
-24469881	1999631	1004	1.221
 2265982	333476	1005	0
 2265910	333476	1004	0.41
 2265998	333476	1085	0.4
 13338550	333476	2047	53
 13338452	333476	2048	56
-24474192	1999632	2048	20.72851125
-24474191	1999632	2047	26.602
-24474189	1999632	1005	2.406325
-24470091	1999632	1004	0.6188
-24474200	1999633	2048	21.5796975
-24474199	1999633	2047	27.63
-24474197	1999633	1005	2.64135
-24470123	1999633	1004	0.6044
-24474208	1999634	2048	18.95436075
-24474207	1999634	2047	21.9574
 2227784	323121	1085	26
-24474205	1999634	1005	3.837475
-24470059	1999634	1004	0.425
 2227684	323121	1004	28
 2227685	323121	1005	2.89
 13338529	323121	2047	310
 13338431	323121	2048	314
-2237619	325658	1003	18.2
-2237575	325658	1008	322
 2238528	325871	1003	9.43
 2238521	325871	1008	270
 2228470	323294	1005	16.2
@@ -1154,15 +514,8 @@ COPY foods.food_nutrient (id, fdc_id, nutrient_id, amount) FROM stdin;
 2228469	323294	1004	57.8
 13338507	323294	2047	667
 13338409	323294	2048	621
-2239144	325992	1008	169
-2239103	325992	1003	16.7
-2240131	326135	1003	27
-2240073	326135	1008	393
 2240334	326196	1003	2.94
 2240316	326196	1008	36
-2229339	323444	1004	11
-2229391	323444	1085	10.3
-2229340	323444	1005	6.86
 2229571	323505	1005	4.42
 2229570	323505	1004	1.49
 13338486	323505	2047	43
@@ -1240,48 +593,21 @@ COPY foods.food_nutrient (id, fdc_id, nutrient_id, amount) FROM stdin;
 13338456	323697	2048	48
 13338552	334194	2047	85
 13338454	334194	2048	90
-2242226	326905	1008	249
-2242227	326905	1003	3.3
-2268391	334247	1005	99.6
 2230393	323793	1005	6.02
 2230392	323793	1004	0.65
 13338556	323793	2047	350
 13338458	323793	2048	376
-2268382	334247	1004	0.32
 2242728	327046	1003	1.06
 2242732	327046	1008	58
-2243089	327198	1003	0.82
-2243060	327198	1008	34
 8523955	747429	1085	26.6
-2230984	324038	1004	0.19
-2230975	324038	1005	6.74
 8523933	747429	1004	31.1
 8523956	747429	1005	6.35
 13338565	747429	2047	375
 13338460	747429	2048	373
 2243584	327357	1003	1.06
 2243546	327357	1008	39
-8524371	747447	1085	0.07
-8524279	747447	1005	6.27
-8524297	747447	1004	0.34
-13338488	747447	2047	39
-13338390	747447	2048	32
-8524405	747448	1004	0.22
 2243980	327501	1008	47
-8524459	747448	1085	0.17
 2243939	327501	1003	0.91
-8524419	747448	1005	7.63
-13338497	747448	2047	35
-13338399	747448	2048	31
-2231464	324157	1004	28.7
-2231565	324157	1085	27.1
-2231465	324157	1005	3.37
-2244386	327699	1008	31
-2244375	327699	1003	0.64
-13338528	324157	2047	325
-13338430	324157	2048	329
-2244897	327923	1008	17
-2244936	327923	1003	1.24
 2232271	324317	1085	12.6
 2232166	324317	1004	14.4
 2232167	324317	1005	36.3
@@ -1405,24 +731,12 @@ COPY foods.food_nutrient (id, fdc_id, nutrient_id, amount) FROM stdin;
 24473657	2003604	1004	0.24
 2247787	328637	1008	408
 2247800	328637	1003	23.3
-2271378	334849	1004	6.39
-2271450	334849	1085	5.93
-2271379	334849	1005	0
 8526272	747997	1005	2.36
 8526268	747997	1004	0
 13338551	747997	2047	52
 13338453	747997	2048	55
-2271587	334897	1004	6.36
-2271651	334897	1085	5.56
-2271588	334897	1005	0
-2271680	334898	1005	0
-2271716	334898	1085	2.23
-2271679	334898	1004	2.48
 2248933	328841	1003	11
 2248903	328841	1008	84
-2271901	334963	1004	2.41
-2271987	334963	1085	2.14
-2271902	334963	1005	0
 2234311	324860	1085	47.9
 2234280	324860	1005	22.3
 2234279	324860	1004	51.1
@@ -1456,16 +770,10 @@ COPY foods.food_nutrient (id, fdc_id, nutrient_id, amount) FROM stdin;
 33296882	2647443	2047	351.4
 33296879	2647443	1005	2.72432
 33296828	2647443	1004	27.24
-2272355	335061	1005	0
-2272352	335061	1004	11.4
-2272368	335061	1085	10.5
 8527182	748236	1005	1.02
 8527177	748236	1004	28.8
 13338532	748236	2047	328
 13338434	748236	2048	334
-2272589	335109	1085	4.5
-2272525	335109	1004	5.32
-2272576	335109	1005	0
 2251263	329370	1003	23.7
 2251279	329370	1008	298
 2235088	325036	1005	12.4
@@ -1488,8 +796,6 @@ COPY foods.food_nutrient (id, fdc_id, nutrient_id, amount) FROM stdin;
 2235804	325198	1005	5.27
 13338517	325198	2047	368
 13338419	325198	2048	366
-2252851	329830	1008	326
-2252809	329830	1003	24.5
 2236073	325287	1004	0.7
 2236074	325287	1005	7.59
 13338512	325287	2047	39
@@ -1509,16 +815,11 @@ COPY foods.food_nutrient (id, fdc_id, nutrient_id, amount) FROM stdin;
 13338410	325524	2048	612
 2254843	330458	1008	833
 2254832	330458	1003	0
-2255930	330869	1003	27.1
-2255933	330869	1008	220
-2237668	325658	1085	25.8
 27790251	2257044	2047	40.705
 27790248	2257044	1005	2.996125
 27790191	2257044	1004	1.957
 27790257	2257045	2047	19.33
 27790254	2257045	1005	0.67075
-2237574	325658	1005	2.15
-2237573	325658	1004	26.2
 27790240	2257045	1004	1.558
 27790263	2257046	2047	48.3298
 27790260	2257046	1005	5.100325
@@ -1534,10 +835,7 @@ COPY foods.food_nutrient (id, fdc_id, nutrient_id, amount) FROM stdin;
 13338526	325871	2047	267
 13338428	325871	2048	270
 2259100	331897	1008	156
-2239143	325992	1005	0.93
-2239142	325992	1004	10.4
 2259079	331897	1003	23.9
-2239221	325992	1085	8.86
 2259565	331960	1003	32.1
 2259526	331960	1008	166
 27791510	2258586	2048	44.978589
@@ -1564,10 +862,7 @@ COPY foods.food_nutrient (id, fdc_id, nutrient_id, amount) FROM stdin;
 27791529	2258591	2047	31.7404
 27791528	2258591	1005	6.703125
 27791451	2258591	1004	0.1556
-2240072	326135	1005	1.44
-2240071	326135	1004	31
 2261075	332282	1003	1.41
-2240163	326135	1085	27.6
 2261049	332282	1008	45
 2240315	326196	1005	5.3
 2240314	326196	1004	1.21
@@ -1602,8 +897,6 @@ COPY foods.food_nutrient (id, fdc_id, nutrient_id, amount) FROM stdin;
 27793253	2259796	1004	19.08
 2263143	332791	1008	130
 2263121	332791	1003	1.15
-2263548	332864	1003	19.3
-2263569	332864	1008	346
 2241765	326698	1085	3.76
 2241720	326698	1005	5.3
 2241719	326698	1004	3.38
@@ -1613,8 +906,6 @@ COPY foods.food_nutrient (id, fdc_id, nutrient_id, amount) FROM stdin;
 2264158	333008	1003	5.79
 2264831	333281	1003	0.84
 2264833	333281	1008	18
-2242225	326905	1005	63.9
-2242263	326905	1004	0.92
 2265346	333374	1008	74
 2265357	333374	1003	16.3
 2242730	327046	1005	14
@@ -1635,8 +926,6 @@ COPY foods.food_nutrient (id, fdc_id, nutrient_id, amount) FROM stdin;
 27793992	2261422	2047	360.7805
 27793991	2261422	1005	79.9422
 27793926	2261422	1004	0.9513
-2243105	327198	1004	0.18
-2243059	327198	1005	8.16
 2243545	327357	1005	9.18
 2243611	327357	1085	0.13
 2243547	327357	1004	0.28
@@ -1667,11 +956,6 @@ COPY foods.food_nutrient (id, fdc_id, nutrient_id, amount) FROM stdin;
 8535542	749420	1004	36.5
 13338567	749420	2047	501
 13338462	749420	2048	512
-2268383	334247	1008	385
-2268373	334247	1003	0
-2244425	327699	1085	0.17
-2244385	327699	1005	7.63
-2244371	327699	1004	0.22
 9636110	789890	1005	77.3
 9636109	789890	1004	1.48
 13338568	789890	2047	366
@@ -1685,8 +969,6 @@ COPY foods.food_nutrient (id, fdc_id, nutrient_id, amount) FROM stdin;
 13338570	790018	2047	362
 13338465	790018	2048	370
 9636544	790085	1005	71.2
-2244896	327923	1005	3.24
-2244901	327923	1004	0.26
 9636543	790085	1004	2.73
 13338571	790085	2047	370
 13338466	790085	2048	346
@@ -1702,42 +984,6 @@ COPY foods.food_nutrient (id, fdc_id, nutrient_id, amount) FROM stdin;
 9636993	790276	1004	1.74
 13338574	790276	2047	364
 13338469	790276	2048	372
-2271380	334849	1008	155
-2271393	334849	1003	22.8
-2271589	334897	1008	176
-2271612	334897	1003	27.7
-2271681	334898	1008	122
-2271652	334898	1003	23.4
-27797247	2263887	2048	32.66565
-27797246	2263887	2047	36.4
-27797245	2263887	1005	7.964375
-27797235	2263887	1004	0.22
-27797252	2263888	2048	51.412425
-27797251	2263888	2047	57.3375
-27797250	2263888	1005	12.904375
-27797162	2263888	1004	0.1875
-27797257	2263889	2048	57.384621
-27797256	2263889	2047	63.8563
-27797255	2263889	1005	14.571775
-27797180	2263889	1004	0.3063
-27797262	2263890	2048	77.151876
-27797261	2263890	2047	85.919
-27797260	2263890	1005	20.196825
-27797112	2263890	1004	0.1638
-27797267	2263891	2048	71.939325
-27797266	2263891	2047	80.1025
-27797265	2263891	1005	18.60375
-27797133	2263891	1004	0.2325
-27797272	2263892	2048	46.4205
-27797271	2263892	2047	51.6025
-27797270	2263892	1005	12.2615625
-27797209	2263892	1004	0.1625
-2271903	334963	1008	123
-2271931	334963	1003	23.7
-2272304	335061	1003	27.3
-2272344	335061	1008	219
-2272548	335109	1003	22.7
-2272539	335109	1008	145
 2273153	335240	1003	12.3
 2273116	335240	1008	254
 9638545	790577	1005	9.93
@@ -1748,8 +994,6 @@ COPY foods.food_nutrient (id, fdc_id, nutrient_id, amount) FROM stdin;
 9638715	790646	1005	8.61
 13338576	790646	2047	38
 13338471	790646	2048	36
-9638953	790774	1005	20.1
-9638935	790774	1004	0.22
 28912756	2346384	2048	104.574374
 28912755	2346384	2047	102.921
 28912753	2346384	1005	4.59964
@@ -1790,8 +1034,6 @@ COPY foods.food_nutrient (id, fdc_id, nutrient_id, amount) FROM stdin;
 28912794	2346393	2047	625.75
 28912793	2346393	1005	20.03462
 28912599	2346393	1004	51.09
-9639407	790991	1005	23
-9639429	790991	1004	0.29
 28912799	2346394	2048	678.66434
 28912798	2346394	2047	729.556
 28912797	2346394	1005	10.9096
@@ -1865,30 +1107,6 @@ COPY foods.food_nutrient (id, fdc_id, nutrient_id, amount) FROM stdin;
 28912242	2346408	1004	0.2138
 28912860	2346408	1005	6.7899
 28912861	2346408	2047	34.0538
-28912866	2346409	2048	32.66565
-28912865	2346409	2047	36.4
-28912864	2346409	1005	7.964375
-28912224	2346409	1004	0.22
-28912871	2346410	2048	51.412425
-28912870	2346410	2047	57.3375
-28912869	2346410	1005	12.904375
-28912198	2346410	1004	0.1875
-28912876	2346411	2048	57.384621
-28912875	2346411	2047	63.8563
-28912874	2346411	1005	14.571775
-28912169	2346411	1004	0.3063
-28912881	2346412	2048	77.151876
-28912880	2346412	2047	85.919
-28912879	2346412	1005	20.196825
-28912305	2346412	1004	0.1638
-28912886	2346413	2048	71.939325
-28912885	2346413	2047	80.1025
-28912884	2346413	1005	18.60375
-28912284	2346413	1004	0.2325
-28912891	2346414	2048	46.4205
-28912890	2346414	2047	51.6025
-28912889	2346414	1005	12.2615625
-28912266	2346414	1004	0.1625
 13336132	1104766	1005	27.9
 13336136	1104766	1004	20.7
 13338583	1104766	2047	452
@@ -1909,44 +1127,11 @@ COPY foods.food_nutrient (id, fdc_id, nutrient_id, amount) FROM stdin;
 13336696	1104962	1005	7.68
 13338584	1104962	2047	36
 13338479	1104962	2048	33
-13336919	1105073	1005	20.1
-13336901	1105073	1004	0.22
-13338577	1105073	2047	85
-13338472	1105073	2048	77
 2248982	328841	1085	1.87
 2248901	328841	1004	2.3
 2248902	328841	1005	4.31
 13338535	328841	2047	82
 13338437	328841	2048	84
-13337384	1105314	1005	23
-13337406	1105314	1004	0.29
-13338578	1105314	2047	98
-13338473	1105314	2048	88
-13337622	1105430	1005	14.8
-13337617	1105430	1004	0.21
-13338586	1105430	2047	62
-13338481	1105430	2048	56
-13337808	1105547	1004	0.1
-13337813	1105547	1005	14.7
-13338590	1105547	2047	60
-13338485	1105547	2048	54
-13337999	1105664	1004	0.14
-13338004	1105664	1005	14.2
-13338589	1105664	2047	59
-13338484	1105664	2048	53
-13338190	1105781	1004	0.15
-13338195	1105781	1005	14.8
-13338588	1105781	2047	61
-13338483	1105781	2048	55
-13338381	1105897	1004	0.16
-13338386	1105897	1005	15.7
-13338587	1105897	2047	65
-13338482	1105897	2048	58
-21115640	1750337	1085	1.8841
-21115511	1750337	2048	38.485
-21115510	1750337	2047	38.485
-21115509	1750337	1005	1.293125
-21115385	1750337	1004	2.125
 2251278	329370	1005	4.44
 2251336	329370	1085	17.8
 2251277	329370	1004	20.4
@@ -1964,9 +1149,6 @@ COPY foods.food_nutrient (id, fdc_id, nutrient_id, amount) FROM stdin;
 2252275	329716	1004	55.5
 13338533	329716	2047	641
 13338435	329716	2048	654
-2252850	329830	1005	2.07
-2252849	329830	1004	24.3
-2252932	329830	1085	21.4
 2253845	330137	1004	0.37
 2253846	330137	1005	3.64
 2253907	330137	1085	0.17
@@ -1977,74 +1159,21 @@ COPY foods.food_nutrient (id, fdc_id, nutrient_id, amount) FROM stdin;
 2254471	330415	1085	0.15
 13338527	330415	2047	82
 13338429	330415	2048	83
-8513953	746758	1003	27.7
-8513930	746758	1008	176
-8514009	746759	1008	155
-8514022	746759	1003	22.8
-8514080	746760	1003	23.4
-8514109	746760	1008	122
-8514175	746761	1003	23.7
-8514147	746761	1008	123
-8514246	746762	1008	145
-8514255	746762	1003	22.7
-8514337	746763	1008	219
-8514297	746763	1003	27.3
 8514412	746764	1008	37
 8514381	746764	1003	0.81
-8514474	746765	1003	24.5
 2254891	330458	1085	90.5
 2254870	330458	1005	0.84
-8514516	746765	1008	326
 2254841	330458	1004	99.1
 13338506	330458	2047	895
 13338408	330458	2048	833
-8514663	746766	1008	157
-8514626	746766	1003	7.81
-8514804	746767	1003	27
-8514746	746767	1008	393
-8514839	746768	1008	249
-8514840	746768	1003	3.3
-8514968	746769	1003	1.24
-8514929	746769	1008	17
-8515015	746770	1003	0.82
-8514986	746770	1008	34
 8515054	746771	1003	0.91
 8515095	746771	1008	47
-8515138	746772	1008	43
-8515110	746772	1003	3.38
 8515260	746773	1003	0.38
 8515295	746773	1008	57
-8515489	746776	1008	34
-8515482	746776	1003	3.43
-8515632	746777	1003	1.44
-8515641	746777	1008	29
-8515674	746778	1003	3.36
-8515726	746778	1008	50
-8515905	746779	1003	13.3
-8515857	746779	1008	328
-8515976	746780	1008	322
-8516020	746780	1003	18.2
-8516174	746781	1008	346
-8516153	746781	1003	19.3
-8516234	746782	1003	3.27
-8516212	746782	1008	60
-8516377	746783	1008	169
-8516336	746783	1003	16.7
-8516467	746784	1008	385
-8516457	746784	1003	0
-8516553	746785	1003	27.1
-8516556	746785	1008	220
-2255955	330869	1085	10.4
-2255932	330869	1005	0
-2255877	330869	1004	11.6
 8518379	746952	1008	121
 8518363	746952	1003	19.6
 8523957	747429	1008	375
 8523941	747429	1003	17.5
-8524280	747447	1008	31
-8524317	747447	1003	2.57
-8524420	747448	1008	31
-8524409	747448	1003	0.64
 8525378	747693	1003	1.11
 8525380	747693	1008	117
 8526271	747997	1008	55
@@ -2073,10 +1202,6 @@ COPY foods.food_nutrient (id, fdc_id, nutrient_id, amount) FROM stdin;
 9638540	790577	1003	0.94
 9638710	790646	1003	0.83
 9638716	790646	1008	38
-9638952	790774	1003	0.73
-9638955	790774	1008	85
-9639423	790991	1003	0.74
-9639408	790991	1008	97
 13335662	1104647	1003	6.62
 13335664	1104647	1008	143
 13335867	1104705	1008	366
@@ -2091,43 +1216,6 @@ COPY foods.food_nutrient (id, fdc_id, nutrient_id, amount) FROM stdin;
 13336543	1104913	1003	8.75
 13336697	1104962	1008	35
 13336695	1104962	1003	0.89
-13336918	1105073	1003	0.73
-13336921	1105073	1008	85
-13337385	1105314	1008	97
-13337400	1105314	1003	0.74
-13337621	1105430	1003	0.19
-13337623	1105430	1008	62
-13337814	1105547	1008	60
-13337812	1105547	1003	0.1
-13338003	1105664	1003	0.27
-13338005	1105664	1008	59
-13338194	1105781	1003	0.13
-13338196	1105781	1008	61
-13338387	1105897	1008	65
-13338385	1105897	1003	0.15
-21115508	1750337	1003	3.546875
-21115512	1750338	1003	0.5546875
-21115516	1750339	1003	0.1875
-21115520	1750340	1003	0.1484375
-21115524	1750341	1003	0.1328125
-21115528	1750342	1003	0.265625
-21115532	1750343	1003	0.1015625
-21115536	1750344	1003	2.5
-21115540	1750345	1003	2.89875
-21115544	1750346	1003	2.414375
-21115548	1750347	1003	2.890625
-21115552	1750352	1003	2.851875
-21115556	1750353	1003	2.90625
-21115560	1750354	1003	0.695625
-24474109	1999626	1003	2.5
-24474116	1999627	1003	2.89875
-24474123	1999628	1003	2.414375
-24474130	1999629	1003	2.890625
-24474137	1999630	1003	3.546875
-24474164	1999631	1003	0.5546875
-24474188	1999632	1003	2.851875
-24474196	1999633	1003	2.90625
-24474204	1999634	1003	0.695625
 24474212	2003586	1003	11.4
 24474218	2003587	1003	14.475
 24474224	2003588	1003	11.73125
@@ -2168,12 +1256,6 @@ COPY foods.food_nutrient (id, fdc_id, nutrient_id, amount) FROM stdin;
 27795963	2262073	1003	19.7054
 27795967	2262074	1003	20.78734
 27795971	2262075	1003	18.0359
-27797244	2263887	1003	0.640625
-27797249	2263888	1003	1.008125
-27797254	2263889	1003	0.703125
-27797259	2263890	1003	0.914375
-27797264	2263891	1003	0.89875
-27797269	2263892	1003	0.2734375
 28912752	2346384	1003	11.62436
 28912757	2346385	1003	5.78985
 28912762	2346386	1003	2.017994
@@ -2199,12 +1281,6 @@ COPY foods.food_nutrient (id, fdc_id, nutrient_id, amount) FROM stdin;
 28912851	2346406	1003	0.625
 28912855	2346407	1003	0.96125
 28912859	2346408	1003	1.2425
-28912863	2346409	1003	0.640625
-28912868	2346410	1003	1.008125
-28912873	2346411	1003	0.703125
-28912878	2346412	1003	0.914375
-28912883	2346413	1003	0.89875
-28912888	2346414	1003	0.2734375
 31222702	2512371	1003	13.2093
 31222706	2512372	1003	11.92235
 31222710	2512373	1003	8.27277
@@ -2264,7 +1340,7 @@ COPY foods.food_nutrient (id, fdc_id, nutrient_id, amount) FROM stdin;
 
 
 --
--- Data for Name: nutrient; Type: TABLE DATA; Schema: foods; Owner: admin
+-- Data for Name: nutrient; Type: TABLE DATA; Schema: foods; Owner: postgres
 --
 
 COPY foods.nutrient (id, name, unit_name) FROM stdin;
@@ -2279,7 +1355,7 @@ COPY foods.nutrient (id, name, unit_name) FROM stdin;
 
 
 --
--- Name: food pk_food; Type: CONSTRAINT; Schema: foods; Owner: admin
+-- Name: food pk_food; Type: CONSTRAINT; Schema: foods; Owner: postgres
 --
 
 ALTER TABLE ONLY foods.food
@@ -2287,7 +1363,7 @@ ALTER TABLE ONLY foods.food
 
 
 --
--- Name: food_nutrient pk_food_nutrient; Type: CONSTRAINT; Schema: foods; Owner: admin
+-- Name: food_nutrient pk_food_nutrient; Type: CONSTRAINT; Schema: foods; Owner: postgres
 --
 
 ALTER TABLE ONLY foods.food_nutrient
@@ -2295,7 +1371,7 @@ ALTER TABLE ONLY foods.food_nutrient
 
 
 --
--- Name: nutrient pk_nutrient; Type: CONSTRAINT; Schema: foods; Owner: admin
+-- Name: nutrient pk_nutrient; Type: CONSTRAINT; Schema: foods; Owner: postgres
 --
 
 ALTER TABLE ONLY foods.nutrient
@@ -2303,7 +1379,7 @@ ALTER TABLE ONLY foods.nutrient
 
 
 --
--- Name: food_nutrient fk_food_nutrient_food; Type: FK CONSTRAINT; Schema: foods; Owner: admin
+-- Name: food_nutrient fk_food_nutrient_food; Type: FK CONSTRAINT; Schema: foods; Owner: postgres
 --
 
 ALTER TABLE ONLY foods.food_nutrient
@@ -2311,7 +1387,7 @@ ALTER TABLE ONLY foods.food_nutrient
 
 
 --
--- Name: food_nutrient fk_food_nutrient_nutrient; Type: FK CONSTRAINT; Schema: foods; Owner: admin
+-- Name: food_nutrient fk_food_nutrient_nutrient; Type: FK CONSTRAINT; Schema: foods; Owner: postgres
 --
 
 ALTER TABLE ONLY foods.food_nutrient

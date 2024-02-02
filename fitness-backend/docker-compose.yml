@@ -1,0 +1,70 @@
+version: '3'
+services:
+  users-microservice:
+    build: ./users-service
+    ports:
+      - 8081:8081
+    networks:
+      backend:
+        aliases:
+          [users, u]
+    depends_on:
+      - users-db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://users-db:5432/users
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SERVER_PORT=8081
+
+  food-microservice:
+    build: ./food-microservice
+    ports:
+      - 8082:8082
+    networks:
+      backend:
+        aliases:
+          [food, f]
+
+    depends_on:
+      - food-db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://food-db:5432/food
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SERVER_PORT=8082
+        
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - 8080:8080
+    networks:
+      - backend
+    depends_on:
+      - users-microservice
+      - food-microservice
+    environment:
+      - SERVER_PORT=8080
+
+  users-db:
+    image: postgres
+    networks:
+      - backend
+    environment:
+      - POSTGRES_DB=users
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+  food-db:
+    image: postgres
+    networks:
+      - backend
+    volumes:
+      - ./sql-dump:/docker-entrypoint-initdb.d
+    environment:
+      - POSTGRES_DB=food
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+networks:
+  backend:

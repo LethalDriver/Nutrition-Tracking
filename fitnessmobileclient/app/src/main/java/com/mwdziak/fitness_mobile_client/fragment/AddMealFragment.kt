@@ -20,6 +20,7 @@ import com.mwdziak.fitness_mobile_client.utils.hideKeyboard
 import com.mwdziak.fitness_mobile_client.utils.showSnackBar
 import com.mwdziak.fitness_mobile_client.viewmodel.IngredientFormViewModel
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.getKoin
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class AddMealFragment : Fragment() {
@@ -86,7 +87,7 @@ class AddMealFragment : Fragment() {
     }
 
     private fun initForm(view: View){
-        val formViewModel: IngredientFormViewModel by viewModel()
+        val formViewModel = requireActivity().getKoin().get<IngredientFormViewModel>()
         viewModel.addIngredient(formViewModel)
 
         formViewModel.setFoodKinds(viewModel.getFoodCategories())

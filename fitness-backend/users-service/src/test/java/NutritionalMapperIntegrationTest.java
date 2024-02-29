@@ -1,6 +1,7 @@
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mapstruct.factory.Mappers;
+import org.mwdziak.UsersDaysApplication;
 import org.mwdziak.domain.*;
 import org.mwdziak.dto.DayDTO;
 import org.mwdziak.dto.MealDTO;
@@ -8,6 +9,9 @@ import org.mwdziak.dto.NutritionalGoalsDTO;
 import org.mwdziak.mapper.DayMapper;
 import org.mwdziak.mapper.MealMapper;
 import org.mwdziak.mapper.NutritionalGoalsMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 
 import java.time.LocalDate;
@@ -16,18 +20,28 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = UsersDaysApplication.class)
 public class NutritionalMapperIntegrationTest {
 
+    @Autowired
+    private NutritionalGoalsMapper nutritionalGoalsMapper;
+
+    @Autowired
+    private MealMapper mealMapper;
+
+    @Autowired
+    private DayMapper dayMapper;
+
     @Test
-    public void givenSourceToDestination_whenMaps_thenCorrect() {
+    public void givenNutritonalGoalsToNutritionalGoalsDto_whenMaps_thenCorrect() {
         NutritionalGoalsDTO nutritionalGoalsDTO = new NutritionalGoalsDTO();
         nutritionalGoalsDTO.setCalories(1.0);
         nutritionalGoalsDTO.setProtein(2.0);
         nutritionalGoalsDTO.setCarbohydrates(3.0);
         nutritionalGoalsDTO.setFat(4.0);
 
-        NutritionalGoalsMapper mapper = Mappers.getMapper(NutritionalGoalsMapper.class);
-        NutritionalGoals nutritionalGoals = mapper.toEntity(nutritionalGoalsDTO);
+        NutritionalGoals nutritionalGoals = nutritionalGoalsMapper.toEntity(nutritionalGoalsDTO);
         assertEquals(nutritionalGoalsDTO.getCalories(), nutritionalGoals.getCalories());
         assertEquals(nutritionalGoalsDTO.getProtein(), nutritionalGoals.getProtein());
         assertEquals(nutritionalGoalsDTO.getCarbohydrates(), nutritionalGoals.getCarbohydrates());
@@ -39,8 +53,8 @@ public class NutritionalMapperIntegrationTest {
     public void givenMealToMealDto_whenMaps_thenCorrect() {
         Meal meal = getMeal();
 
-        MealMapper mapper = Mappers.getMapper(MealMapper.class);
-        MealDTO mealDTO = mapper.toDto(meal);
+
+        MealDTO mealDTO = mealMapper.toDto(meal);
         assertEquals(meal.getName(), mealDTO.getName());
         assertEquals(meal.getIngredients().get(0).getFoodKind(), mealDTO.getIngredients().get(0).getFoodKind());
         assertEquals(meal.getIngredients().get(0).getDescription(), mealDTO.getIngredients().get(0).getDescription());
@@ -79,16 +93,14 @@ public class NutritionalMapperIntegrationTest {
     public void givenDayToDayDto_whenMaps_thenCorrect() {
         Day day = getDay();
 
-        DayMapper mapper = Mappers.getMapper(DayMapper.class);
-        DayDTO dayDTO = mapper.toDto(day);
+        DayDTO dayDTO = dayMapper.toDto(day);
         assertEquals(day.getDate(), dayDTO.getDate());
         assertEquals(day.getMeals().size(), dayDTO.getMeals().size());
         assertEquals(day.getMeals().get(0).getName(), dayDTO.getMeals().get(0).getName());
     }
 
     private static Day getDay() {
-        Meal meal = new Meal();
-        meal.setName("mealName");
+        Meal meal = getMeal();
 
         List<Meal> meals = new ArrayList<>();
         meals.add(meal);

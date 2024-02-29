@@ -33,7 +33,7 @@ public class MappersIntegrationTests {
     private DayMapper dayMapper;
 
     @Test
-    public void givenNutritonalGoalsToNutritionalGoalsDto_whenMaps_thenCorrect() {
+    public void givenNutritionalGoalsToNutritionalGoalsDto_whenMaps_thenCorrect() {
         NutritionalGoalsDTO nutritionalGoalsDTO = new NutritionalGoalsDTO();
         nutritionalGoalsDTO.setCalories(1.0);
         nutritionalGoalsDTO.setProtein(2.0);

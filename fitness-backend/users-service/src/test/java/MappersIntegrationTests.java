@@ -1,6 +1,5 @@
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mapstruct.factory.Mappers;
 import org.mwdziak.UsersDaysApplication;
 import org.mwdziak.domain.*;
 import org.mwdziak.dto.DayDTO;
@@ -22,7 +21,7 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = UsersDaysApplication.class)
-public class NutritionalMapperIntegrationTest {
+public class MappersIntegrationTests {
 
     @Autowired
     private NutritionalGoalsMapper nutritionalGoalsMapper;
